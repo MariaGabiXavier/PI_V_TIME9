@@ -2,6 +2,9 @@ package com.sched.api.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -12,4 +15,10 @@ public class Company {
     private Long id;
     private String name;
     private String cnpj;
+
+    @Column(nullable = false)
+    private Boolean deleted = false;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 }

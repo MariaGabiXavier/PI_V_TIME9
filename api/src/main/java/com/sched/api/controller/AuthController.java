@@ -1,9 +1,15 @@
 package com.sched.api.controller;
 
 import com.sched.api.domain.User;
-import com.sched.api.dto.*;
-import com.sched.api.services.AuthService;
+import com.sched.api.dto.request.CompanyRequest;
+import com.sched.api.dto.request.LoginRequest;
+import com.sched.api.dto.request.UserRequest;
+import com.sched.api.dto.response.CompanyResponse;
+import com.sched.api.dto.response.LoginResponse;
+import com.sched.api.dto.response.UserResponse;
+import com.sched.api.service.AuthService;
 import com.sched.api.security.TokenService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,20 +31,21 @@ public class AuthController {
     }
 
     @PostMapping("/company")
-    public ResponseEntity<CompanyResponse> registerCompany(@RequestBody CompanyRequest dto) {
+    public ResponseEntity<CompanyResponse> registerCompany(@Valid @RequestBody CompanyRequest dto) {
         return ResponseEntity.ok(authService.registerCompany(dto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest dto) {
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest dto) {
         var authToken = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = authenticationManager.authenticate(authToken);
         var token = tokenService.generateToken((User) auth.getPrincipal());
+
         return ResponseEntity.ok(new LoginResponse(token));
     }
 
     @PostMapping("/user")
-    public ResponseEntity<UserResponse> registerUser(@RequestBody UserRequest dto, @AuthenticationPrincipal User admin) {
+    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRequest dto, @AuthenticationPrincipal User admin) {
         return ResponseEntity.ok(authService.registerUser(dto, admin));
     }
 }

@@ -1,6 +1,8 @@
 package com.sched.api.security;
 
 import com.sched.api.repository.UserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.FilterChain;
@@ -28,11 +30,14 @@ class SecurityFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         var token = recoverToken(request);
+
         if (token != null) {
             var login = tokenService.validateToken(token);
+
             repository.findByEmail(login).ifPresent(user -> {
-                var authentication = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(authentication);
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             });
         }
         filterChain.doFilter(request, response);
