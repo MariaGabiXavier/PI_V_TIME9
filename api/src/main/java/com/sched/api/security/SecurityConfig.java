@@ -29,6 +29,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/company").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/user").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/user/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/user/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/company/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/company/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/company/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/company/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
