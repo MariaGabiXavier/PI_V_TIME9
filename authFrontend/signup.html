@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign In</title>
+  <link rel="stylesheet" href="sigup.css" />
+</head>
+<body>
+  <header class="header-auth">
+    <img src="../img/Logo.png" alt="Sched Logo" class="header-logo-image">
+    <nav class="nav-shed">
+      <a href="login.html" class="button-entrar">
+        <img src="../img/iconProfile.png" alt="User" class="btn-icon">
+        Entrar
+      </a>
+  </nav>
+</header>
+
+  <div class="page">
+    <div class="background"></div>
+
+    <div class="welcome-text">
+      <h2>Bem Vindo(a)</h2>
+      <p class="subtitle">
+        Use nossos formulários para fazer login ou criar sua conta!<br>no projeto totalmente grátis.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label>Nome da Empresa</label>
+       <input id="name" type="text" placeholder="Nome registrado da empresa" />
+    </div>
+
+    <div class="form-group">
+      <label>CNPJ da Empresa</label>
+      <input id="cnpj" type="text" placeholder="CNPJ" />
+    </div>
+
+    <div class="form-group">
+      <label>Email do Administrador</label>
+      <input id="email" type="email" placeholder="Seu email" />
+    </div>
+
+    <div class="form-group">
+      <label>Senha do Administrador</label>
+      <input id="password" type="password" placeholder="Senha" />
+    </div>
+
+    <div class="form-group">
+      <label>Confirmação de Senha</label>
+      <input id="confirmPassword" type="password" placeholder="Confirme a senha" />
+    </div>
+
+    <div class="remember">
+      <input type="checkbox" id="check" />
+      <label for="check">Lembrar de mim</label>
+    </div>
+
+    <button class="btn" onclick="cadastrar()">Cadastrar</button>
+
+    <p class="login">
+      Já possui uma empresa cadastrada?
+      <a href="login.html">Entrar</a>
+    </p>
+  </div>
+</div>
+
+<script>
+async function cadastrar() {
+  const name = document.getElementById("name").value;
+  const cnpj = document.getElementById("cnpj").value;
+  const emailADMIN = document.getElementById("email").value;
+  const passwordADMIN = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  const cnpjLimpo = cnpj.replace(/\D/g, "");
+
+  if (!name || !cnpj || !emailADMIN || !passwordADMIN) {
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  if (passwordADMIN !== confirmPassword) {
+    alert("As senhas não coincidem!");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:8080/auth/company", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+      name,
+      cnpj: cnpjLimpo,
+      email: emailADMIN,
+      password: passwordADMIN
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error(error);
+      alert(JSON.stringify(error.message));
+      return;
+    }
+
+    alert("Empresa cadastrada com sucesso!");
+
+  } catch (error) {
+    console.error(error);
+    alert("Erro inesperado");
+  }
+}
+</script>
+</body>
+</html>
