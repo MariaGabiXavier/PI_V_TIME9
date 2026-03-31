@@ -62,9 +62,56 @@
     </div>
 
     <script>
-        function fazerLogin() {
-            console.log("Tentando logar...");
+        async function fazerLogin() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (!email || !password) {
+            alert("Por favor, preencha todos os campos.");
+            return;
         }
+
+        // ter as chaves exatas que o LoginRequest espera no Java
+        const dadosLogin = {
+            email: email,
+            password: password
+        };
+
+        try {
+            console.log("Tentando logar em: http://127.0.0.1:8080/auth/login");
+
+            const response = await fetch("http://127.0.0.1:8080/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dadosLogin)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // result.token é o nome que vem do seu LoginResponse no Java
+                const token = result.token;
+
+                // SALVANDO O TOKEN: Guardamos no localStorage para usar depois
+                localStorage.setItem("token", token);
+                localStorage.setItem("userEmail", email);
+
+                alert("Login realizado com sucesso!");
+                
+                // Redireciona para a sua página principal!!!! mudar quando estiver pronta a main
+                window.location.href = "../main_teste.html"; 
+            } else {
+                // Exibe erro de senha incorreta ou usuário não encontrado
+                alert("Erro ao entrar: " + (result.message || "E-mail ou senha inválidos"));
+            }
+
+        } catch (error) {
+            console.error("Erro na requisição:", error);
+            alert("Não foi possível conectar ao servidor. Verifique se o backend está ligado.");
+        }
+    }
     </script>
 </body>
 </html>
