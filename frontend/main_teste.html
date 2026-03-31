@@ -16,16 +16,14 @@
         
         if (!token) {
             alert("Acesso não autorizado!");
-            window.location.href = "authFrontend/login.html"; // Redireciona para a tela de login
+            window.location.href = "pages/login.html"; // Redireciona para a tela de login
         }
 
         // Exemplo de como dar "Sair"
         function logout() {
             localStorage.removeItem("token"); // Joga o token fora
-            window.location.href = "authFrontend/login.html"; // Volta para a tela de login
+            window.location.href = "pages/login.html"; // Volta para a tela de login
         }
-
-        
     </script>
 </body>
 </html>

@@ -76,7 +76,7 @@
   height: 500px; 
 
   /* Imagem de fundo */
-  background: url("../img/background.png") no-repeat center;
+  background: url("../assets/background.png") no-repeat center;
   background-size: cover;
 
   /* Arredonda todos os cantos para dar o efeito de card */

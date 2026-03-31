@@ -76,7 +76,7 @@ body {
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
-/* Garante que o ícone (img) dentro do botão fique branco */
+/* Garante que o ícone (assets) dentro do botão fique branco */
 .btn-criar-menu img {
     filter: brightness(0) invert(1);
     width: 12px;
@@ -227,7 +227,7 @@ input:checked + .slider:before { transform: translateX(16px); }
     /* Altura total menos o respiro de 120px embaixo */
     height: calc(100vh - 120px); 
     
-    background: linear-gradient(135deg, rgba(66, 153, 225, 0.85) 0%, rgba(159, 122, 234, 0.85) 100%), url('../img/background-login.png');
+    background: linear-gradient(135deg, rgba(66, 153, 225, 0.85) 0%, rgba(159, 122, 234, 0.85) 100%), url('../assets/background-login.png');
     background-blend-mode: overlay;
     background-size: cover;
     background-position: center;
