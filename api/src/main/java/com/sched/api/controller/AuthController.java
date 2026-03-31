@@ -16,8 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-
-@CrossOrigin(origins = "*")
+//mudei essa parte
+@CrossOrigin(origins = "http://127.0.0.1:5500", allowedHeaders = "*")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

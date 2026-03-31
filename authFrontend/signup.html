@@ -67,51 +67,61 @@
 </div>
 
 <script>
-async function cadastrar() {
+  async function cadastrar() {
   const name = document.getElementById("name").value;
   const cnpj = document.getElementById("cnpj").value;
-  const emailADMIN = document.getElementById("email").value;
-  const passwordADMIN = document.getElementById("password").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
   const cnpjLimpo = cnpj.replace(/\D/g, "");
 
-  if (!name || !cnpj || !emailADMIN || !passwordADMIN) {
+  if (!name || !cnpjLimpo || !email || !password) {
     alert("Preencha todos os campos!");
     return;
   }
 
-  if (passwordADMIN !== confirmPassword) {
+  if (password !== confirmPassword) {
     alert("As senhas não coincidem!");
     return;
   }
 
-  try {
-    const response = await fetch("http://localhost:8080/auth/company", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-      name,
-      cnpj: cnpjLimpo,
-      email: emailADMIN,
-      password: passwordADMIN
-      })
-    });
+  // Objeto montado com os nomes EXATOS que estão no seu Java (CompanyRequest)
+  const payload = {
+    name: name,
+    cnpj: cnpjLimpo,
+    emailADMIN: email,      // Verifique se no Java está emailADMIN
+    passwordADMIN: password  // Verifique se no Java está passwordADMIN
+  };
 
-    if (!response.ok) {
-      const error = await response.json();
-      console.error(error);
-      alert(JSON.stringify(error.message));
-      return;
+  try {
+    console.log("Tentando conectar em: http://localhost:8080/auth/company");
+    
+    const response = await fetch("http://127.0.0.1:8080/auth/company", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+    if (response.ok) {
+      const result = await response.json();
+      alert("Empresa cadastrada com sucesso!");
+      window.location.href = "login.html";
+    } else {
+      const errorData = await response.json();
+      console.error("Erro do servidor:", errorData);
+      alert("Erro do servidor: " + (errorData.message || "Dados inválidos"));
     }
 
-    alert("Empresa cadastrada com sucesso!");
-
   } catch (error) {
-    console.error(error);
-    alert("Erro inesperado");
+    console.error("Erro detalhado:", error);
+    
+    // Se cair aqui, o navegador nem conseguiu chegar no Java
+    alert("Não foi possível conectar ao servidor.\n\n" +
+          "1. Verifique se o VS Code ainda mostra 'Started ApiApplication'.\n" +
+          "2. Se estiver usando Wi-Fi público, o firewall pode bloquear a porta 8080.\n" +
+          "3. Tente trocar 'localhost' por '127.0.0.1' na URL do fetch.");
   }
 }
 </script>
