@@ -1,0 +1,202 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+:root {
+    --content-padding-x: 10%; /* Ajuste para alinhar com o card se necessário */
+}
+
+.header-auth {
+    position: absolute; /* Mudado de fixed para absolute para rolar com o topo */
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px var(--content-padding-x); 
+    box-sizing: border-box;
+    z-index: 10;
+    background-color: transparent; /* Removido o fundo branco */
+    box-shadow: none; /* Removida a sombra */
+    top: 40px; /* Desce um pouco para alinhar com o conteúdo da imagem */
+    padding: 0 60px; /* Aumenta o recuo lateral se necessário */
+}
+
+.header-logo-image {
+    height: 35px; /* Tamanho aproximado do Figma */
+    width: auto;
+}
+
+.nav-shed {
+    display: flex;
+    align-items: center;
+}
+
+.button-entrar {
+    display: flex;         /* Ativa o flexbox */
+    align-items: center;   /* Alinha verticalmente no centro */
+    gap: 10px;            /* Espaço entre a imagem e o texto */
+    
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: white;
+    padding: 6px 16px 6px 8px; /* Menos padding na esquerda para compensar o ícone */
+    border-radius: 50px;       /* Deixa o botão bem arredondado (estilo pílula) */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.btn-icon {
+    width: 15px;          /* Tamanho da imagem de perfil */
+    height: 15px;
+    border-radius: 40%;   /* Deixa a imagem redonda */
+    object-fit: cover;    /* Garante que a imagem não distorça */
+}
+
+.button-entrar:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* FUNDO GRADIENTE */
+.background {
+  position: absolute;
+  /* Controla o recuo das bordas (a "borda branca" que você vê) */
+  top: 20px; 
+  left: 20px;
+  right: 20px;
+  
+  /* Altura da imagem */
+  height: 500px; 
+
+  /* Imagem de fundo */
+  background: url("../assets/background.png") no-repeat center;
+  background-size: cover;
+
+  /* Arredonda todos os cantos para dar o efeito de card */
+  border-radius: 24px; 
+  
+  /* Garante que a imagem fique atrás de tudo */
+  z-index: 0;
+}
+
+.page {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Faz os itens ficarem um em cima do outro */
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px; /* Espaço para não bater no menu superior */
+}
+
+/* Estilo do texto que fica fora do card */
+.welcome-text {
+  text-align: center;
+  color: white; /* Cor branca para aparecer no fundo azul */
+  margin-bottom: 10px; /* Espaço entre o texto e o card branco */
+  z-index: 1; /* Garante que fique acima do background */
+}
+
+.welcome-text h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.welcome-text .subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.5;
+  color: white; /* Força a cor branca aqui também */
+}
+
+.card {
+  position: relative;
+  background: white;
+  width: 450px; /* Ajustei a largura para ficar mais próximo do Figma */
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  z-index: 1;
+}
+
+.card h2 {
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* INPUTS */
+.form-group {
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  font-size: 12px;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 4px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+/* CHECKBOX */
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+/* BOTÃO */
+.btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #4facfe, #a855f7);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Isso faz a mudança ser suave, não um pulo */
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: translateY(-2px); /* Sobe o botão levemente */
+  box-shadow: 0 8px 15px rgba(173, 134, 240, 0.3); /* Cria uma sombra colorida */
+  filter: brightness(1.1); /* Deixa as cores do gradiente mais vivas */
+}
+
+.btn:active {
+  transform: translateY(0); /* Quando clica, ele "desce" de volta */
+}
+
+/* LINK */
+.login {
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.login a {
+  color: #7c3aed;
+  text-decoration: none;
+}

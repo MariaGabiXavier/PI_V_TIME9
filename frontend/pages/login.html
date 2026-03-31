@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sched - Login</title>
+    <link rel="stylesheet" href="../css/login.css" />
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <img src="../assets/Logo_preta.png" alt="Sched" class="mini-logo">
+
+            <a href="signup.html" class="btn-criar-menu">
+                <img src="../assets/iconKey.png" width="12" alt="">
+                Criar conta
+            </a>
+        </div>
+    </header>
+
+    <div class="login-container">
+        
+        <main class="login-form-side">
+            <div class="login-box">
+                <h2 class="welcome-back">Bem-vindo(a) de volta!</h2>
+                <p class="subtitle">Insira os dados de cadastro para entrar</p>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Email do Administrador">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Senha do Administrador">
+                </div>
+
+                <div class="remember-row">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="remember-text">lembrar-se de mim</span>
+                </div>
+
+                <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+                
+                <p class="footer-link">
+                    Não tem uma conta? <a href="signup.html">Crie uma</a>
+                </p>
+            </div>
+        </main>
+
+        <aside class="login-banner-side">
+            <div class="banner-card">
+                <img src="../assets/logo.png" alt="Sched Logo" class="banner-logo">
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        async function fazerLogin() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (!email || !password) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+
+        // ter as chaves exatas que o LoginRequest espera no Java
+        const dadosLogin = {
+            email: email,
+            password: password
+        };
+
+        try {
+            console.log("Tentando logar em: http://127.0.0.1:8080/auth/login");
+
+            const response = await fetch("http://127.0.0.1:8080/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dadosLogin)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // result.token é o nome que vem do seu LoginResponse no Java
+                const token = result.token;
+
+                // SALVANDO O TOKEN: Guardamos no localStorage para usar depois
+                localStorage.setItem("token", token);
+                localStorage.setItem("userEmail", email);
+
+                alert("Login realizado com sucesso!");
+                
+                // Redireciona para a sua página principal!!!! mudar quando estiver pronta a main
+                window.location.href = "../main_teste.html"; 
+            } else {
+                // Exibe erro de senha incorreta ou usuário não encontrado
+                alert("Erro ao entrar: " + (result.message || "E-mail ou senha inválidos"));
+            }
+
+        } catch (error) {
+            console.error("Erro na requisição:", error);
+            alert("Não foi possível conectar ao servidor. Verifique se o backend está ligado.");
+        }
+    }
+    </script>
+</body>
+</html>

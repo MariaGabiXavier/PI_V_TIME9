@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign In</title>
+  <link rel="stylesheet" href="../css/sigup.css" />
+</head>
+<body>
+  <header class="header-auth">
+    <img src="../assets/Logo.png" alt="Sched Logo" class="header-logo-image">
+    <nav class="nav-shed">
+      <a href="login.html" class="button-entrar">
+        <img src="../assets/iconProfile.png" alt="User" class="btn-icon">
+        Entrar
+      </a>
+  </nav>
+</header>
+
+  <div class="page">
+    <div class="background"></div>
+
+    <div class="welcome-text">
+      <h2>Bem Vindo(a)</h2>
+      <p class="subtitle">
+        Use nossos formulários para fazer login ou criar sua conta!<br>no projeto totalmente grátis.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <label>Nome da Empresa</label>
+       <input id="name" type="text" placeholder="Nome registrado da empresa" />
+    </div>
+
+    <div class="form-group">
+      <label>CNPJ da Empresa</label>
+      <input id="cnpj" type="text" placeholder="CNPJ" />
+    </div>
+
+    <div class="form-group">
+      <label>Email do Administrador</label>
+      <input id="email" type="email" placeholder="Seu email" />
+    </div>
+
+    <div class="form-group">
+      <label>Senha do Administrador</label>
+      <input id="password" type="password" placeholder="Senha" />
+    </div>
+
+    <div class="form-group">
+      <label>Confirmação de Senha</label>
+      <input id="confirmPassword" type="password" placeholder="Confirme a senha" />
+    </div>
+
+    <div class="remember">
+      <input type="checkbox" id="check" />
+      <label for="check">Lembrar de mim</label>
+    </div>
+
+    <button class="btn" onclick="cadastrar()">Cadastrar</button>
+
+    <p class="login">
+      Já possui uma empresa cadastrada?
+      <a href="login.html">Entrar</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  async function cadastrar() {
+  const name = document.getElementById("name").value;
+  const cnpj = document.getElementById("cnpj").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  const cnpjLimpo = cnpj.replace(/\D/g, "");
+
+  if (!name || !cnpjLimpo || !email || !password) {
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("As senhas não coincidem!");
+    return;
+  }
+
+  const payload = {
+    name: name,
+    cnpj: cnpjLimpo,
+    emailADMIN: email,      // Verifique se no Java está emailADMIN
+    passwordADMIN: password  // Verifique se no Java está passwordADMIN
+  };
+
+  try {
+    console.log("Tentando conectar em: http://localhost:8080/auth/company");
+    
+    const response = await fetch("http://localhost:8080/auth/company", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+    if (response.ok) {
+      const result = await response.json();
+      alert("Empresa cadastrada com sucesso!");
+      window.location.href = "login.html";
+    } else {
+      const errorData = await response.json();
+      console.error("Erro do servidor:", errorData);
+      alert("Erro do servidor: " + (errorData.message || "Dados inválidos"));
+    }
+
+  } catch (error) {
+    console.error("Erro detalhado:", error);
+    alert(error.message);
+    // Se cair aqui o navegador nem conseguiu chegar no Java
+    alert("Não foi possível conectar ao servidor.\n\n" +
+          "1. Verifique se o VS Code ainda mostra 'Started ApiApplication'.\n" +
+          "2. Se estiver usando Wi-Fi público, o firewall pode bloquear a porta 8080.\n" +
+          "3. Tente trocar 'localhost' por '127.0.0.1' na URL do fetch.");
+  }
+}
+</script>
+</body>
+</html>
