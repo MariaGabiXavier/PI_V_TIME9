@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-
 @Entity
 @Table(name = "company_sched")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor

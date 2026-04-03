@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
     // Fallback for unhandled exceptions (500) - Important to avoid exposing StackTraces
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGeneralException(Exception ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Deu um erro ai, sei la qual :)", request);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), request);
     }
 
     // Login and Authentication Errors (401)
