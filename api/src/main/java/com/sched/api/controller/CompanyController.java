@@ -1,6 +1,7 @@
 package com.sched.api.controller;
 
 import com.sched.api.dto.request.CompanyRequest;
+import com.sched.api.dto.request.CompanyUpdateRequest;
 import com.sched.api.dto.response.CompanyResponse;
 import com.sched.api.service.CompanyService;
 import jakarta.validation.Valid;
@@ -34,7 +35,7 @@ public class CompanyController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CompanyResponse> update(@PathVariable Long id, @Valid @RequestBody CompanyRequest dto) {
+    public ResponseEntity<CompanyResponse> update(@PathVariable Long id, @Valid @RequestBody CompanyUpdateRequest dto) {
         return ResponseEntity.ok(companyService.update(id, dto));
     }
 

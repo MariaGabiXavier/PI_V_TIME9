@@ -3,6 +3,7 @@ package com.sched.api.service;
 import com.sched.api.domain.Company;
 import com.sched.api.domain.User;
 import com.sched.api.dto.request.CompanyRequest;
+import com.sched.api.dto.request.CompanyUpdateRequest;
 import com.sched.api.dto.response.CompanyResponse;
 import com.sched.api.exception.ResourceNotFoundException;
 import com.sched.api.repository.CompanyRepository;
@@ -34,7 +35,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public CompanyResponse update(Long id, CompanyRequest dto) {
+    public CompanyResponse update(Long id, CompanyUpdateRequest dto) {
         User authUser = SecurityUtils.getAuthenticatedUser();
         Company company = findActiveCompanyOrThrow(id);
 
