@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard | Sched</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="../assets/logo_menu.png" alt="Sched">
+      </div>
+
+      <nav class="menu">
+  <a class="menu-item active">
+    <div class="icon-box">
+      <img src="../assets/icone_casa.png" alt="Dashboard">
+    </div>
+    <span>Dashboard</span>
+  </a>
+
+  <a class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_produtos.png" alt="Produtos">
+    </div>
+    <span>Produtos</span>
+  </a>
+
+  <a class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_estoque.png" alt="Estoque">
+    </div>
+    <span>Estoque</span>
+  </a>
+
+  <a class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_vendas.png" alt="Vendas">
+    </div>
+    <span>Vendas</span>
+  </a>
+
+  <a class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_alertas.png" alt="Alertas">
+    </div>
+    <span>Alertas</span>
+  </a>
+  <span class="admin-title">ADMIN (apenas)</span>
+  <a class="menu-item">
+      <div class="icon-box">
+        <img src="../assets/icon_user.png" alt="">
+      </div>
+      <span>Funcionários</span>
+    </a>
+    <div class="help-card">
+      <div class="help-icon">
+        <img src="../assets/icon_help.png" alt="">
+      </div>
+    <div class="help-text">
+      <strong>Precisa de ajuda?</strong>
+      <p>Entre em contato com nosso time!</p>
+    </div>
+    <button class="help-button">Entre em contato</button>
+</div>
+</nav>
+    </aside>
+
+    <main>
+        <div class="page-header">
+            <div class="page-header-left">
+                <div class="breadcrumb">
+                <span class="breadcrumb-muted">Páginas</span>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-active">Dashboard</span>
+                </div>
+
+                <h1 class="page-title">Dashboard</h1>
+            </div>
+
+            <div class="page-header-right">
+                <button class="topbar-icon">
+                    <img src="../assets/iconProfile.png" alt="">
+                </button>
+                <button class="topbar-icon">
+                    <img src="../assets/Icon_conf.png" alt="">
+                </button>
+                <button class="topbar-icon">
+                    <img src="../assets//Icon_sino.png" alt="">
+                </button>
+            </div>
+        </div>
+
+      <section class="metrics">
+        <!-- Card 1 -->
+        <div class="card metric-card">
+            <div class="metric-text">
+            <p>Vendas de Hoje</p>
+            <strong>
+                104 <span class="green">+15%</span>
+            </strong>
+            </div>
+
+            <div class="metric-icon">
+            <img src="../assets/icon_carteira.png" alt="Vendas">
+            </div>
+        </div>
+
+        <div class="card metric-card">
+            <div class="metric-text">
+            <p>Total de Itens no Estoque</p>
+            <strong>
+                2.300 <span class="red">-8%</span>
+            </strong>
+            </div>
+
+            <div class="metric-icon">
+            <img src="../assets/icon_globo.png" alt="Estoque">
+            </div>
+        </div>
+
+        <div class="card metric-card">
+            <div class="metric-text">
+            <p>Produtos com Alerta de Estoque Baixo</p>
+            <strong>4</strong>
+            </div>
+
+            <div class="metric-icon">
+            <img src="../assets/icon_aviso.png" alt="Alerta de estoque">
+            </div>
+        </div>
+
+        <div class="card metric-card">
+            <div class="metric-text">
+            <p>Produtos Cadastrados</p>
+            <strong>138</strong>
+            </div>
+
+            <div class="metric-icon">
+            <img src="../assets/icon_prod2.png" alt="Produtos cadastrados">
+            </div>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="box previsoes-box">
+            <h3>
+                Previsões
+                <span class="ai-badge">sched AI</span>
+            </h3>
+
+            <div class="previsoes-cards">
+                <div class="previsao-card">
+                    <div class="previsao-header">
+                    <strong>Aumento de demanda</strong>
+                    <span class="info-icon">i</span>
+                    </div>
+                    <p>
+                    Detectamos 5 possíveis aumentos de demanda para hoje
+                    baseados nas últimas semanas
+                    </p>
+                    <a href="#">Ver mais</a>
+                </div>
+
+                <div class="previsao-card">
+                    <div class="previsao-header">
+                        <strong>Reposição de Estoque</strong>
+                    </div>
+                    <p>
+                    Recomendamos estocagem de acordo com as previsões atuais
+                    </p>
+                    <a href="#">Ver mais</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="box alertas-box">
+            <h3>Alertas Importantes</h3>
+
+            <div class="alertas-columns">
+                <div class="alerta-column">
+                    <div class="alerta-header">
+                        <span class="alerta-icon">!</span>
+                        <strong>4 Produtos com baixo estoque</strong>
+                        </div>
+
+                        <ul>
+                        <li>Água c/ gás</li>
+                        <li>Skol Lata</li>
+                        <li>Smirnoff 2L</li>
+                        <li>Picolé Sergel Menta Flocada</li>
+                        </ul>
+
+                        <a href="#">Ver mais</a>
+                </div>
+
+                <div class="alerta-column">
+                    <div class="alerta-header">
+                    <span class="alerta-icon">!</span>
+                    <strong>13 Produtos próximos da data de validade</strong>
+                    </div>
+
+                    <ul>
+                    <li>Frango à passarinho</li>
+                    <li>Alface</li>
+                    <li>Rúcula</li>
+                    <li>Whisky Bourbon</li>
+                    <li>Leite Condensado</li>
+                    </ul>
+
+                    <a href="#">Ver mais</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="grid-3">
+        <div class="box chart-card">
+            <div class="chart-placeholder dark"></div>
+
+            <div class="chart-info">
+                <h3>
+                    Previsão de Demanda 
+                    <span class="ai-badge">sched AI</span>
+                </h3>
+                <p class="chart-sub"><span class="green2">( +8% )</span> As previsões são boas para este mês!</p>
+
+            <div class="chart-stats">
+
+            <div class="chart-stat">
+                <div class="chart-stat-icon">
+                <img src="../assets/icon_carteira.png" alt="Vendas">
+                </div>
+                <div class="chart-stat-text">
+                <span>Vendas</span>
+                <strong>32.984</strong>
+                </div>
+            </div>
+
+            <div class="chart-stat">
+                <div class="chart-stat-icon">
+                <img src="../assets/icon_globo.png" alt="Reposições">
+                </div>
+                <div class="chart-stat-text">
+                <span>Reposições</span>
+                <strong>415</strong>
+                </div>
+            </div>
+
+            <div class="chart-stat">
+                <div class="chart-stat-icon">
+                <img src="../assets/icon_aviso.png" alt="Perda">
+                </div>
+                <div class="chart-stat-text">
+                <span>Perda</span>
+                <strong>12</strong>
+                </div>
+            </div>
+
+            <div class="chart-stat">
+                <div class="chart-stat-icon">
+                <img src="../assets/icon_vendas.png" alt="Expectativa">
+                </div>
+                <div class="chart-stat-text">
+                <span>Expectativa</span>
+                <strong>Ótima!</strong>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="box chart-card">
+            <h3>Vendas Overview</h3>
+            <p class="chart-sub green">(10%) a mais que 2025</p>
+
+            <div class="chart-placeholder light"></div>
+        </div>
+    </section>
+
+    <section class="footer-cards">
+        <div class="footer-card footer-business">
+            
+            <div class="footer-business-text">
+                <span class="footer-eyebrow">Construído para</span>
+                <h4>Você gerenciar seu negócio!</h4>
+                <p>
+                    Somos um time de desenvolvedores, planejando o melhor
+                    gerenciamento de estoque. Todo detalhe do seu negócio
+                    deve estar na ponta da língua!
+                </p>
+                <a href="#">Ler mais →</a>
+            </div>
+
+            <div class="footer-business-image">
+                <div class="footer-business-image-inner">
+                    <img src="../assets/logo.png" alt="Sched">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-card footer-news">
+            <div class="footer-news-inner">
+                <div class="footer-news-content">
+                    <h4>Acompanhe as novidades da Sched AI</h4>
+
+                    <p>
+                        Constantemente evoluindo as ferramentas de Machine Learning
+                        da Sched para sugerir as melhores escolhas para o seu negócio.
+                    </p>
+
+                    <a href="#" class="footer-link">Ler mais →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+  </div>
+</body>
+</html>
