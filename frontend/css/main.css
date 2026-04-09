@@ -165,14 +165,15 @@ body {
 }
 
 .menu-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.2s ease;
-  color: #9ca3af
+    text-decoration: none; /* Remove o sublinhado de link */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    color: #9ca3af; /* Mantém a cor cinza padrão */
 }
 
 .menu-item span {

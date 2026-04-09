@@ -3,115 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sched - Produtos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Produtos | Sched</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/produto.css">
 </head>
 <body>
-
-    <aside class="sidebar">
-        <div class="logo">
-            <img src="https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard/logo-ct-dark.png" alt="sched" style="width: 100px;">
-        </div>
-        <nav>
-            <a href="#" class="nav-link">Dashboard</a>
-            <a href="#" class="nav-link active">Produtos</a>
-            <a href="#" class="nav-link">Estoque</a>
-        </nav>
-    </aside>
-
-    <main class="main-content">
-        <header class="navbar">
-            <div class="breadcrumb">
-                Páginas / <span>Produtos</span>
-                <h2>Produtos</h2>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="../assets/logo_menu.png" alt="Sched">
             </div>
-        </header>
-        
-        <div class="action-bar">
-            <input type="text" placeholder="Pesquisar produto..." style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; width: 300px;">
-            <button class="btn-new" id="btnOpen">Novo Produto</button>
-        </div>
-
-        <section class="card-table">
-            <div class="card-header"><h3>Produtos Registrados</h3></div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>PRODUTO</th>
-                        <th>PREÇO</th>
-                        <th>TIPO</th>
-                        <th>CATEGORIA</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Filé Mignon (kg)</td>
-                        <td style="font-weight: 700;">R$49,00</td>
-                        <td><span class="badge badge-orange">Perecível</span></td>
-                        <td>Carne</td>
-                        <td><a href="#" style="color: #8898aa; text-decoration: none; font-size: 0.8rem;">Editar</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-    </main>
-
+            <nav class="menu">
+                <a href="/frontend/pages/main.html" class="menu-item">
+                    <div class="icon-box">
+                        <img src="../assets/icone_casa.png" alt="Dashboard">
+                    </div>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/frontend/pages/produto.html" class="menu-item active">
+                    <div class="icon-box">
+                        <img src="../assets/icon_produtos.png" alt="Produtos">
+                    </div>
+                    <span>Produtos</span>
+                </a>
+                <a class="menu-item">
+                    <div class="icon-box">
+                        <img src="../assets/icon_estoque.png" alt="Estoque">
+                    </div>
+                    <span>Estoque</span>
+                </a>
+                <a class="menu-item">
+                    <div class="icon-box">
+                        <img src="../assets/icon_vendas.png" alt="Vendas">
+                    </div>
+                    <span>Vendas</span>
+                </a>
+                <a class="menu-item">
+                    <div class="icon-box">
+                        <img src="../assets/icon_alertas.png" alt="Alertas">
+                    </div>
+                    <span>Alertas</span>
+                </a>
+                <span class="admin-title">ADMIN (apenas)</span>
+                <a class="menu-item">
+                    <div class="icon-box">
+                        <img src="../assets/icon_user.png" alt="">
+                    </div>
+                    <span>Funcionários</span>
+                </a>
+                <div class="help-card">
+                    <div class="help-icon">
+                        <img src="../assets/icon_help.png" alt="">
+                    </div>
+                    <div class="help-text">
+                        <strong>Precisa de ajuda?</strong>
+                        <p>Entre em contato com nosso time!</p>
+                    </div>
+                    <button class="help-button">Entre em contato</button>
+                </div>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="page-header">
+                <div class="page-header-left">
+                    <div class="breadcrumb">
+                        <span class="breadcrumb-muted">Páginas</span>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-active">Produtos</span>
+                    </div>
+                    <h1 class="page-title">Produtos</h1>
+                </div>
+                <div class="page-header-right">
+                    <button class="topbar-icon"><img src="../assets/iconProfile.png" alt=""></button>
+                    <button class="topbar-icon"><img src="../assets/Icon_conf.png" alt=""></button>
+                    <button class="topbar-icon"><img src="../assets/Icon_sino.png" alt=""></button>
+                </div>
+            </header>
+            <div class="action-bar">
+                <input type="text" placeholder="Type here..." class="search-input">
+                <button class="btn-new" id="btnOpen">Novo Produto</button>
+            </div>
+            <section class="card-table">
+                <div class="card-header">
+                    <h3>Produtos Registrados</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PRODUTO</th>
+                            <th>PREÇO</th>
+                            <th>TIPO DO PRODUTO</th>
+                            <th>CATEGORIA</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="product-cell">
+                                <img src="../assets/file_mignon.png" alt="" class="thumb-prod">
+                                Filé Mignon (kg)
+                            </td>
+                            <td class="price-cell">R$49,00</td>
+                            <td><span class="badge badge-orange">Perecível</span></td>
+                            <td>Carne</td>
+                            <td><a href="#" class="edit-link">Editar</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content-box">
             <div class="close-icon" id="btnClose">&times;</div>
-            
-            <h2>Novo Produto</h2>
-            <div class="subtitle"><strong>Registre</strong> os detalhes do produto</div>
-
+            <h2 class="modal-title">Novo Produto</h2>
+            <p class="modal-subtitle"><strong>Registre</strong> os detalhes do produto</p>
             <div class="modal-grid">
-                <div class="modal-label">Produto</div>
-                <div class="modal-label">Preço</div>
-                <div class="modal-label">Tipo do Produto</div>
-                <div class="modal-label">Categoria</div>
-
-                <div class="modal-divider"></div>
-
-                <input type="text" placeholder="Nome do Produto">
-
-                <div class="modal-price-wrapper">
-                    <span class="modal-currency">R$</span>
-                    <input type="text" placeholder="00,00">
+                <div class="grid-item">
+                    <label class="modal-label">Produto</label>
+                    <input type="text" placeholder="Nome do Produto">
                 </div>
-
-                <select required>
-                    <option value="" disabled selected>Selecione</option>
-                    <option value="perecivel">Perecível</option>
-                    <option value="nao-perecivel">Não Perecível</option>
-                </select>
-
-                <select required>
-                    <option value="" disabled selected>Selecione</option>
-                    <option value="carnes">Carnes</option>
-                    <option value="congelados">Congelados</option>
-                </select>
+                <div class="grid-item">
+                    <label class="modal-label">Preço</label>
+                    <div class="price-input-wrapper">
+                        <span>R$</span>
+                        <input type="text" placeholder="00,00">
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <label class="modal-label">Tipo do Produto</label>
+                    <select>
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="perecivel">Perecível</option>
+                        <option value="nao-perecivel">Não Perecível</option>
+                    </select>
+                </div>
+                <div class="grid-item">
+                    <label class="modal-label">Categoria</label>
+                    <select>
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="carnes">Carnes</option>
+                        <option value="bebidas">Bebidas</option>
+                    </select>
+                </div>
             </div>
-
             <div class="modal-actions">
-                <button class="btn-modal btn-modal-cancel" id="btnCancel">Cancelar</button>
-                <button class="btn-modal btn-modal-save">Salvar Produto</button>
+                <button class="btn-modal-cancel" id="btnCancel">Cancelar</button>
+                <button class="btn-modal-save">Salvar Produto</button>
             </div>
         </div>
     </div>
-
     <script>
         const modal = document.getElementById('modalOverlay');
         const btnOpen = document.getElementById('btnOpen');
         const btnClose = document.getElementById('btnClose');
         const btnCancel = document.getElementById('btnCancel');
-
         btnOpen.onclick = () => modal.style.display = 'flex';
-        
         const fechar = () => modal.style.display = 'none';
         btnClose.onclick = fechar;
         btnCancel.onclick = fechar;
-
         window.onclick = (event) => {
             if (event.target == modal) fechar();
         }
