@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sched - Login</title>
     <link rel="stylesheet" href="../css/login.css" />
+    <link rel="stylesheet" href="../css/alert.css" />
 </head>
 <body>
+    <div id="alert-container"></div> 
     <header class="main-header">
         <div class="header-content">
             <img src="../assets/Logo_preta.png" alt="Sched" class="mini-logo">
@@ -59,13 +61,14 @@
 
     </div>
 
+    <script src="../js/alert.js"></script>
     <script>
         async function fazerLogin() {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
         if (!email || !password) {
-            alert("Por favor, preencha todos os campos.");
+            showAlert('warning', 'AVISO!', 'Por favor, preencha todos os campos.');
             return;
         }
 
@@ -96,18 +99,21 @@
                 localStorage.setItem("token", token);
                 localStorage.setItem("userEmail", email);
 
-                alert("Login realizado com sucesso!");
+                showAlert('success', 'SUCESSO!', 'Login realizado com sucesso! Entrando...');
                 
-                // Redireciona para a sua página principal!!!! mudar quando estiver pronta a main
-                window.location.href = "../main_teste.html"; 
+            
+                setTimeout(() => {
+                    window.location.href = "../main_teste.html"; 
+                }, 2000);
+
             } else {
                 // Exibe erro de senha incorreta ou usuário não encontrado
-                alert("Erro ao entrar: " + (result.message || "E-mail ou senha inválidos"));
+                showAlert('error', 'ERRO AO ENTRAR', result.message || "E-mail ou senha inválidos");
             }
 
         } catch (error) {
             console.error("Erro na requisição:", error);
-            alert("Não foi possível conectar ao servidor. Verifique se o backend está ligado.");
+            showAlert('error', 'SEM CONEXÃO', 'O servidor parece estar desligado.');
         }
     }
     </script>

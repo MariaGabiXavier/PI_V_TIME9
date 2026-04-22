@@ -4,8 +4,11 @@
   <meta charset="UTF-8" />
   <title>Sign In</title>
   <link rel="stylesheet" href="../css/sigup.css" />
+  <link rel="stylesheet" href="../css/alert.css" />
 </head>
 <body>
+  <div id="alert-container"></div> 
+
   <header class="header-auth">
     <img src="../assets/Logo.png" alt="Sched Logo" class="header-logo-image">
     <nav class="nav-shed">
@@ -66,63 +69,83 @@
   </div>
 </div>
 
+<script src="../js/alert.js"></script>
 <script>
   async function cadastrar() {
-  const name = document.getElementById("name").value;
-  const cnpj = document.getElementById("cnpj").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
+    const name = document.getElementById("name").value;
+    const cnpj = document.getElementById("cnpj").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
 
-  const cnpjLimpo = cnpj.replace(/\D/g, "");
+    const cnpjLimpo = cnpj.replace(/\D/g, "");
 
-  if (!name || !cnpjLimpo || !email || !password) {
-    alert("Preencha todos os campos!");
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    alert("As senhas não coincidem!");
-    return;
-  }
-
-  const payload = {
-    name: name,
-    cnpj: cnpjLimpo,
-    emailADMIN: email,      // Verifique se no Java está emailADMIN
-    passwordADMIN: password  // Verifique se no Java está passwordADMIN
-  };
-
-  try {
-    console.log("Tentando conectar em: http://localhost:8080/auth/company");
-    
-    const response = await fetch("http://localhost:8080/auth/company", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-    if (response.ok) {
-      const result = await response.json();
-      alert("Empresa cadastrada com sucesso!");
-      window.location.href = "login.html";
-    } else {
-      const errorData = await response.json();
-      console.error("Erro do servidor:", errorData);
-      alert("Erro do servidor: " + (errorData.message || "Dados inválidos"));
+    // Validação de campos vazios
+    if (!name || !cnpjLimpo || !email || !password) {
+      if (typeof showAlert === "function") {
+        showAlert('warning', 'AVISO!', 'Preencha todos os campos!');
+      } else {
+        alert("Preencha todos os campos!");
+      }
+      return;
     }
 
-  } catch (error) {
-    console.error("Erro detalhado:", error);
-    alert(error.message);
-    // Se cair aqui o navegador nem conseguiu chegar no Java
-    alert("Não foi possível conectar ao servidor.\n\n" +
-          "1. Verifique se o VS Code ainda mostra 'Started ApiApplication'.\n" +
-          "2. Se estiver usando Wi-Fi público, o firewall pode bloquear a porta 8080.\n" +
-          "3. Tente trocar 'localhost' por '127.0.0.1' na URL do fetch.");
+    // Validação de senhas
+    if (password !== confirmPassword) {
+      if (typeof showAlert === "function") {
+        showAlert('error', 'ERRO!', 'As senhas não coincidem!');
+      } else {
+        alert("As senhas não coincidem!");
+      }
+      return;
+    }
+
+    const payload = {
+      name: name,
+      cnpj: cnpjLimpo,
+      emailADMIN: email,
+      passwordADMIN: password
+    };
+
+    try {
+      console.log("Enviando dados para o servidor...");
+      
+      const response = await fetch("http://localhost:8080/auth/company", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        // Se salvou no banco, entramos aqui
+        console.log("Sucesso no servidor!");
+        
+        if (typeof showAlert === "function") {
+          showAlert('success', 'SUCESSO!', 'Empresa cadastrada com sucesso!');
+        }
+
+        // Redireciona após 2 segundos (tempo para o usuário ver o alerta)
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 2000);
+
+      } else {
+        // Erro retornado pelo Java (ex: CNPJ já existe)
+        const errorData = await response.json().catch(() => ({})); 
+        console.error("Erro do servidor:", errorData);
+        
+        if (typeof showAlert === "function") {
+          showAlert('error', 'ERRO!', errorData.message || "Dados inválidos");
+        }
+      }
+
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+      if (typeof showAlert === "function") {
+        showAlert('error', 'SEM CONEXÃO', 'Não foi possível conectar ao servidor Java.');
+      }
+    }
   }
-}
 </script>
 </body>
 </html>
