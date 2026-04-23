@@ -21,6 +21,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
+    public UserResponse me() {
+        User authUser = SecurityUtils.getAuthenticatedUser();
+
+        User user = userRepository.findByEmail(authUser.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("user not found or inactive"));
+
+        return mapToResponse(user);
+    }
+
+    @Transactional(readOnly = true)
     public List<UserResponse> getAll() {
         User authUser = SecurityUtils.getAuthenticatedUser();
         return userRepository.findAllByCompanyIdAndDeletedFalse(authUser.getCompany().getId())
