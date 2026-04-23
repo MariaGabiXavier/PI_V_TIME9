@@ -13,6 +13,9 @@ public record ProductRequest(
         @NotNull(message = "price cannot be empty")
         Double price,
 
+        @NotBlank(message = "unitOfMeasure cannot be empty")
+        String unitOfMeasure,
+
         @NotNull(message = "isPerishable cannot be empty")
         Boolean isPerishable
 ) {}

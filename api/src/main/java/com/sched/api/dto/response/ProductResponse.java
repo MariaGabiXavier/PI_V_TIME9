@@ -11,6 +11,7 @@ public record ProductResponse(
         String category,
         Double price,
         Boolean isPerishable,
+        String unitOfMeasure,
         LocalDateTime createdAt,
         Company company
 ) {
@@ -21,6 +22,7 @@ public record ProductResponse(
                 product.getCategory(),
                 product.getPrice(),
                 product.getIsPerishable(),
+                product.getUnitOfMeasure(),
                 product.getCreatedAt(),
                 product.getCompany()
         );

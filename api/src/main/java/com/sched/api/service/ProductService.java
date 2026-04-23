@@ -54,7 +54,7 @@ public class ProductService {
             throw new AccessDeniedException("Not authorized to create product, user/company has be deleted");
         }
 
-        Product product = new Product(null, dto.name(), dto.category(), dto.price(), dto.isPerishable(), null, company);
+        Product product = new Product(null, dto.name(), dto.category(), dto.price(), dto.unitOfMeasure(), dto.isPerishable(), null, company);
 
         productRepository.save(product);
 

@@ -19,6 +19,7 @@ public class Product {
     private String name;
     private String category;
     private Double price;
+    private String unitOfMeasure;
     private Boolean isPerishable;
 
     @CreationTimestamp
