@@ -61,7 +61,7 @@ public class StockService {
         var product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("product not found or inactive with id: " + id));
 
-        Stock stock = new Stock(null, dto.quantity(), dto.expirationDate(), null, product);
+        Stock stock = new Stock(null, dto.quantity(), dto.expirationDate(), null, product,authUser);
 
         stock = stockRepository.save(stock);
 
@@ -113,7 +113,8 @@ public class StockService {
                 stock.getProduct().getIsPerishable(),
                 stock.getQuantity(),
                 stock.getCreatedAt(),
-                stock.getExpirationDate()
+                stock.getExpirationDate(),
+                stock.getCreatedBy().getName()
         );
     }
 

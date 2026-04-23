@@ -9,5 +9,6 @@ public record StockBatchResponse(
         Boolean isPerishable,
         Integer quantity,
         LocalDateTime createdAt,
-        LocalDateTime expirationDate
+        LocalDateTime expirationDate,
+        String createdBy
 ) { }
