@@ -14,13 +14,13 @@
                 <img src="../assets/logo_menu.png" alt="Sched">
             </div>
             <nav class="menu">
-                <a href="/frontend/pages/main.html" class="menu-item">
+                <a href="dashboard.html" class="menu-item">
                     <div class="icon-box">
                         <img src="../assets/icone_casa.png" alt="Dashboard">
                     </div>
                     <span>Dashboard</span>
                 </a>
-                <a href="/frontend/pages/produto.html" class="menu-item active">
+                <a href="produto.html" class="menu-item active">
                     <div class="icon-box">
                         <img src="../assets/icon_produtos.png" alt="Produtos">
                     </div>
@@ -97,60 +97,91 @@
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="product-cell">
-                                <img src="../assets/file_mignon.png" alt="" class="thumb-prod">
-                                Filé Mignon (kg)
-                            </td>
-                            <td class="price-cell">R$49,00</td>
-                            <td><span class="badge badge-orange">Perecível</span></td>
-                            <td>Carne</td>
-                            <td><a href="#" class="edit-link">Editar</a></td>
-                        </tr>
+                    <tbody id="productsTableBody">
                     </tbody>
                 </table>
             </section>
         </main>
     </div>
     <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content-box">
-            <div class="close-icon" id="btnClose">&times;</div>
-            <h2 class="modal-title">Novo Produto</h2>
-            <p class="modal-subtitle"><strong>Registre</strong> os detalhes do produto</p>
-            <div class="modal-grid">
-                <div class="grid-item">
-                    <label class="modal-label">Produto</label>
+        <div class="modal-box">
+
+            <div class="modal-header">
+                <div>
+                    <h2>Novo Produto</h2>
+                    <p><strong>Registre</strong> os detalhes do produto</p>
+                </div>
+                <span class="close-icon" id="btnClose">&times;</span>
+            </div>
+
+            <div class="modal-form">
+
+                <!-- Nome -->
+                <div class="form-group full">
+                    <label>Nome do Produto *</label>
                     <input type="text" placeholder="Nome do Produto">
                 </div>
-                <div class="grid-item">
-                    <label class="modal-label">Preço</label>
-                    <div class="price-input-wrapper">
+
+                <!-- Quantificação -->
+                <div class="form-group">
+                    <label>Tipo da quantificação *</label>
+                    <select>
+                        <option disabled selected>Quantificação</option>
+                        <option value="UNIDADES">Unidades</option>
+                        <option value="CAIXAS">Caixas</option>
+                        <option value="PACOTES">Pacotes</option>
+                        <option value="LATAS">Latas</option>
+                        <option value="GARRAFAS">Garrafas</option>
+                        <option value="SACOS">Sacos</option>
+                        <option value="FARDOS">Fardos</option>
+                        <option value="KG">Kg</option>
+                        <option value="G">g</option>
+                    </select>
+                </div>
+
+                <!-- Preço -->
+                <div class="form-group">
+                    <label>Preço *</label>
+                    <div class="input-price">
                         <span>R$</span>
                         <input type="text" placeholder="00,00">
                     </div>
                 </div>
-                <div class="grid-item">
-                    <label class="modal-label">Tipo do Produto</label>
+
+                <!-- Tipo -->
+                <div class="form-group">
+                    <label>Tipo do Produto *</label>
                     <select>
-                        <option value="" disabled selected>Selecione</option>
+                        <option disabled selected>Não Perecível</option>
                         <option value="perecivel">Perecível</option>
                         <option value="nao-perecivel">Não Perecível</option>
                     </select>
                 </div>
-                <div class="grid-item">
-                    <label class="modal-label">Categoria</label>
+
+                <!-- Categoria -->
+                <div class="form-group">
+                    <label>Categoria *</label>
                     <select>
-                        <option value="" disabled selected>Selecione</option>
-                        <option value="carnes">Carnes</option>
-                        <option value="bebidas">Bebidas</option>
+                        <option disabled selected>Categoria</option>
+                        <option value="bebida">Bebida Não-Alcoólica</option>
+                        <option value="bebida_alcoolica">Bebida Alcoólica</option>
+                        <option value="carne">Carne</option>
+                        <option value="vegetais">Vegetal</option>
+                        <option value="doce">Doce</option>
+                        <option value="mercearia">Mercearia</option>
+                        <option value="salgadinho">Salgadinho</option>
+                        <option value="tabacaria">Tabacaria</option>
+                        <option value="limpeza">Limpeza</option>
                     </select>
                 </div>
+
             </div>
+
             <div class="modal-actions">
-                <button class="btn-modal-cancel" id="btnCancel">Cancelar</button>
-                <button class="btn-modal-save">Salvar Produto</button>
+                <button class="btn-cancel" id="btnCancel">Cancelar</button>
+                <button class="btn-save">Salvar Produto</button>
             </div>
+
         </div>
     </div>
     <script>
@@ -166,5 +197,7 @@
             if (event.target == modal) fechar();
         }
     </script>
+
+    <!-- <script src="../js/produto.js"></script> -->
 </body>
 </html>
