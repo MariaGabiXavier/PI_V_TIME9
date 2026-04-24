@@ -12,13 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (user) {
         await loadProducts();
     }
-
-
-    // SE A VALIDACAO ACIMA NAO ESTIVER DANDO CERTO
-    // COMENTA ELA TODA -> LINHA 3-14
-    // E DEIXA SÓ ESSA LINHA AQUI DE BAIXO -> LINHA 21
-
-    // await loadProducts();
 });
 
 function logout() {
@@ -40,7 +33,7 @@ async function isValidUser(token) {
         const result = await response.json();
 
         if (response.ok) {
-            showAlert('success', 'SUCESSO!', 'usuario valido!!!');
+            // showAlert('success', 'SUCESSO!', 'usuario valido!!!');
             return result;
         } else {
             logout();
@@ -80,7 +73,7 @@ async function loadProducts() {
 
                 tr.innerHTML = `
                     <td class="product-cell">
-                        <img src="../assets/default.png" class="thumb-prod">
+                        <img src="../assets/categorias_dos_produtos_sched/${product.category}.png" class="thumb-prod">
                         ${product.name}
                     </td>
                     <td class="price-cell">R$${formatPrice(product.price)}</td>
@@ -113,12 +106,10 @@ async function saveProduct() {
         const category = document.getElementById("productCategory").value;
         const priceRaw = document.getElementById("productPrice").value;
         const unitOfMeasure = document.getElementById("unitOfMeasure").value;
-        const type = document.getElementById("productType").value;
+        const isPerishable = document.getElementById("productType").value === "true";
 
         // transforma "25,50" → 25.50
         const price = parseFloat(priceRaw.replace(",", "."));
-
-        const isPerishable = type === "perecivel";
 
         const productData = {
             name,

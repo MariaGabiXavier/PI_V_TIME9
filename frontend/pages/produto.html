@@ -6,8 +6,11 @@
     <title>Produtos | Sched</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/produto.css">
+    <link rel="stylesheet" href="../css/alert.css">
 </head>
 <body>
+    <div id="alert-container"></div>
+
     <div class="app">
         <aside class="sidebar">
             <div class="logo">
@@ -63,6 +66,7 @@
                 </div>
             </nav>
         </aside>
+
         <main class="main-content">
             <header class="page-header">
                 <div class="page-header-left">
@@ -103,6 +107,7 @@
             </section>
         </main>
     </div>
+
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-box">
 
@@ -152,9 +157,9 @@
                 <div class="form-group">
                     <label>Tipo do Produto *</label>
                     <select id="productType">
-                        <option disabled selected>Não Perecível</option>
-                        <option value="perecivel">Perecível</option>
-                        <option value="nao-perecivel">Não Perecível</option>
+                        <option disabled selected>Tipo do Produto</option>
+                        <option value="true">Perecível</option>
+                        <option value="false">Não Perecível</option>
                     </select>
                 </div>
 
@@ -163,15 +168,16 @@
                     <label>Categoria *</label>
                     <select id="productCategory">
                         <option disabled selected>Categoria</option>
-                        <option value="bebida">Bebida Não-Alcoólica</option>
-                        <option value="bebida_alcoolica">Bebida Alcoólica</option>
-                        <option value="carne">Carne</option>
-                        <option value="vegetais">Vegetal</option>
-                        <option value="doce">Doce</option>
-                        <option value="mercearia">Mercearia</option>
-                        <option value="salgadinho">Salgadinho</option>
-                        <option value="tabacaria">Tabacaria</option>
-                        <option value="limpeza">Limpeza</option>
+                        <option value="Bebida Alcoólica">Bebida Alcoólica</option>
+                        <option value="Bebida">Bebida</option>
+                        <option value="Carne">Carne</option>
+                        <option value="Vegetal">Vegetal</option>
+                        <option value="Doce">Doce</option>
+                        <option value="Mercearia">Mercearia</option>
+                        <option value="Salgadinho">Salgadinho</option>
+                        <option value="Tabacaria">Tabacaria</option>
+                        <option value="Limpeza">Limpeza</option>
+                        <option value="Outros">Outros</option>
                     </select>
                 </div>
 
@@ -199,6 +205,7 @@
         }
     </script>
 
+    <script src="../js/alert.js"></script>
     <script src="../js/produto.js"></script>
 </body>
 </html>
