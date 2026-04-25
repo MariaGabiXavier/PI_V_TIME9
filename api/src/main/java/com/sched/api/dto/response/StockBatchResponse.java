@@ -8,6 +8,7 @@ public record StockBatchResponse(
         String productCategory,
         Boolean isPerishable,
         Integer quantity,
+        String unitOfMeasure,
         LocalDateTime createdAt,
         LocalDateTime expirationDate,
         String createdBy

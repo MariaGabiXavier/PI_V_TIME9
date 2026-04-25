@@ -112,6 +112,7 @@ public class StockService {
                 stock.getProduct().getCategory(),
                 stock.getProduct().getIsPerishable(),
                 stock.getQuantity(),
+                stock.getProduct().getUnitOfMeasure(),
                 stock.getCreatedAt(),
                 stock.getExpirationDate(),
                 stock.getCreatedBy().getName()
@@ -145,6 +146,7 @@ public class StockService {
                 product.getName(),
                 product.getCategory(),
                 product.getIsPerishable(),
+                product.getUnitOfMeasure(),
 
                 totalQuantity,
 

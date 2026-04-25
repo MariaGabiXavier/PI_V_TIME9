@@ -7,6 +7,7 @@ public record StockResponse(
         String productName,
         String productCategory,
         Boolean productIsPerishable,
+        String unitOfMeasure,
 
         Integer availableQuantity,
         LocalDateTime lastStockEntry,
