@@ -179,35 +179,45 @@ async function updateProduct() {
         return;
     }
 
+    const name = document.getElementById("edit-input-nome").value.trim();
+    const priceRaw = document.getElementById("edit-input-preco").value.trim();
+    const category = document.getElementById("edit-input-categoria").value;
+    const statusText = document.getElementById("edit-input-status").value;
+
+    if (!name || !priceRaw || !category) {
+        showAlert('warning', 'CAMPOS OBRIGATÓRIOS', 'Preencha todos os campos antes de salvar.');
+        return;
+    }
+
+    const price = parseFloat(priceRaw.replace(/[R$\s]/g, "").replace(",", "."));
+
+    if (isNaN(price)) {
+        showAlert('error', 'VALOR INVÁLIDO', 'Digite um preço válido.');
+        return;
+    }
+
+    const precoOriginal = parseFloat(window.dadosOriginais.preco.replace(",", "."));
+    
+    if (
+        name === window.dadosOriginais.nome &&
+        price === precoOriginal &&
+        category === window.dadosOriginais.categoria &&
+        statusText === window.dadosOriginais.status
+    ) {
+        showAlert('warning', 'SEM ALTERAÇÕES', 'Você não modificou nenhum dado deste produto.');
+        return; 
+    }
+
+    const productData = {
+        name: name,
+        category: category,
+        price: price,
+        unitOfMeasure: "UNIDADES", 
+        isPerishable: statusText === "Perecível"
+    };
+
     try {
         const token = localStorage.getItem("token");
-
-        const name = document.getElementById("edit-input-nome").value.trim();
-        const priceRaw = document.getElementById("edit-input-preco").value.trim();
-        const category = document.getElementById("edit-input-categoria").value;
-        const statusText = document.getElementById("edit-input-status").value;
-
-        if (!name || !priceRaw || !category) {
-            showAlert('warning', 'CAMPOS OBRIGATÓRIOS', 'Preencha todos os campos.');
-            return;
-        }
-
-        const price = parseFloat(
-            priceRaw.replace(/[R$\s]/g, "").replace(",", ".")
-        );
-
-        if (isNaN(price)) {
-            showAlert('error', 'VALOR INVÁLIDO', 'Digite um preço válido.');
-            return;
-        }
-
-        const productData = {
-            name: name,
-            category: category,
-            price: price,
-            unitOfMeasure: "UNIDADES", 
-            isPerishable: statusText === "Perecível"
-        };
 
         const response = await fetch(`http://localhost:8080/product/${idParaEditar}`, {
             method: "PUT",
@@ -219,7 +229,7 @@ async function updateProduct() {
         });
 
         if (response.ok) {
-            showAlert('success', 'SUCESSO', 'Produto atualizado!');
+            showAlert('success', 'SUCESSO', 'Produto atualizado com sucesso!');
 
             document.getElementById("modalEditOverlay").style.display = "none";
 
@@ -227,18 +237,12 @@ async function updateProduct() {
 
         } else {
             const result = await response.json().catch(() => ({}));
-
-            showAlert(
-                'error',
-                'ERRO',
-                result.message || JSON.stringify(result)
-            );
-
+            showAlert('error', 'ERRO AO SALVAR', result.message || 'Verifique os dados e tente novamente.');
             console.log("ERRO BACKEND:", result); 
         }
 
     } catch (error) {
         console.error(error);
-        showAlert('error', 'SEM CONEXÃO', 'Servidor não respondeu.');
+        showAlert('error', 'SEM CONEXÃO', 'O servidor não respondeu.');
     }
 }

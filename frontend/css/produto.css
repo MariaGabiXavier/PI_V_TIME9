@@ -384,7 +384,6 @@ td {
   margin-top: 60px;
 }
 
-/* OVERLAY */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -395,7 +394,6 @@ td {
   align-items: center;
 }
 
-/* BOX */
 .modal-box {
   background: #fff;
   width: 850px;
@@ -405,7 +403,6 @@ td {
   animation: fadeIn 0.2s ease;
 }
 
-/* HEADER */
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -430,7 +427,6 @@ td {
   cursor: pointer;
 }
 
-/* FORM GRID */
 .modal-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -453,7 +449,6 @@ td {
   margin-bottom: 6px;
 }
 
-/* INPUTS */
 .modal-form input,
 .modal-form select {
   height: 46px;
@@ -465,7 +460,6 @@ td {
   outline: none;
 }
 
-/* PREÇO */
 .input-price {
   display: flex;
   align-items: center;
@@ -486,7 +480,6 @@ td {
   height: 44px;
 }
 
-/* BOTÕES */
 .modal-actions {
   display: flex;
   justify-content: center;
@@ -522,11 +515,6 @@ td {
   opacity: 0.9;
 }
 
-/* ==========================================
-   ESTILOS EXCLUSIVOS DO MODAL DE EDIÇÃO
-   ========================================== */
-/* Container Principal do Modal de Edição */
-/* 1. Container Principal do Modal */
 .modal-box-edit {
   background: #fff;
   width: 850px;
@@ -537,7 +525,6 @@ td {
   position: relative;
 }
 
-/* 2. Cabeçalho do Modal */
 .modal-header-edit {
   display: flex;
   justify-content: space-between;
@@ -562,8 +549,6 @@ td {
   margin-right: 4px;
 }
 
-/* 3. Estrutura de Grid (Labels, Preview e Inputs) */
-/* Usamos 2.5fr para o nome ter mais espaço que os outros campos */
 .edit-grid-labels, 
 .edit-grid-preview, 
 .edit-grid-inputs {
@@ -586,7 +571,6 @@ td {
   text-transform: uppercase;
 }
 
-/* 4. Miniatura do Produto (O que corrige o seu erro) */
 .product-info {
   display: flex;
   align-items: center;
@@ -597,7 +581,7 @@ td {
   width: 48px !important;
   height: 48px !important;
   border-radius: 8px;
-  object-fit: cover; /* Mantém a proporção da imagem sem esticar */
+  object-fit: cover; 
   background: #f8fafc;
 }
 
@@ -607,7 +591,6 @@ td {
   font-size: 14px;
 }
 
-/* 5. Estilização dos Preços e Badges no Preview */
 .price-info, .category-info {
   font-weight: 700;
   color: #1e293b;
@@ -625,7 +608,6 @@ td {
   text-align: center;
 }
 
-/* 6. Ícone de Troca (⇅) */
 .swap-icon-container {
   text-align: center;
   margin: 15px 0;
@@ -633,7 +615,6 @@ td {
   font-size: 22px;
 }
 
-/* 7. Estilo dos Inputs de Edição */
 .input-field, .input-field-select, .input-price-wrapper {
   height: 45px;
   background: #fff;
@@ -659,7 +640,6 @@ td {
   color: #64748b;
 }
 
-/* 8. Botões de Ação */
 .modal-actions-edit {
   display: flex;
   justify-content: center;
@@ -693,7 +673,16 @@ td {
   transform: translateY(-2px);
   opacity: 0.9;
 }
-/* ANIMAÇÃO */
+
+.status-perecivel {
+    background-color: #fb6340 !important;
+    color: white !important;
+}
+
+.status-nao-perecivel {
+    background-color: #22c55e !important;
+    color: white !important;
+}
 @keyframes fadeIn {
   from {
     opacity: 0;

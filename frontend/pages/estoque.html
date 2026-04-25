@@ -22,13 +22,13 @@
                     </div>
                     <span>Dashboard</span>
                 </a>
-                <a href="produto.html" class="menu-item active">
+                <a href="produto.html" class="menu-item ">
                     <div class="icon-box">
                         <img src="../assets/icon_produtos.png" alt="Produtos">
                     </div>
                     <span>Produtos</span>
                 </a>
-                <a href="estoque.html" class="menu-item">
+                <a href="estoque.html" class="menu-item active">
                     <div class="icon-box">
                         <img src="../assets/icon_estoque.png" alt="Estoque">
                     </div>
@@ -76,20 +76,20 @@
                     <h1 class="page-title">Produtos em Estoque</h1>
                 </div>
                 <div class="page-header-right">
-                    <button class="topbar-icon"><img src="../assets/iconProfile.png" alt="Perfil"></button>
-                    <button class="topbar-icon"><img src="../assets/Icon_conf.png" alt="Configuração"></button>
-                    <button class="topbar-icon"><img src="../assets/Icon_sino.png" alt="Notificação"></button>
+                    <button class="topbar-icon"><img src="../assets/iconProfile.png" alt=""></button>
+                    <button class="topbar-icon"><img src="../assets/Icon_conf.png" alt=""></button>
+                    <button class="topbar-icon"><img src="../assets/Icon_sino.png" alt=""></button>
                 </div>
             </header>
 
             <div class="action-bar">
-                <div class="action-bar-left">
+                <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
                     <div class="search-container">
-                        <img src="../assets/icon_search.png" class="search-icon">
+                        <img class="search-icon">
                         <input type="text" placeholder="Type here..." class="search-input">
                     </div>
-                    <button class="btn-history">
-                        <img src="../assets/icon_clock.png" alt=""> Histórico de Estocagem
+                    <button class="btn-new btn-history">
+                        Histórico de Estocagem
                     </button>
                 </div>
                 <p class="instruction-text">Clique em um produto para <strong>registrar estocagem.</strong></p>
@@ -130,10 +130,11 @@
                 </div>
             </div>
 
-            <div class="modal-actions">
-                <button type="button" class="btn-cancel close-modal">Cancelar</button>
-                <button type="submit" class="btn-confirm">Registrar entrada</button>
-            </div>
+            
+        <div class="modal-actions-edit">
+            <button type="button" class="btn-delete-red close-modal">Cancelar</button>
+            <button type="submit" class="btn-save-gradient" id="btnSaveEdit">Registrar entrada</button>
+        </div>
         </form>
     </div>
 </div>

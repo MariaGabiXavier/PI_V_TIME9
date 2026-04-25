@@ -83,10 +83,18 @@
                     <button class="topbar-icon"><img src="../assets/Icon_sino.png" alt=""></button>
                 </div>
             </header>
+          
+
             <div class="action-bar">
-                <input type="text" placeholder="Type here..." class="search-input">
-                <button class="btn-new" id="btnOpen">Novo Produto</button>
+                <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
+                    <div class="search-container">
+                        <img class="search-icon">
+                        <input type="text" placeholder="Type here..." class="search-input">
+                    </div>
+                    <button class="btn-new btn-history" class="btn-add" id="btnOpen">Novo Produto</button>
+                </div>
             </div>
+
             <section class="card-table">
                 <div class="card-header">
                     <h3>Produtos Registrados</h3>
@@ -262,34 +270,47 @@
     document.addEventListener('click', function (e) {
         const btnEditar = e.target.closest('.edit-link');
 
-        if (btnEditar) {
-            e.preventDefault();
+    if (btnEditar) {
+        e.preventDefault();
 
-            window.idProdutoSendoEditado = btnEditar.getAttribute('data-id');
+        window.idProdutoSendoEditado = btnEditar.getAttribute('data-id');
 
-            const linha = btnEditar.closest('tr');
-            
-            const nome = linha.cells[0].innerText.trim();
-            const preco = linha.cells[1].innerText.trim();
-            const status = linha.cells[2].innerText.trim();
-            const categoria = linha.cells[3].innerText.trim();
-            const imgElement = linha.querySelector('img');
-            const imgSrc = imgElement ? imgElement.src : '../assets/file.png';
+        const linha = btnEditar.closest('tr');
+        const nome = linha.cells[0].innerText.trim();
+        const preco = linha.cells[1].innerText.trim();
+        const status = linha.cells[2].innerText.trim();
+        const categoria = linha.cells[3].innerText.trim();
+        
+        window.dadosOriginais = {
+            nome: nome,
+            preco: preco.replace('R$', '').trim(),
+            status: status,
+            categoria: categoria
+        };
 
-            document.getElementById('edit-header-titulo').innerText = `Editar Produto - ${nome}`;
-            document.getElementById('edit-preview-img').src = imgSrc;
-            document.getElementById('edit-preview-nome').innerText = nome;
-            document.getElementById('edit-preview-preco').innerText = preco;
-            document.getElementById('edit-preview-status').innerText = status;
-            document.getElementById('edit-preview-categoria').innerText = categoria;
+        const badgePreview = document.getElementById('edit-preview-status');
+        badgePreview.innerText = status;
 
-            document.getElementById('edit-input-nome').value = nome;
-            document.getElementById('edit-input-preco').value = preco.replace('R$', '').trim();
-            document.getElementById('edit-input-status').value = status;
-            document.getElementById('edit-input-categoria').value = categoria;
-
-            modalEditar.style.display = 'flex';
+        badgePreview.classList.remove('status-perecivel', 'status-nao-perecivel');
+        
+        if (status === "Perecível") {
+            badgePreview.classList.add('status-perecivel');
+        } else {
+            badgePreview.classList.add('status-nao-perecivel');
         }
+
+        document.getElementById('edit-header-titulo').innerText = `Editar Produto - ${nome}`;
+        document.getElementById('edit-preview-nome').innerText = nome;
+        document.getElementById('edit-preview-preco').innerText = preco;
+        document.getElementById('edit-preview-categoria').innerText = categoria;
+
+        document.getElementById('edit-input-nome').value = nome;
+        document.getElementById('edit-input-preco').value = preco.replace('R$', '').trim();
+        document.getElementById('edit-input-status').value = status;
+        document.getElementById('edit-input-categoria').value = categoria;
+
+        modalEditar.style.display = 'flex';
+    }
 
         if (e.target.id === 'btnClose' || e.target.id === 'btnEditClose' || e.target.id === 'btnCancel') {
             modalNovo.style.display = 'none';
