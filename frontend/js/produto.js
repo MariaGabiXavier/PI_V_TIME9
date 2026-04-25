@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (user) {
         await loadProducts();
     }
+
+    document.getElementById("btnSaveEdit").addEventListener("click", updateProduct);
 });
 
 function logout() {
@@ -167,4 +169,76 @@ function clearForm() {
     document.getElementById("unitOfMeasure").selectedIndex = 0;
     document.getElementById("productType").selectedIndex = 0;
     document.getElementById("productCategory").selectedIndex = 0;
+}
+
+async function updateProduct() {
+    const idParaEditar = window.idProdutoSendoEditado;
+
+    if (!idParaEditar) {
+        showAlert('error', 'ERRO', 'Nenhum produto selecionado para edição.');
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem("token");
+
+        const name = document.getElementById("edit-input-nome").value.trim();
+        const priceRaw = document.getElementById("edit-input-preco").value.trim();
+        const category = document.getElementById("edit-input-categoria").value;
+        const statusText = document.getElementById("edit-input-status").value;
+
+        if (!name || !priceRaw || !category) {
+            showAlert('warning', 'CAMPOS OBRIGATÓRIOS', 'Preencha todos os campos.');
+            return;
+        }
+
+        const price = parseFloat(
+            priceRaw.replace(/[R$\s]/g, "").replace(",", ".")
+        );
+
+        if (isNaN(price)) {
+            showAlert('error', 'VALOR INVÁLIDO', 'Digite um preço válido.');
+            return;
+        }
+
+        const productData = {
+            name: name,
+            category: category,
+            price: price,
+            unitOfMeasure: "UNIDADES", 
+            isPerishable: statusText === "Perecível"
+        };
+
+        const response = await fetch(`http://localhost:8080/product/${idParaEditar}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(productData)
+        });
+
+        if (response.ok) {
+            showAlert('success', 'SUCESSO', 'Produto atualizado!');
+
+            document.getElementById("modalEditOverlay").style.display = "none";
+
+            await loadProducts();
+
+        } else {
+            const result = await response.json().catch(() => ({}));
+
+            showAlert(
+                'error',
+                'ERRO',
+                result.message || JSON.stringify(result)
+            );
+
+            console.log("ERRO BACKEND:", result); 
+        }
+
+    } catch (error) {
+        console.error(error);
+        showAlert('error', 'SEM CONEXÃO', 'Servidor não respondeu.');
+    }
 }

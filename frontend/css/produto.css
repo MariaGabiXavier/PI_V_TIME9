@@ -522,6 +522,177 @@ td {
   opacity: 0.9;
 }
 
+/* ==========================================
+   ESTILOS EXCLUSIVOS DO MODAL DE EDIÇÃO
+   ========================================== */
+/* Container Principal do Modal de Edição */
+/* 1. Container Principal do Modal */
+.modal-box-edit {
+  background: #fff;
+  width: 850px;
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease;
+  position: relative;
+}
+
+/* 2. Cabeçalho do Modal */
+.modal-header-edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.modal-header-edit h2 {
+  font-size: 22px;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.stock-status {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.check-icon {
+  color: #22c55e;
+  margin-right: 4px;
+}
+
+/* 3. Estrutura de Grid (Labels, Preview e Inputs) */
+/* Usamos 2.5fr para o nome ter mais espaço que os outros campos */
+.edit-grid-labels, 
+.edit-grid-preview, 
+.edit-grid-inputs {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1.2fr; 
+  gap: 20px;
+  align-items: center;
+}
+
+.edit-grid-labels {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 15px;
+}
+
+.edit-grid-labels span {
+  font-size: 11px;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+/* 4. Miniatura do Produto (O que corrige o seu erro) */
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.thumb-edit {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 8px;
+  object-fit: cover; /* Mantém a proporção da imagem sem esticar */
+  background: #f8fafc;
+}
+
+#edit-preview-nome {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 14px;
+}
+
+/* 5. Estilização dos Preços e Badges no Preview */
+.price-info, .category-info {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 14px;
+}
+
+.badge-status-green {
+  background: #56d094;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  text-align: center;
+}
+
+/* 6. Ícone de Troca (⇅) */
+.swap-icon-container {
+  text-align: center;
+  margin: 15px 0;
+  color: #cbd5e1;
+  font-size: 22px;
+}
+
+/* 7. Estilo dos Inputs de Edição */
+.input-field, .input-field-select, .input-price-wrapper {
+  height: 45px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #64748b;
+  width: 100%;
+  outline: none;
+}
+
+.input-price-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-field-price {
+  border: none;
+  width: 100%;
+  outline: none;
+  color: #64748b;
+}
+
+/* 8. Botões de Ação */
+.modal-actions-edit {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+.btn-delete-red {
+  background: #f5365c;
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-save-gradient {
+  background: linear-gradient(90deg, #5e72e4, #825ee4);
+  color: #fff;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-delete-red:hover, .btn-save-gradient:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
 /* ANIMAÇÃO */
 @keyframes fadeIn {
   from {
