@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produtos | Sched</title>
+    <title>Vendas | Sched</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/produto.css">
+    <link rel="stylesheet" href="../css/vendas.css">
     <link rel="stylesheet" href="../css/alert.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
                     </div>
                     <span>Dashboard</span>
                 </a>
-                <a href="produto.html" class="menu-item active">
+                <a href="produto.html" class="menu-item ">
                     <div class="icon-box">
                         <img src="../assets/icon_produtos.png" alt="Produtos">
                     </div>
@@ -35,7 +35,7 @@
                     </div>
                     <span>Estoque</span>
                 </a>
-                <a href="vendas.html" class="menu-item">
+                <a href="vendas.html" class="menu-item active">
                     <div class="icon-box">
                         <img src="../assets/icon_vendas.png" alt="Vendas">
                     </div>
@@ -73,9 +73,9 @@
                     <div class="breadcrumb">
                         <span class="breadcrumb-muted">Páginas</span>
                         <span class="breadcrumb-separator">/</span>
-                        <span class="breadcrumb-active">Produtos</span>
+                        <span class="breadcrumb-active">Vendas</span>
                     </div>
-                    <h1 class="page-title">Produtos</h1>
+                    <h1 class="page-title">Página de Vendas</h1>
                 </div>
                 <div class="page-header-right">
                     <button class="topbar-icon"><img src="../assets/iconProfile.png" alt=""></button>
@@ -91,9 +91,15 @@
                         <img class="search-icon">
                         <input type="text" placeholder="Type here..." class="search-input">
                     </div>
-                    <button class="btn-new btn-history" class="btn-add" id="btnOpen">Novo Produto</button>
+                    <button class="btn-new btn-history">
+                        Histórico de Vendas
+                    </button>
                 </div>
+                <p class="instruction-text">Clique em um produto para <strong>registrar venda.</strong></p>
             </div>
+
+            <section class="stock-grid">
+                </section>
 
             <section class="card-table">
                 <div class="card-header">
@@ -114,89 +120,6 @@
                 </table>
             </section>
         </main>
-    </div>
-
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-box">
-
-            <div class="modal-header">
-                <div>
-                    <h2>Novo Produto</h2>
-                    <p><strong>Registre</strong> os detalhes do produto</p>
-                </div>
-                <span class="close-icon" id="btnClose">&times;</span>
-            </div>
-
-            <div class="modal-form">
-
-                <!-- Nome -->
-                <div class="form-group full">
-                    <label>Nome do Produto *</label>
-                    <input type="text" id="productName" placeholder="Nome do Produto">
-                </div>
-
-                <!-- Quantificação -->
-                <div class="form-group">
-                    <label>Tipo da quantificação *</label>
-                    <select id="unitOfMeasure">
-                        <option disabled selected>Quantificação</option>
-                        <option value="UNIDADES">Unidades</option>
-                        <option value="CAIXAS">Caixas</option>
-                        <option value="PACOTES">Pacotes</option>
-                        <option value="LATAS">Latas</option>
-                        <option value="GARRAFAS">Garrafas</option>
-                        <option value="SACOS">Sacos</option>
-                        <option value="FARDOS">Fardos</option>
-                        <option value="KG">Kg</option>
-                        <option value="G">g</option>
-                    </select>
-                </div>
-
-                <!-- Preço -->
-                <div class="form-group">
-                    <label>Preço *</label>
-                    <div class="input-price">
-                        <span>R$</span>
-                        <input type="text" id="productPrice" placeholder="00,00">
-                    </div>
-                </div>
-
-                <!-- Tipo -->
-                <div class="form-group">
-                    <label>Tipo do Produto *</label>
-                    <select id="productType">
-                        <option disabled selected>Tipo do Produto</option>
-                        <option value="true">Perecível</option>
-                        <option value="false">Não Perecível</option>
-                    </select>
-                </div>
-
-                <!-- Categoria -->
-                <div class="form-group">
-                    <label>Categoria *</label>
-                    <select id="productCategory">
-                        <option disabled selected>Categoria</option>
-                        <option value="Bebida Alcoólica">Bebida Alcoólica</option>
-                        <option value="Bebida">Bebida</option>
-                        <option value="Carne">Carne</option>
-                        <option value="Vegetal">Vegetal</option>
-                        <option value="Doce">Doce</option>
-                        <option value="Mercearia">Mercearia</option>
-                        <option value="Salgadinho">Salgadinho</option>
-                        <option value="Tabacaria">Tabacaria</option>
-                        <option value="Limpeza">Limpeza</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="modal-actions">
-                <button class="btn-cancel" id="btnCancel">Cancelar</button>
-                <button class="btn-save" id="btnSaveProduct">Salvar Produto</button>
-            </div>
-
-        </div>
     </div>
 
 <div class="modal-overlay" id="modalEditOverlay">
@@ -264,7 +187,6 @@
 </div>
 
     <script>
-    const modalNovo = document.getElementById('modalOverlay');
     const modalEditar = document.getElementById('modalEditOverlay');
 
     document.addEventListener('click', function (e) {
@@ -313,23 +235,18 @@
     }
 
         if (e.target.id === 'btnClose' || e.target.id === 'btnEditClose' || e.target.id === 'btnCancel') {
-            modalNovo.style.display = 'none';
             modalEditar.style.display = 'none';
         }
     });
 
-    document.getElementById('btnOpen').onclick = () => {
-        modalNovo.style.display = 'flex';
-    };
 
     window.onclick = (event) => {
-        if (event.target == modalNovo || event.target == modalEditar) {
-            modalNovo.style.display = 'none';
+        if (event.target == modalEditar) {
             modalEditar.style.display = 'none';
         }
     };
 </script>
     <script src="../js/alert.js"></script>
-    <script src="../js/produto.js"></script>
+    <script src="../js/vendas.js"></script>
 </body>
 </html>

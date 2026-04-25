@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estoque | Sched</title>
+    <title>Vendas | Sched</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/estoque.css">
+    <link rel="stylesheet" href="../css/historico_vendas.css">
 </head>
 <body>
     <div id="alert-container"></div>
@@ -28,13 +28,13 @@
                     </div>
                     <span>Produtos</span>
                 </a>
-                <a href="estoque.html" class="menu-item active">
+                <a href="estoque.html" class="menu-item ">
                     <div class="icon-box">
                         <img src="../assets/icon_estoque.png" alt="Estoque">
                     </div>
                     <span>Estoque</span>
                 </a>
-                <a  href="vendas.html" class="menu-item">
+                <a href="vendas.html" class="menu-item active">
                     <div class="icon-box">
                         <img src="../assets/icon_vendas.png" alt="Vendas">
                     </div>
@@ -65,15 +65,16 @@
                 </div>
             </nav>
         </aside>
-       <main class="main-content">
+
+         <main class="main-content">
             <header class="page-header">
                 <div class="page-header-left">
                     <div class="breadcrumb">
                         <span class="breadcrumb-muted">Páginas</span>
                         <span class="breadcrumb-separator">/</span>
-                        <span class="breadcrumb-active">Estoque</span>
+                        <span class="breadcrumb-active">Vendas</span>
                     </div>
-                    <h1 class="page-title">Produtos em Estoque</h1>
+                    <h1 class="page-title">Página de vendas - Histórico de Vendas</h1>
                 </div>
                 <div class="page-header-right">
                     <button class="topbar-icon"><img src="../assets/iconProfile.png" alt=""></button>
@@ -83,62 +84,40 @@
             </header>
 
             <div class="action-bar">
-                <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
-                    <div class="search-container">
-                        <img class="search-icon">
-                        <input type="text" placeholder="Type here..." class="search-input">
-                    </div>
-                    <button class="btn-new btn-history">
-                        Histórico de Estocagem
-                    </button>
-                </div>
-                <p class="instruction-text">Clique em um produto para <strong>registrar estocagem.</strong></p>
-            </div>
-
-            <section class="stock-grid">
-                </section>
-        </main>
-    </div>
-
-    <div id="stockModal" class="modal">
-    <div class="modal-content modal-large">
-        <div class="modal-header">
-            <h2 id="modalHeaderTitle">Entrada de Estoque</h2> 
-            <button class="close-modal">&times;</button>
-        </div>
-        
-        <form id="stockForm">
-            <div class="modal-body">
-                <div class="modal-preview-section">
-                    <div id="cardPreview" class="stock-card preview-card"></div>
-                </div>
-
-                <div class="modal-divider-icon">⇄</div>
-
-                <div class="modal-fields-section">
-                    <div class="form-group">
-                        <label>Quantidade adicionada</label>
-                        <input type="number" id="stockQuantity" required>
-                    </div>
-
-                    <div id="perishableFields" style="display: none;">
-                        <div class="form-group">
-                            <label>Data de validade do lote</label>
-                            <input type="date" id="stockExpiry">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            
-        <div class="modal-actions-edit">
-            <button type="button" class="btn-delete-red close-modal">Cancelar</button>
-            <button type="submit" class="btn-save-gradient" id="btnSaveEdit">Registrar entrada</button>
-        </div>
-        </form>
+    <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
+        <div class="search-container">
+    <img class="search-icon"> <input type="text" id="historySearch" placeholder="Type here..." class="search-input">
+</div>
+        <button class="btn-new" onclick="window.location.href='vendas.html'">
+            Voltar
+        </button>
     </div>
 </div>
-<script src="../js/alert.js"></script>
-<script src="../js/estoque.js"></script>
+
+            <section class="history-card">
+                <div class="history-header-info">
+                    <h2>Histórico de Vendas</h2>
+                    <p class="history-stats">
+                        <span class="check-icon">✔</span> 
+                        <span class="bold-stats">21 vendas registradas</span> esta semana
+                    </p>
+                </div>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>PRODUTO</th>
+                            <th>FUNCIONÁRIO</th>
+                            <th>QUANTIDADE ADICIONADA</th>
+                            <th>DATA DE ESTOCAGEM</th>
+                            <th>DATA DE VALIDADE</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+    <script src="../js/historico_vendas.js"></script>
 </body>
 </html>
