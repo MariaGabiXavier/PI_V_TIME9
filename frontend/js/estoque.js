@@ -8,6 +8,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
+    const btnHistory = document.querySelector(".btn-history");
+    if (btnHistory) {
+        btnHistory.addEventListener("click", () => {
+            window.location.href = "historico_estoque.html";
+        });
+    }
+
     await loadStockProducts();
     
     setupModalEvents();

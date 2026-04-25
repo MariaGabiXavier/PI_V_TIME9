@@ -353,8 +353,17 @@ body {
     text-transform: uppercase;
 }
 
-.badge-orange { background: #fff7ed; color: #f97316; border: 1px solid #fdba74; }
-.badge-green { background: #f0fdf4; color: #22c55e; border: 1px solid #86efac; }
+.badge-orange { 
+    background: #fff7ed; 
+    color: #f97316; 
+    border: 1px solid #fdba74; 
+}
+
+.badge-green { 
+    background: #f0fdf4; 
+    color: #22c55e; 
+    border: 1px solid #86efac; 
+}
 
 .card-center {
     display: flex;
@@ -585,8 +594,15 @@ body {
   transition: 0.2s;
 }
 
-.btn-delete-red:hover, 
 .btn-save-gradient:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn-delete-red:hover {
+  background: #ef4444; 
+  color: #ffffff !important; 
   transform: translateY(-2px);
   opacity: 0.9;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
