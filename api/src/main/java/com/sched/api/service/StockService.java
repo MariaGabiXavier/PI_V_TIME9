@@ -57,7 +57,6 @@ public class StockService {
             throw new AccessDeniedException("Not authorized to create product, user/company has be deleted");
         }
 
-
         var product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("product not found or inactive with id: " + id));
 
@@ -131,13 +130,17 @@ public class StockService {
                 .max(LocalDateTime::compareTo)
                 .orElse(null);
 
+        LocalDateTime epoch = LocalDateTime.of(1970, 1, 1, 0, 0);
+
         LocalDateTime nextToExpire = productStocks.stream()
                 .map(Stock::getExpirationDate)
+                .filter(date -> date != null && !date.isEqual(epoch))
                 .min(LocalDateTime::compareTo)
                 .orElse(null);
 
         LocalDateTime latestExpiration = productStocks.stream()
                 .map(Stock::getExpirationDate)
+                .filter(date -> date != null && !date.isEqual(epoch))
                 .max(LocalDateTime::compareTo)
                 .orElse(null);
 
@@ -147,9 +150,7 @@ public class StockService {
                 product.getCategory(),
                 product.getIsPerishable(),
                 product.getUnitOfMeasure(),
-
                 totalQuantity,
-
                 lastEntry,
                 nextToExpire,
                 latestExpiration

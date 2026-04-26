@@ -2,8 +2,10 @@ package com.sched.api.service;
 
 import com.sched.api.domain.Company;
 import com.sched.api.domain.Product;
+import com.sched.api.domain.Stock;
 import com.sched.api.domain.User;
 import com.sched.api.dto.request.ProductRequest;
+import com.sched.api.dto.request.StockRequest;
 import com.sched.api.dto.response.ProductResponse;
 import com.sched.api.exception.ResourceNotFoundException;
 import com.sched.api.repository.ProductRepository;
@@ -13,6 +15,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final StockService stockService;
 
     @Transactional(readOnly = true)
     public List<ProductResponse> findAll() {
@@ -56,7 +60,12 @@ public class ProductService {
 
         Product product = new Product(null, dto.name(), dto.category(), dto.price(), dto.unitOfMeasure(), dto.isPerishable(), null, company);
 
-        productRepository.save(product);
+        Product savedProduct = productRepository.save(product);
+
+        LocalDateTime defaultDate = LocalDateTime.of(1970, 1, 1, 0, 0);
+        StockRequest dtoS = new StockRequest(0, defaultDate);
+
+        stockService.create(savedProduct.getId(), dtoS);
 
         return new ProductResponse(product);
     }
