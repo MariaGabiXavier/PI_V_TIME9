@@ -48,13 +48,17 @@
         <span>Alertas</span>
       </a>
 
-      <span class="admin-title">ADMIN (apenas)</span>
-      <a href="funcionario.html" class="menu-item">
-        <div class="icon-box">
-          <img src="../assets/icon_user.png" alt="">
-        </div>
-        <span>Funcionários</span>
-      </a>
+      <div id="adminMenu" style="display: none;">
+        <span class="admin-title">ADMIN (apenas)</span>
+
+        <a href="funcionario.html" class="menu-item">
+          <div class="icon-box">
+            <img src="../assets/icon_user.png" alt="">
+          </div>
+          <span>Funcionários</span>
+        </a>
+      </div>
+
       <div class="help-card">
         <div class="help-icon">
           <img src="../assets/icon_help.png" alt="">
@@ -94,5 +98,7 @@
     </div>
   </main>
 </div>
+  <script src="../js/auth.js"></script>
+
 </body>
 </html>

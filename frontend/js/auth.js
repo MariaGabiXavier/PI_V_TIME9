@@ -1,15 +1,18 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const valid = await validateToken();
+    const user = await validateToken();
 
-    if (!valid) {
+    if (!user) {
         logout();
+        return;
     }
+
+    showAdminMenu(user);
 });
 
 async function validateToken() {
     const token = localStorage.getItem("token");
 
-    if (!token) return false;
+    if (!token) return null;
 
     try {
         const response = await fetch("http://localhost:8080/user/me", {
@@ -18,10 +21,12 @@ async function validateToken() {
             }
         });
 
-        return response.ok;
+        if (!response.ok) return null;
+
+        return await response.json();
 
     } catch (error) {
-        return false;
+        return null;
     }
 }
 
@@ -29,4 +34,12 @@ function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("userEmail");
     window.location.href = "login.html";
+}
+
+function showAdminMenu(user) {
+    const adminMenu = document.getElementById("adminMenu");
+
+    if (user.role === "ADMIN") {
+        adminMenu.style.display = "block";
+    }
 }
