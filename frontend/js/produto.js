@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -11,16 +10,54 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (user) {
         await loadProducts();
+    } else {
+        window.location.href = "login.html";
     }
 
+    // Eventos de Clique
+    document.getElementById("btnSaveProduct").addEventListener("click", saveProduct);
     document.getElementById("btnSaveEdit").addEventListener("click", updateProduct);
+    document.getElementById("btnOpen").onclick = () => {
+        document.getElementById('modalOverlay').style.display = 'flex';
+    };
+
+    // Fechar modais
+    document.addEventListener('click', (e) => {
+        const modalNovo = document.getElementById('modalOverlay');
+        const modalEditar = document.getElementById('modalEditOverlay');
+
+        if (e.target.id === 'btnClose' || e.target.id === 'btnEditClose' || e.target.id === 'btnCancel') {
+            modalNovo.style.display = 'none';
+            modalEditar.style.display = 'none';
+        }
+
+        if (e.target === modalNovo || e.target === modalEditar) {
+            modalNovo.style.display = 'none';
+            modalEditar.style.display = 'none';
+        }
+
+        // Lógica de abrir edição via Delegação de Evento
+        const btnEditar = e.target.closest('.edit-link');
+        if (btnEditar) {
+            e.preventDefault();
+            openPopUpEdit(btnEditar);
+        }
+    });
+
+    document.querySelector(".search-input").addEventListener("input", function (e) {
+        const termoBusca = e.target.value.toLowerCase();
+
+        const produtosFiltrados = allProducts.filter(produto => {
+            const nome = produto.name.toLowerCase();
+            const categoria = produto.category.toLowerCase();
+            return nome.includes(termoBusca) || categoria.includes(termoBusca);
+        });
+
+        renderListProducts(produtosFiltrados);
+    });
 });
 
-function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userEmail");
-    window.location.href = "login.html";
-}
+let allProducts = [];
 
 async function isValidUser(token) {
     try {
@@ -31,17 +68,11 @@ async function isValidUser(token) {
                 "Content-Type": "application/json"
             }
         });
-
         const result = await response.json();
+        if (response.ok) return result;
 
-        if (response.ok) {
-            // showAlert('success', 'SUCESSO!', 'usuario valido!!!');
-            return result;
-        } else {
-            logout();
-            showAlert('error', 'ERRO DE USUARIO', result.message);
-            return null;
-        }
+        logout();
+        return null;
     } catch (error) {
         showAlert('error', 'SEM CONEXÃO', 'O servidor parece estar desligado.');
         return null;
@@ -51,76 +82,43 @@ async function isValidUser(token) {
 async function loadProducts() {
     try {
         const token = localStorage.getItem("token");
-
         const response = await fetch("http://localhost:8080/product", {
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer " + token,
-                "Content-Type": "application/json"
-            }
+            headers: { "Authorization": "Bearer " + token }
         });
+        const products = await response.json();
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            showAlert('error', 'ERRO AO CARREGAR PRODUTOS', result.message);
-        } else {
-            const products = result;
-
-            const tableBody = document.getElementById("productsTableBody");
-            tableBody.innerHTML = "";
-
-            products.forEach(product => {
-                const tr = document.createElement("tr");
-
-                tr.innerHTML = `
-                    <td class="product-cell">
-                        <img src="../assets/categorias_dos_produtos_sched/${product.category}.png" class="thumb-prod">
-                        ${product.name}
-                    </td>
-                    <td class="price-cell">R$${formatPrice(product.price)}</td>
-                    <td>
-                        <span class="badge ${getBadgeClass(product.isPerishable)}">
-                            ${formatType(product.isPerishable)}
-                        </span>
-                    </td>
-                    <td>${product.category}</td>
-                    <td>
-                        <a href="#" class="edit-link" data-id="${product.id}">
-                            Editar
-                        </a>
-                    </td>
-                `;
-
-                tableBody.appendChild(tr);
-            });
+        if (response.ok) {
+            allProducts = products;
+            renderListProducts(allProducts);
         }
     } catch (error) {
-        showAlert('error', 'SEM CONEXÃO', 'O servidor parece estar desligado.');
+        showAlert('error', 'ERRO', 'Não foi possível carregar os produtos.');
     }
 }
 
 async function saveProduct() {
+    const name = document.getElementById("productName").value.trim();
+    const category = document.getElementById("productCategory").value;
+    const priceRaw = document.getElementById("productPrice").value;
+    const unitOfMeasure = document.getElementById("unitOfMeasure").value;
+    const isPerishable = document.getElementById("productType").value === "true";
+
+    const price = parseFloat(priceRaw.replace(",", "."));
+
+    if(!name || !category || !priceRaw || !unitOfMeasure || document.getElementById("productType").value === "") {
+        showAlert('warning', 'CAMPOS OBRIGATÓRIOS', 'Preencha todos os campos!');
+        return;
+    }
+
+    if (isNaN(price)) {
+        showAlert('error', 'VALOR INVÁLIDO', 'Digite um preço válido.');
+        return;
+    }
+
+    const productData = { name, category, price, isPerishable, unitOfMeasure };
+
     try {
         const token = localStorage.getItem("token");
-
-        const name = document.getElementById("productName").value;
-        const category = document.getElementById("productCategory").value;
-        const priceRaw = document.getElementById("productPrice").value;
-        const unitOfMeasure = document.getElementById("unitOfMeasure").value;
-        const isPerishable = document.getElementById("productType").value === "true";
-
-        // transforma "25,50" → 25.50
-        const price = parseFloat(priceRaw.replace(",", "."));
-
-        const productData = {
-            name,
-            category,
-            price,
-            unitOfMeasure,
-            isPerishable
-        };
-
         const response = await fetch("http://localhost:8080/product", {
             method: "POST",
             headers: {
@@ -130,95 +128,59 @@ async function saveProduct() {
             body: JSON.stringify(productData)
         });
 
-        const result = await response.json();
-
-        if (!response.ok) {
-            showAlert('error', 'ERRO AO CADASTRAR PRODUTO', result.message);
-        } else {
+        if (response.ok) {
             showAlert('success', 'SUCESSO!', 'Produto cadastrado com sucesso!');
-
             document.getElementById("modalOverlay").style.display = "none";
-
-            clearForm();
-
+            clearFormCreate();
             await loadProducts();
+        } else {
+            const result = await response.json();
+            showAlert('error', 'ERRO', result.message);
         }
-
     } catch (error) {
-        showAlert('error', 'SEM CONEXÃO', 'O servidor parece estar desligado.');
+        showAlert('error', 'SEM CONEXÃO', 'Erro ao conectar com o servidor.');
     }
-}
-
-function formatPrice(price) {
-    return price.toFixed(2).replace(".", ",");
-}
-
-function formatType(isPerishable) {
-    return isPerishable ? "Perecível" : "Não Perecível";
-}
-
-function getBadgeClass(isPerishable) {
-    return isPerishable ? "badge-orange" : "badge-green";
-}
-
-document.getElementById("btnSaveProduct").addEventListener("click", saveProduct);
-
-function clearForm() {
-    document.getElementById("productName").value = "";
-    document.getElementById("productPrice").value = "";
-    document.getElementById("unitOfMeasure").selectedIndex = 0;
-    document.getElementById("productType").selectedIndex = 0;
-    document.getElementById("productCategory").selectedIndex = 0;
 }
 
 async function updateProduct() {
     const idParaEditar = window.idProdutoSendoEditado;
-
-    if (!idParaEditar) {
-        showAlert('error', 'ERRO', 'Nenhum produto selecionado para edição.');
-        return;
-    }
-
     const name = document.getElementById("edit-input-nome").value.trim();
     const priceRaw = document.getElementById("edit-input-preco").value.trim();
     const category = document.getElementById("edit-input-categoria").value;
-    const statusText = document.getElementById("edit-input-status").value;
+    const isPerishable = document.getElementById("edit-input-status").value === "true";
+
+    const price = parseFloat(priceRaw.replace(",", "."));
 
     if (!name || !priceRaw || !category) {
-        showAlert('warning', 'CAMPOS OBRIGATÓRIOS', 'Preencha todos os campos antes de salvar.');
+        showAlert('warning', 'CAMPOS OBRIGATÓRIOS', 'Preencha todos os campos!');
         return;
     }
-
-    const price = parseFloat(priceRaw.replace(/[R$\s]/g, "").replace(",", "."));
 
     if (isNaN(price)) {
         showAlert('error', 'VALOR INVÁLIDO', 'Digite um preço válido.');
         return;
     }
 
-    const precoOriginal = parseFloat(window.dadosOriginais.preco.replace(",", "."));
-    
     if (
         name === window.dadosOriginais.nome &&
-        price === precoOriginal &&
+        price === parseFloat(window.dadosOriginais.preco.replace(",", ".")) &&
         category === window.dadosOriginais.categoria &&
-        statusText === window.dadosOriginais.status
+        isPerishable === window.dadosOriginais.status
     ) {
-        showAlert('warning', 'SEM ALTERAÇÕES', 'Você não modificou nenhum dado deste produto.');
-        return; 
+        showAlert('warning', 'SEM ALTERAÇÕES', 'Você não modificou nenhum dado.');
+        return;
     }
 
     const productData = {
         name: name,
         category: category,
         price: price,
-        unitOfMeasure: "UNIDADES", 
-        isPerishable: statusText === "Perecível"
+        isPerishable: isPerishable,
+        unitOfMeasure: window.dadosOriginais.unitOfMeasure
     };
 
     try {
         const token = localStorage.getItem("token");
-
         const response = await fetch(`http://localhost:8080/product/${idParaEditar}`, {
             method: "PUT",
             headers: {
@@ -230,19 +192,110 @@ async function updateProduct() {
 
         if (response.ok) {
             showAlert('success', 'SUCESSO', 'Produto atualizado com sucesso!');
-
             document.getElementById("modalEditOverlay").style.display = "none";
-
+            clearFormUpdate();
             await loadProducts();
-
         } else {
-            const result = await response.json().catch(() => ({}));
-            showAlert('error', 'ERRO AO SALVAR', result.message || 'Verifique os dados e tente novamente.');
-            console.log("ERRO BACKEND:", result); 
+            const result = await response.json();
+            showAlert('error', 'ERRO AO SALVAR', result.message);
         }
-
     } catch (error) {
-        console.error(error);
-        showAlert('error', 'SEM CONEXÃO', 'O servidor não respondeu.');
+        showAlert('error', 'SEM CONEXÃO', 'O servidor parece estar desligado.');
     }
+}
+
+function renderListProducts(productsList) {
+    const tableBody = document.getElementById("productsTableBody");
+    tableBody.innerHTML = "";
+
+    productsList.forEach(product => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td class="product-cell">
+                <img src="../assets/categorias_dos_produtos_sched/${product.category}.png" class="thumb-prod" alt="">
+                ${product.name}
+            </td>
+            <td class="price-cell">R$ ${product.price.toFixed(2).replace(".", ",")}</td>
+            <td>
+                <span class="badge ${product.isPerishable ? "badge-orange" : "badge-green"}">
+                    ${product.isPerishable ? "Perecível" : "Não Perecível"}
+                </span>
+            </td>
+            <td>${product.category}</td>
+            <td>
+                <a href="#" class="edit-link" 
+                   data-id="${product.id}" 
+                   data-uom="${product.unitOfMeasure}"
+                   data-perishable="${product.isPerishable}">
+                    Editar
+                </a>
+            </td>
+        `;
+        tableBody.appendChild(tr);
+    });
+}
+
+function openPopUpEdit(elemento) {
+    const modalEditar = document.getElementById('modalEditOverlay');
+    const id = elemento.getAttribute('data-id');
+    const uom = elemento.getAttribute('data-uom');
+    const perishable = elemento.getAttribute('data-perishable') === 'true';
+
+    const linha = elemento.closest('tr');
+    const nome = linha.cells[0].innerText.trim();
+    const precoTexto = linha.cells[1].innerText.replace('R$', '').trim();
+    const statusText = linha.cells[2].innerText.trim();
+    const categoria = linha.cells[3].innerText.trim();
+
+    // Salva dados originais para comparação
+    window.idProdutoSendoEditado = id;
+    window.dadosOriginais = {
+        nome: nome,
+        preco: precoTexto,
+        status: perishable,
+        categoria: categoria,
+        unitOfMeasure: uom
+    };
+
+    // ATUALIZAÇÃO: Define a imagem inicial no modal baseada na categoria
+    const imgPreview = document.getElementById('edit-preview-img');
+    imgPreview.src = `../assets/categorias_dos_produtos_sched/${categoria}.png`;
+
+    document.getElementById('edit-header-titulo').innerText = `Editar Produto - ${nome}`;
+    document.getElementById('edit-preview-nome').innerText = nome;
+    document.getElementById('edit-preview-preco').innerText = `R$ ${precoTexto}`;
+    document.getElementById('edit-preview-categoria').innerText = categoria;
+
+    const badgePreview = document.getElementById('edit-preview-status');
+    badgePreview.innerText = statusText;
+    badgePreview.className = perishable ? 'badge-status-orange' : 'badge-status-green';
+
+    // Preenche Inputs
+    document.getElementById('edit-input-nome').value = nome;
+    document.getElementById('edit-input-preco').value = precoTexto;
+    document.getElementById('edit-input-status').value = perishable.toString();
+    document.getElementById('edit-input-categoria').value = categoria;
+
+    modalEditar.style.display = 'flex';
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userEmail");
+    window.location.href = "login.html";
+}
+
+function clearFormCreate() {
+    document.getElementById("productName").value = "";
+    document.getElementById("productCategory").selectedIndex = 0;
+    document.getElementById("productPrice").value = "";
+    document.getElementById("unitOfMeasure").selectedIndex = 0;
+    document.getElementById("productType").selectedIndex = 0;
+}
+
+function clearFormUpdate() {
+    document.getElementById("edit-input-nome").value = "";
+    document.getElementById("edit-input-preco").value = "";
+    window.idProdutoSendoEditado = null;
+    window.dadosOriginais = null;
 }

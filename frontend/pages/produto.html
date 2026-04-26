@@ -9,239 +9,161 @@
     <link rel="stylesheet" href="../css/alert.css">
 </head>
 <body>
-    <div id="alert-container"></div>
+<div id="alert-container"></div>
 
-    <div class="app">
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="../assets/logo_menu.png" alt="Sched">
-            </div>
-            <nav class="menu">
-                <a href="dashboard.html" class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/icone_casa.png" alt="Dashboard">
-                    </div>
-                    <span>Dashboard</span>
-                </a>
-                <a href="produto.html" class="menu-item active">
-                    <div class="icon-box">
-                        <img src="../assets/icon_produtos.png" alt="Produtos">
-                    </div>
-                    <span>Produtos</span>
-                </a>
-                <a href="estoque.html" class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/icon_estoque.png" alt="Estoque">
-                    </div>
-                    <span>Estoque</span>
-                </a>
-                <a href="vendas.html" class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/icon_vendas.png" alt="Vendas">
-                    </div>
-                    <span>Vendas</span>
-                </a>
-                <a class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/icon_alertas.png" alt="Alertas">
-                    </div>
-                    <span>Alertas</span>
-                </a>
-                <span class="admin-title">ADMIN (apenas)</span>
-                <a class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/icon_user.png" alt="">
-                    </div>
-                    <span>Funcionários</span>
-                </a>
-                <div class="help-card">
-                    <div class="help-icon">
-                        <img src="../assets/icon_help.png" alt="">
-                    </div>
-                    <div class="help-text">
-                        <strong>Precisa de ajuda?</strong>
-                        <p>Entre em contato com nosso time!</p>
-                    </div>
-                    <button class="help-button">Entre em contato</button>
-                </div>
-            </nav>
-        </aside>
-
-        <main class="main-content">
-            <header class="page-header">
-                <div class="page-header-left">
-                    <div class="breadcrumb">
-                        <span class="breadcrumb-muted">Páginas</span>
-                        <span class="breadcrumb-separator">/</span>
-                        <span class="breadcrumb-active">Produtos</span>
-                    </div>
-                    <h1 class="page-title">Produtos</h1>
-                </div>
-                <div class="page-header-right">
-                    <button class="topbar-icon"><img src="../assets/iconProfile.png" alt=""></button>
-                    <button class="topbar-icon"><img src="../assets/Icon_conf.png" alt=""></button>
-                    <button class="topbar-icon"><img src="../assets/Icon_sino.png" alt=""></button>
-                </div>
-            </header>
-          
-
-            <div class="action-bar">
-                <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
-                    <div class="search-container">
-                        <img class="search-icon">
-                        <input type="text" placeholder="Type here..." class="search-input">
-                    </div>
-                    <button class="btn-new btn-history" class="btn-add" id="btnOpen">Novo Produto</button>
-                </div>
-            </div>
-
-            <section class="card-table">
-                <div class="card-header">
-                    <h3>Produtos Registrados</h3>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>PRODUTO</th>
-                            <th>PREÇO</th>
-                            <th>TIPO DO PRODUTO</th>
-                            <th>CATEGORIA</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="productsTableBody">
-                    </tbody>
-                </table>
-            </section>
-        </main>
-    </div>
-
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-box">
-
-            <div class="modal-header">
-                <div>
-                    <h2>Novo Produto</h2>
-                    <p><strong>Registre</strong> os detalhes do produto</p>
-                </div>
-                <span class="close-icon" id="btnClose">&times;</span>
-            </div>
-
-            <div class="modal-form">
-
-                <!-- Nome -->
-                <div class="form-group full">
-                    <label>Nome do Produto *</label>
-                    <input type="text" id="productName" placeholder="Nome do Produto">
-                </div>
-
-                <!-- Quantificação -->
-                <div class="form-group">
-                    <label>Tipo da quantificação *</label>
-                    <select id="unitOfMeasure">
-                        <option disabled selected>Quantificação</option>
-                        <option value="UNIDADES">Unidades</option>
-                        <option value="CAIXAS">Caixas</option>
-                        <option value="PACOTES">Pacotes</option>
-                        <option value="LATAS">Latas</option>
-                        <option value="GARRAFAS">Garrafas</option>
-                        <option value="SACOS">Sacos</option>
-                        <option value="FARDOS">Fardos</option>
-                        <option value="KG">Kg</option>
-                        <option value="G">g</option>
-                    </select>
-                </div>
-
-                <!-- Preço -->
-                <div class="form-group">
-                    <label>Preço *</label>
-                    <div class="input-price">
-                        <span>R$</span>
-                        <input type="text" id="productPrice" placeholder="00,00">
-                    </div>
-                </div>
-
-                <!-- Tipo -->
-                <div class="form-group">
-                    <label>Tipo do Produto *</label>
-                    <select id="productType">
-                        <option disabled selected>Tipo do Produto</option>
-                        <option value="true">Perecível</option>
-                        <option value="false">Não Perecível</option>
-                    </select>
-                </div>
-
-                <!-- Categoria -->
-                <div class="form-group">
-                    <label>Categoria *</label>
-                    <select id="productCategory">
-                        <option disabled selected>Categoria</option>
-                        <option value="Bebida Alcoólica">Bebida Alcoólica</option>
-                        <option value="Bebida">Bebida</option>
-                        <option value="Carne">Carne</option>
-                        <option value="Vegetal">Vegetal</option>
-                        <option value="Doce">Doce</option>
-                        <option value="Mercearia">Mercearia</option>
-                        <option value="Salgadinho">Salgadinho</option>
-                        <option value="Tabacaria">Tabacaria</option>
-                        <option value="Limpeza">Limpeza</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="modal-actions">
-                <button class="btn-cancel" id="btnCancel">Cancelar</button>
-                <button class="btn-save" id="btnSaveProduct">Salvar Produto</button>
-            </div>
-
+<div class="app">
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="../assets/logo_menu.png" alt="Sched">
         </div>
-    </div>
+        <nav class="menu">
+            <a href="dashboard.html" class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/icone_casa.png" alt="Dashboard">
+                </div>
+                <span>Dashboard</span>
+            </a>
+            <a href="produto.html" class="menu-item active">
+                <div class="icon-box">
+                    <img src="../assets/icon_produtos.png" alt="Produtos">
+                </div>
+                <span>Produtos</span>
+            </a>
+            <a href="estoque.html" class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/icon_estoque.png" alt="Estoque">
+                </div>
+                <span>Estoque</span>
+            </a>
+            <a href="vendas.html" class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/icon_vendas.png" alt="Vendas">
+                </div>
+                <span>Vendas</span>
+            </a>
+            <a class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/icon_alertas.png" alt="Alertas">
+                </div>
+                <span>Alertas</span>
+            </a>
+            <span class="admin-title">ADMIN (apenas)</span>
+            <a class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/icon_user.png" alt="">
+                </div>
+                <span>Funcionários</span>
+            </a>
+            <div class="help-card">
+                <div class="help-icon">
+                    <img src="../assets/icon_help.png" alt="">
+                </div>
+                <div class="help-text">
+                    <strong>Precisa de ajuda?</strong>
+                    <p>Entre em contato com nosso time!</p>
+                </div>
+                <button class="help-button">Entre em contato</button>
+            </div>
+        </nav>
+    </aside>
 
-<div class="modal-overlay" id="modalEditOverlay">
-    <div class="modal-box-edit">
-        <div class="modal-header-edit">
+    <main class="main-content">
+        <header class="page-header">
+            <div class="page-header-left">
+                <div class="breadcrumb">
+                    <span class="breadcrumb-muted">Páginas</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-active">Produtos</span>
+                </div>
+                <h1 class="page-title">Produtos</h1>
+            </div>
+            <div class="page-header-right">
+                <button class="topbar-icon"><img src="../assets/iconProfile.png" alt=""></button>
+                <button class="topbar-icon"><img src="../assets/Icon_conf.png" alt=""></button>
+                <button class="topbar-icon"><img src="../assets/Icon_sino.png" alt=""></button>
+            </div>
+        </header>
+
+
+        <div class="action-bar">
+            <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
+                <div class="search-container">
+                    <img class="search-icon">
+                    <input type="text" placeholder="Pesquisar produto..." class="search-input">
+                </div>
+                <button class="btn-new btn-history" id="btnOpen">Novo Produto</button>
+            </div>
+        </div>
+
+        <section class="card-table">
+            <div class="card-header">
+                <h3>Produtos Registrados</h3>
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>PRODUTO</th>
+                    <th>PREÇO</th>
+                    <th>TIPO DO PRODUTO</th>
+                    <th>CATEGORIA</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+        <div class="modal-header">
             <div>
-                <h2 id="edit-header-titulo">Editar Produto</h2>
-                <p class="stock-status"><span class="check-icon">✔</span> <strong id="edit-header-estoque">30 registrados</strong> no estoque</p>
+                <h2>Novo Produto</h2>
+                <p><strong>Registre</strong> os detalhes do produto</p>
             </div>
-            <span class="close-icon" id="btnEditClose">&times;</span>
+            <span class="close-icon" id="btnClose">&times;</span>
         </div>
-
-        <div class="edit-content">
-            <div class="edit-grid-labels">
-                <span>PRODUTO</span>
-                <span>PREÇO</span>
-                <span>TIPO DO PRODUTO</span>
-                <span>CATEGORIA</span>
+        <div class="modal-form">
+            <div class="form-group full">
+                <label>Nome do Produto *</label>
+                <input type="text" id="productName" placeholder="Nome do Produto">
             </div>
-
-            <div class="edit-grid-preview">
-                <div class="product-info">
-                    <img src="" id="edit-preview-img" class="thumb-edit">
-                    <span id="edit-preview-nome">---</span>
-                </div>
-                <div class="price-info"><span id="edit-preview-preco">R$ 0,00</span></div>
-                <div><span class="badge-status-green" id="edit-preview-status">---</span></div>
-                <div><span class="category-info" id="edit-preview-categoria">---</span></div>
-            </div>
-
-            <div class="swap-icon-container" style="text-align: center; margin: 15px 0;">
-                <span style="font-size: 24px; color: #cbd5e1;">⇅</span>
-            </div>
-
-            <div class="edit-grid-inputs">
-                <input type="text" id="edit-input-nome" class="input-field">
-                <div class="input-price-wrapper">
-                    <span class="currency-prefix">R$</span>
-                    <input type="text" id="edit-input-preco" class="input-field-price">
-                </div>
-                <select id="edit-input-status" class="input-field-select">
-                    <option value="Perecível">Perecível</option>
-                    <option value="Não Perecível">Não Perecível</option>
+            <div class="form-group">
+                <label>Tipo da quantificação *</label>
+                <select id="unitOfMeasure">
+                    <option disabled selected value="">Quantificação</option>
+                    <option value="UNIDADES">Unidades</option>
+                    <option value="CAIXAS">Caixas</option>
+                    <option value="PACOTES">Pacotes</option>
+                    <option value="LATAS">Latas</option>
+                    <option value="GARRAFAS">Garrafas</option>
+                    <option value="SACOS">Sacos</option>
+                    <option value="FARDOS">Fardos</option>
+                    <option value="KG">Kg</option>
+                    <option value="G">g</option>
                 </select>
-               <select id="edit-input-categoria" class="input-field-select">
+            </div>
+            <div class="form-group">
+                <label>Preço *</label>
+                <div class="input-price">
+                    <span>R$</span>
+                    <input type="text" id="productPrice" placeholder="00,00">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Tipo do Produto *</label>
+                <select id="productType">
+                    <option disabled selected value="">Tipo do Produto</option>
+                    <option value="true">Perecível</option>
+                    <option value="false">Não Perecível</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Categoria *</label>
+                <select id="productCategory">
+                    <option disabled selected value="">Categoria</option>
                     <option value="Bebida Alcoólica">Bebida Alcoólica</option>
                     <option value="Bebida">Bebida</option>
                     <option value="Carne">Carne</option>
@@ -255,7 +177,65 @@
                 </select>
             </div>
         </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" id="btnCancel">Cancelar</button>
+            <button class="btn-save" id="btnSaveProduct">Salvar Produto</button>
+        </div>
+    </div>
+</div>
 
+<div class="modal-overlay" id="modalEditOverlay">
+    <div class="modal-box-edit">
+        <div class="modal-header-edit">
+            <div>
+                <h2 id="edit-header-titulo">Editar Produto</h2>
+
+            </div>
+            <span class="close-icon" id="btnEditClose">&times;</span>
+        </div>
+        <div class="edit-content">
+            <div class="edit-grid-labels">
+                <span>PRODUTO</span>
+                <span>PREÇO</span>
+                <span>TIPO DO PRODUTO</span>
+                <span>CATEGORIA</span>
+            </div>
+            <div class="edit-grid-preview">
+                <div class="product-info">
+                    <img src="" id="edit-preview-img" class="thumb-edit">
+                    <span id="edit-preview-nome">---</span>
+                </div>
+                <div class="price-info"><span id="edit-preview-preco">R$ 0,00</span></div>
+                <div><span class="badge-status-green" id="edit-preview-status">---</span></div>
+                <div><span class="category-info" id="edit-preview-categoria">---</span></div>
+            </div>
+            <div class="swap-icon-container" style="text-align: center; margin: 15px 0;">
+                <span style="font-size: 24px; color: #cbd5e1;">⇅</span>
+            </div>
+            <div class="edit-grid-inputs">
+                <input type="text" id="edit-input-nome" class="input-field">
+                <div class="input-price-wrapper">
+                    <span class="currency-prefix">R$</span>
+                    <input type="text" id="edit-input-preco" class="input-field-price">
+                </div>
+                <select id="edit-input-status" class="input-field-select">
+                    <option value="true">Perecível</option>
+                    <option value="false">Não Perecível</option>
+                </select>
+                <select id="edit-input-categoria" class="input-field-select">
+                    <option value="Bebida Alcoólica">Bebida Alcoólica</option>
+                    <option value="Bebida">Bebida</option>
+                    <option value="Carne">Carne</option>
+                    <option value="Vegetal">Vegetal</option>
+                    <option value="Doce">Doce</option>
+                    <option value="Mercearia">Mercearia</option>
+                    <option value="Salgadinho">Salgadinho</option>
+                    <option value="Tabacaria">Tabacaria</option>
+                    <option value="Limpeza">Limpeza</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+        </div>
         <div class="modal-actions-edit">
             <button class="btn-delete-red" id="btnExcluir">Excluir Produto</button>
             <button class="btn-save-gradient" id="btnSaveEdit">Salvar Alterações</button>
@@ -263,73 +243,7 @@
     </div>
 </div>
 
-    <script>
-    const modalNovo = document.getElementById('modalOverlay');
-    const modalEditar = document.getElementById('modalEditOverlay');
-
-    document.addEventListener('click', function (e) {
-        const btnEditar = e.target.closest('.edit-link');
-
-    if (btnEditar) {
-        e.preventDefault();
-
-        window.idProdutoSendoEditado = btnEditar.getAttribute('data-id');
-
-        const linha = btnEditar.closest('tr');
-        const nome = linha.cells[0].innerText.trim();
-        const preco = linha.cells[1].innerText.trim();
-        const status = linha.cells[2].innerText.trim();
-        const categoria = linha.cells[3].innerText.trim();
-        
-        window.dadosOriginais = {
-            nome: nome,
-            preco: preco.replace('R$', '').trim(),
-            status: status,
-            categoria: categoria
-        };
-
-        const badgePreview = document.getElementById('edit-preview-status');
-        badgePreview.innerText = status;
-
-        badgePreview.classList.remove('status-perecivel', 'status-nao-perecivel');
-        
-        if (status === "Perecível") {
-            badgePreview.classList.add('status-perecivel');
-        } else {
-            badgePreview.classList.add('status-nao-perecivel');
-        }
-
-        document.getElementById('edit-header-titulo').innerText = `Editar Produto - ${nome}`;
-        document.getElementById('edit-preview-nome').innerText = nome;
-        document.getElementById('edit-preview-preco').innerText = preco;
-        document.getElementById('edit-preview-categoria').innerText = categoria;
-
-        document.getElementById('edit-input-nome').value = nome;
-        document.getElementById('edit-input-preco').value = preco.replace('R$', '').trim();
-        document.getElementById('edit-input-status').value = status;
-        document.getElementById('edit-input-categoria').value = categoria;
-
-        modalEditar.style.display = 'flex';
-    }
-
-        if (e.target.id === 'btnClose' || e.target.id === 'btnEditClose' || e.target.id === 'btnCancel') {
-            modalNovo.style.display = 'none';
-            modalEditar.style.display = 'none';
-        }
-    });
-
-    document.getElementById('btnOpen').onclick = () => {
-        modalNovo.style.display = 'flex';
-    };
-
-    window.onclick = (event) => {
-        if (event.target == modalNovo || event.target == modalEditar) {
-            modalNovo.style.display = 'none';
-            modalEditar.style.display = 'none';
-        }
-    };
-</script>
-    <script src="../js/alert.js"></script>
-    <script src="../js/produto.js"></script>
+<script src="../js/alert.js"></script>
+<script src="../js/produto.js"></script>
 </body>
 </html>
