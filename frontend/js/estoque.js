@@ -20,106 +20,109 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupModalEvents();
 });
 
-function formatLastStock(dateString) {
-    if (!dateString) return "Nunca estocado";
-
-    const stockDate = new Date(dateString);
-    const now = new Date();
-    
-    const formattedDate = stockDate.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit'
-    });
-
-    const d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const d2 = new Date(stockDate.getFullYear(), stockDate.getMonth(), stockDate.getDate());
-    const diffTime = Math.abs(d1 - d2);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    let timeLabel = "";
-    if (diffDays === 0) timeLabel = "hoje";
-    else if (diffDays === 1) timeLabel = "há 1 dia";
-    else timeLabel = `há ${diffDays} dias`;
-
-    return `${formattedDate} <span class="days-ago">${timeLabel}</span>`;
-}
+let allStock = [];
 
 async function loadStockProducts() {
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8080/product", {
+        const response = await fetch("http://localhost:8080/stock/filterProduct", {
             method: "GET",
             headers: {
                 "Authorization": "Bearer " + token,
                 "Content-Type": "application/json"
             }
         });
+        const stock = await response.json();
 
-        if (!response.ok) throw new Error("Erro ao buscar produtos");
-
-        const products = await response.json();
-        const stockGrid = document.querySelector(".stock-grid");
-        stockGrid.innerHTML = "";
-
-        products.forEach(product => {
-            const card = document.createElement("div");
-            card.classList.add("stock-card");
-
-            const isPerishable = product.isPerishable;
-            const badgeClass = isPerishable ? "badge-orange" : "badge-green";
-            const badgeText = isPerishable ? "Perecível" : "Não Perecível";
-            
-            const displayQuantity = product.currentStock != null ? String(product.currentStock).padStart(2, '0') : "00";
-            const lastStockHTML = formatLastStock(product.lastStockDate);
-
-            let footerHTML = "";
-            if (isPerishable) {
-                footerHTML = `
-                    <div class="card-footer">
-                        <div class="expiry-info">
-                            <p>Lote mais perto da validade: <span>${product.nearestExpiry || '--/--/--'}</span></p>
-                            <p>Data de validade do lote: <span>${product.batchExpiry || '--/--/--'}</span></p>
-                        </div>
-                    </div>`;
-            }
-
-            card.innerHTML = `
-                <div class="card-top">
-                    <div class="top-left">
-                        <img src="../assets/categorias_dos_produtos_sched/${product.category}.png" 
-                            class="prod-thumb" onerror="this.src='../assets/file.png'">
-                        <h3>${product.name}</h3>
-                    </div>
-                    <span class="badge ${badgeClass}">${badgeText}</span>
-                </div>
-
-                <div class="card-center">
-                    <div class="quantity-box">
-                        <span class="big-number">${displayQuantity}</span>
-                        <span class="unit-text">${product.unitOfMeasure || "Unidades"}</span>
-                    </div>
-
-                    <div class="right-info">
-                        <div class="info-item">
-                            <small>Categoria</small>
-                            <strong>${product.category}</strong>
-                        </div>
-                        <div class="info-item">
-                            <small>Última estocagem</small>
-                            <strong class="date-highlight">${lastStockHTML}</strong>
-                        </div>
-                    </div>
-                </div>
-                ${footerHTML}
-            `;
-
-            card.onclick = () => openStockModal(product);
-            stockGrid.appendChild(card);
-        });
+        if (response.ok) {
+            allStock = stock;
+            renderStockGrid(stock);
+        }
     } catch (error) {
-        console.error("Erro ao carregar:", error);
+        showAlert('error', 'ERRO', 'Não foi possível carregar o estoque.');
     }
+}
+
+function formatarDataISO(dataISO) {
+    if (!dataISO || dataISO.startsWith("1970")) return '--/--/--';
+    if (!dataISO || dataISO === "") return '--/--/--';
+    const data = new Date(dataISO);
+    // Verifica se a data é válida antes de formatar
+    return isNaN(data.getTime()) ? '--/--/--' : data.toLocaleDateString('pt-BR');
+}
+
+function renderStockGrid(stockList) {
+    const stockGrid = document.querySelector(".stock-grid");
+    stockGrid.innerHTML = "";
+
+    stockList.forEach(product => {
+        const card = document.createElement("div");
+        card.classList.add("stock-card");
+
+        // Mapeamento baseado no seu JSON
+        const name = product.productName;
+        const category = product.productCategory;
+        const isPerishable = product.productIsPerishable;
+        const quantity = product.availableQuantity;
+        const uom = product.unitOfMeasure;
+
+        // Datas formatadas
+        const lastEntry = (quantity > 0) ? formatarDataISO(product.lastStockEntry) : '--/--/--';
+        const nextExpiry = (quantity > 0) ? formatarDataISO(product.nextToExpireDate) : '--/--/--';
+        const latestExpiry = (quantity > 0) ? formatarDataISO(product.latestExpirationDate) : '--/--/--';
+
+        const badgeClass = isPerishable ? "badge-orange" : "badge-green";
+        const badgeText = isPerishable ? "Perecível" : "Não Perecível";
+
+        const displayQuantity = quantity != null ? String(quantity).padStart(2, '0') : "00";
+
+        // Agora o footerHTML é gerado para TODOS os produtos
+        const footerHTML = `
+            <div class="card-footer">
+                <div class="expiry-info">
+                    <p>Validade mais próxima: <span>${nextExpiry}</span></p>
+                    <p>Validade mais distante: <span>${latestExpiry}</span></p>
+                </div>
+            </div>`;
+
+        card.innerHTML = `
+            <div class="card-top">
+                <div class="top-left">
+                    <img src="../assets/categorias_dos_produtos_sched/${category}.png" 
+                        class="prod-thumb" onerror="this.src='../assets/file.png'">
+                    <h3>${name}</h3>
+                </div>
+                <span class="badge ${badgeClass}">${badgeText}</span>
+            </div>
+
+            <div class="card-center">
+                <div class="quantity-box">
+                    <span class="big-number">${displayQuantity}</span>
+                    <span class="unit-text">${uom || "Unidades"}</span>
+                </div>
+
+                <div class="right-info">
+                    <div class="info-item">
+                        <small>Categoria</small>
+                        <strong>${category}</strong>
+                    </div>
+                    <div class="info-item">
+                        <small>Última estocagem</small>
+                        <strong class="date-highlight">${lastEntry}</strong>
+                    </div>
+                </div>
+            </div>
+            ${footerHTML}
+        `;
+
+        card.onclick = () => {
+            if (typeof openStockModal === "function") {
+                openStockModal(product);
+            }
+        };
+
+        stockGrid.appendChild(card);
+    });
 }
 
 function openStockModal(product) {
