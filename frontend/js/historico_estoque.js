@@ -1,28 +1,55 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadHistory();
+
+    document.querySelector(".search-input").addEventListener("input", function (e) {
+        const termoBusca = e.target.value.toLowerCase();
+
+        const produtosFiltrados = allHistory.filter(produto => {
+            const nome = produto.productName.toLowerCase();
+            const categoria = produto.productCategory.toLowerCase();
+            return nome.includes(termoBusca) || categoria.includes(termoBusca);
+        });
+
+        renderTable(produtosFiltrados);
+    });
 });
 
-function loadHistory() {
-    const mockData = [
-        { name: "Filé Mignon (kg)", user: "Jhenifer Lhais", qty: 12, date: "12/04/2026", valid: "12/05/2026", category: "carne" },
-        { name: "Cerveja Original 600ml", user: "Jhenifer Lhais", qty: 14, date: "12/04/2026", valid: "17/05/2026", category: "bebida" },
-        { name: "Campari 1,5L", user: "Jhenifer Lhais", qty: 2, date: "11/04/2026", valid: "29/08/2026", category: "bebida" },
-        { name: "Tomate (saco)", user: "Jhenifer Lhais", qty: 21, date: "11/04/2026", valid: "09/03/2027", category: "vegetal" },
-        { name: "Coca Cola 360ml", user: "Jean yuki Kimura", qty: 9, date: "11/04/2026", valid: "10/01/2028", category: "bebida" }
-    ];
+// Variável global para busca eficiente
+let allHistory = [];
 
-    renderTable(mockData);
+async function loadHistory() {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:8080/stock", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            }
+        });
+        const data = await response.json();
 
-    // QUANDO FOR CONECTAR O BACK-END, USE ESTA PARTE:
-    /*
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:8080/stock/history", {
-        headers: { "Authorization": "Bearer " + token }
-    })
-    .then(res => res.json())
-    .then(data => renderTable(data))
-    .catch(err => console.error("Erro ao carregar:", err));
-    */
+        if (response.ok) {
+            allHistory = data.filter(item => item.quantity > 0);
+
+            renderTable(allHistory);
+            updateStats(allHistory.length);
+        }
+    } catch (error) {
+        showAlert('error', 'ERRO', 'Não foi possível carregar o historico de estoque.');
+    }
+}
+
+function formatarDataISO(dataISO) {
+    if (!dataISO || dataISO.startsWith("1970")) return '--/--/--';
+    const data = new Date(dataISO);
+    return data.toLocaleDateString('pt-BR') + ' ' + data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function formatarSomenteData(dataISO) {
+    if (!dataISO || dataISO.startsWith("1970")) return '--/--/--';
+    const data = new Date(dataISO);
+    return data.toLocaleDateString('pt-BR');
 }
 
 function renderTable(items) {
@@ -31,26 +58,35 @@ function renderTable(items) {
 
     items.forEach(item => {
         const tr = document.createElement("tr");
+
+        // Mapeamento das chaves do seu JSON
+        const productName = item.productName;
+        const category = item.productCategory;
+        const employee = item.createdBy;
+        const quantity = item.quantity;
+        const uom = item.unitOfMeasure;
+        const createdAt = formatarDataISO(item.createdAt); // Data e Hora da estocagem
+        const expiration = formatarSomenteData(item.expirationDate); // Validade
+
         tr.innerHTML = `
             <td>
                 <div class="product-cell">
-                    <img src="../assets/categorias_dos_produtos_sched/${item.category || 'file'}.png" onerror="this.src='../assets/file.png'">
-                    <span>${item.name}</span>
+                    <img src="../assets/categorias_dos_produtos_sched/${category}.png" onerror="this.src='../assets/file.png'">
+                    <span>${productName}</span>
                 </div>
             </td>
-            <td>${item.user}</td>
-            <td class="qty-bold">${item.qty}</td>
-            <td>${item.date}</td>
-            <td>${item.valid}</td>
+            <td>${employee}</td>
+            <td class="qty-bold">${quantity} <small>${uom}</small></td>
+            <td>${createdAt}</td>
+            <td>${expiration}</td>
         `;
         tbody.appendChild(tr);
     });
 }
 
-document.getElementById("historySearch").addEventListener("input", (e) => {
-    const term = e.target.value.toLowerCase();
-    const rows = document.querySelectorAll("#historyTableBody tr");
-    rows.forEach(row => {
-        row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
-    });
-});
+function updateStats(total) {
+    const statsText = document.querySelector(".bold-stats");
+    if (statsText) {
+        statsText.innerText = `${total} lotes estocados`;
+    }
+}

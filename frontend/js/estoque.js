@@ -36,6 +36,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         await registerStockEntry(productId, quantity, expirationDate);
     });
+
+    document.querySelector(".search-input").addEventListener("input", function (e) {
+        const termoBusca = e.target.value.toLowerCase();
+
+        const produtosFiltrados = allStock.filter(produto => {
+            const nome = produto.productName.toLowerCase();
+            const categoria = produto.productCategory.toLowerCase();
+            return nome.includes(termoBusca) || categoria.includes(termoBusca);
+        });
+
+        renderStockGrid(produtosFiltrados);
+    });
 });
 
 let allStock = [];
