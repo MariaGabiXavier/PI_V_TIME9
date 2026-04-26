@@ -1,11 +1,17 @@
-let currentProduct = null;
-
 document.addEventListener("DOMContentLoaded", async () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
         window.location.href = "login.html";
         return;
+    }
+
+    const user = await isValidUser(token);
+
+    if(user) {
+        await loadStockProducts()
+    } else {
+        window.location.href = "login.html";
     }
 
     const btnHistory = document.querySelector(".btn-history");
@@ -15,12 +21,44 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    await loadStockProducts();
-    
-    setupModalEvents();
+    document.querySelectorAll(".close-modal").forEach(button => {
+        button.onclick = () => {
+            document.getElementById("stockModal").style.display = "none";
+        };
+    });
+
+    document.getElementById("stockForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const productId = e.target.dataset.productId;
+        const quantity = document.getElementById("stockQuantity").value;
+        const expirationDate = document.getElementById("stockExpiry").value;
+
+        await registerStockEntry(productId, quantity, expirationDate);
+    });
 });
 
 let allStock = [];
+
+async function isValidUser(token) {
+    try {
+        const response = await fetch("http://localhost:8080/user/me", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            }
+        });
+        const result = await response.json();
+        if (response.ok) return result;
+
+        logout();
+        return null;
+    } catch (error) {
+        showAlert('error', 'SEM CONEXÃO', 'O servidor parece estar desligado.');
+        return null;
+    }
+}
 
 async function loadStockProducts() {
     try {
@@ -43,11 +81,45 @@ async function loadStockProducts() {
     }
 }
 
+async function registerStockEntry(productId, quantity, expirationDate) {
+    try {
+        const token = localStorage.getItem("token");
+
+        const payload = {
+            quantity: parseInt(quantity),
+            expirationDate: `${expirationDate}T23:59:59`
+        };
+
+        const response = await fetch(`http://localhost:8080/stock/${productId}`, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            showAlert("success", "ESTOQUE ATUALIZADO", "O lote foi registrado com sucesso!");
+
+            document.getElementById("stockModal").style.display = "none";
+
+            await loadStockProducts();
+        } else {
+            showAlert("error", "ERRO AO SALVAR", result.message);
+        }
+    } catch (error) {
+        showAlert("error", "SEM CONEXÃO", "O servidor parece estar desligado.");
+    }
+}
+
 function formatarDataISO(dataISO) {
     if (!dataISO || dataISO.startsWith("1970")) return '--/--/--';
     if (!dataISO || dataISO === "") return '--/--/--';
     const data = new Date(dataISO);
-    // Verifica se a data é válida antes de formatar
+
     return isNaN(data.getTime()) ? '--/--/--' : data.toLocaleDateString('pt-BR');
 }
 
@@ -76,7 +148,6 @@ function renderStockGrid(stockList) {
 
         const displayQuantity = quantity != null ? String(quantity).padStart(2, '0') : "00";
 
-        // Agora o footerHTML é gerado para TODOS os produtos
         const footerHTML = `
             <div class="card-footer">
                 <div class="expiry-info">
@@ -126,87 +197,50 @@ function renderStockGrid(stockList) {
 }
 
 function openStockModal(product) {
-    currentProduct = product;
     const modal = document.getElementById("stockModal");
-    const modalHeaderTitle = document.getElementById("modalHeaderTitle");
+    const form = document.getElementById("stockForm");
+
+    form.reset();
+
+    // Armazena o ID para o submit
+    form.dataset.productId = product.productId;
+
+    document.getElementById("modalHeaderTitle").innerText = `Entrada de Estoque: ${product.productName}`;
+
+    // Atualiza o Preview do Card
     const cardPreview = document.getElementById("cardPreview");
-    const perishableFields = document.getElementById("perishableFields");
-    const fieldsSection = document.querySelector(".modal-fields-section");
-    const inputQuantity = document.getElementById("stockQuantity");
+    const badgeClass = product.productIsPerishable ? "badge-orange" : "badge-green";
+    const badgeText = product.productIsPerishable ? "Perecível" : "Não Perecível";
 
-    modalHeaderTitle.innerText = `Entrada de Estoque - ${product.name}`;
-    inputQuantity.placeholder = `nº de ${product.unitOfMeasure || 'Unidades'}`;
-
-    const lastStockDateText = product.lastStockDate ? new Date(product.lastStockDate).toLocaleDateString('pt-BR') : '--';
     cardPreview.innerHTML = `
         <div class="card-top">
             <div class="top-left">
-                <img src="../assets/categorias_dos_produtos_sched/${product.category}.png" class="prod-thumb">
-                <h3>${product.name}</h3>
+                <img src="../assets/categorias_dos_produtos_sched/${product.productCategory}.png" class="prod-thumb">
+                <h3>${product.productName}</h3>
             </div>
-            <span class="badge ${product.isPerishable ? 'badge-orange' : 'badge-green'}">${product.isPerishable ? 'Perecível' : 'Não Perecível'}</span>
+            <span class="badge ${badgeClass}">${badgeText}</span>
         </div>
         <div class="card-center">
             <div class="quantity-box">
-                <span class="big-number">${product.currentStock || '00'}</span>
-                <span class="unit-text">${product.unitOfMeasure || 'Unidades'}</span>
+                <span class="big-number">${String(product.availableQuantity).padStart(2, '0')}</span>
+                <small>Atual</small>
             </div>
             <div class="right-info">
-                <div class="info-item"><small>Categoria</small><strong>${product.category}</strong></div>
-                <div class="info-item"><small>Última estocagem</small><strong>${lastStockDateText}</strong></div>
+                <div class="info-item"><small>Categoria</small><strong>${product.productCategory}</strong></div>
+                <div class="info-item"><small>Unidade</small><strong>${product.unitOfMeasure}</strong></div>
             </div>
         </div>
     `;
 
-    if (product.isPerishable) {
-        perishableFields.style.display = "block";
-        fieldsSection.classList.add("non-perishable-border"); 
-    } else {
-        perishableFields.style.display = "none";
-        fieldsSection.classList.add("non-perishable-border"); 
-    }
+    // AJUSTE: O campo de validade agora fica SEMPRE visível e é obrigatório
+    const perishableFields = document.getElementById("perishableFields");
+    const inputExpiry = document.getElementById("stockExpiry");
 
-    document.getElementById("stockForm").reset();
+    const hoje = new Date().toISOString().split("T")[0];
+    inputExpiry.setAttribute("min", hoje);
+
+    perishableFields.style.display = "block";
+    inputExpiry.required = true;
+
     modal.style.display = "flex";
-}
-
-function setupModalEvents() {
-    const modal = document.getElementById("stockModal");
-    const stockForm = document.getElementById("stockForm");
-
-    document.querySelectorAll(".close-modal").forEach(btn => {
-        btn.onclick = () => modal.style.display = "none";
-    });
-
-    window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
-
-    stockForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem("token");
-        
-        const payload = {
-            productId: currentProduct.id,
-            quantity: parseFloat(document.getElementById("stockQuantity").value),
-            expiryDate: currentProduct.isPerishable ? document.getElementById("stockExpiry").value : null
-        };
-
-        try {
-            const response = await fetch("http://localhost:8080/stock/entry", {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer " + token,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                modal.style.display = "none";
-                await loadStockProducts(); 
-                alert("Estoque registrado com sucesso!");
-            }
-        } catch (error) {
-            alert("Erro ao salvar entrada.");
-        }
-    };
 }

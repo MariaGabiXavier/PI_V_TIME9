@@ -181,6 +181,7 @@ async function updateProduct() {
 
     try {
         const token = localStorage.getItem("token");
+
         const response = await fetch(`http://localhost:8080/product/${idParaEditar}`, {
             method: "PUT",
             headers: {
@@ -190,13 +191,14 @@ async function updateProduct() {
             body: JSON.stringify(productData)
         });
 
+        const result = await response.json();
+
         if (response.ok) {
             showAlert('success', 'SUCESSO', 'Produto atualizado com sucesso!');
             document.getElementById("modalEditOverlay").style.display = "none";
             clearFormUpdate();
             await loadProducts();
         } else {
-            const result = await response.json();
             showAlert('error', 'ERRO AO SALVAR', result.message);
         }
     } catch (error) {
