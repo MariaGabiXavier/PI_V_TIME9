@@ -85,13 +85,12 @@
                     <button class="topbar-icon"><img src="../assets/Icon_sino.png" alt=""></button>
                 </div>
             </header>
-          
 
             <div class="action-bar">
                 <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
                     <div class="search-container">
                         <img class="search-icon">
-                        <input type="text" placeholder="Type here..." class="search-input">
+                        <input type="text" placeholder="Pesquisar produto..." class="search-input">
                     </div>
                     <button class="btn-new btn-history">
                         Histórico de Vendas
@@ -100,8 +99,7 @@
                 <p class="instruction-text">Clique em um produto para <strong>registrar venda.</strong></p>
             </div>
 
-            <section class="stock-grid">
-                </section>
+            <section class="stock-grid"></section>
 
             <section class="card-table">
                 <div class="card-header">
@@ -123,131 +121,6 @@
             </section>
         </main>
     </div>
-
-<div class="modal-overlay" id="modalEditOverlay">
-    <div class="modal-box-edit">
-        <div class="modal-header-edit">
-            <div>
-                <h2 id="edit-header-titulo">Editar Produto</h2>
-                <p class="stock-status"><span class="check-icon">✔</span> <strong id="edit-header-estoque">30 registrados</strong> no estoque</p>
-            </div>
-            <span class="close-icon" id="btnEditClose">&times;</span>
-        </div>
-
-        <div class="edit-content">
-            <div class="edit-grid-labels">
-                <span>PRODUTO</span>
-                <span>PREÇO</span>
-                <span>TIPO DO PRODUTO</span>
-                <span>CATEGORIA</span>
-            </div>
-
-            <div class="edit-grid-preview">
-                <div class="product-info">
-                    <img src="" id="edit-preview-img" class="thumb-edit">
-                    <span id="edit-preview-nome">---</span>
-                </div>
-                <div class="price-info"><span id="edit-preview-preco">R$ 0,00</span></div>
-                <div><span class="badge-status-green" id="edit-preview-status">---</span></div>
-                <div><span class="category-info" id="edit-preview-categoria">---</span></div>
-            </div>
-
-            <div class="swap-icon-container" style="text-align: center; margin: 15px 0;">
-                <span style="font-size: 24px; color: #cbd5e1;">⇅</span>
-            </div>
-
-            <div class="edit-grid-inputs">
-                <input type="text" id="edit-input-nome" class="input-field">
-                <div class="input-price-wrapper">
-                    <span class="currency-prefix">R$</span>
-                    <input type="text" id="edit-input-preco" class="input-field-price">
-                </div>
-                <select id="edit-input-status" class="input-field-select">
-                    <option value="Perecível">Perecível</option>
-                    <option value="Não Perecível">Não Perecível</option>
-                </select>
-               <select id="edit-input-categoria" class="input-field-select">
-                    <option value="Bebida Alcoólica">Bebida Alcoólica</option>
-                    <option value="Bebida">Bebida</option>
-                    <option value="Carne">Carne</option>
-                    <option value="Vegetal">Vegetal</option>
-                    <option value="Doce">Doce</option>
-                    <option value="Mercearia">Mercearia</option>
-                    <option value="Salgadinho">Salgadinho</option>
-                    <option value="Tabacaria">Tabacaria</option>
-                    <option value="Limpeza">Limpeza</option>
-                    <option value="Outros">Outros</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="modal-actions-edit">
-            <button class="btn-delete-red" id="btnExcluir">Excluir Produto</button>
-            <button class="btn-save-gradient" id="btnSaveEdit">Salvar Alterações</button>
-        </div>
-    </div>
-</div>
-
-    <script>
-    const modalEditar = document.getElementById('modalEditOverlay');
-
-    document.addEventListener('click', function (e) {
-        const btnEditar = e.target.closest('.edit-link');
-
-    if (btnEditar) {
-        e.preventDefault();
-
-        window.idProdutoSendoEditado = btnEditar.getAttribute('data-id');
-
-        const linha = btnEditar.closest('tr');
-        const nome = linha.cells[0].innerText.trim();
-        const preco = linha.cells[1].innerText.trim();
-        const status = linha.cells[2].innerText.trim();
-        const categoria = linha.cells[3].innerText.trim();
-        
-        window.dadosOriginais = {
-            nome: nome,
-            preco: preco.replace('R$', '').trim(),
-            status: status,
-            categoria: categoria
-        };
-
-        const badgePreview = document.getElementById('edit-preview-status');
-        badgePreview.innerText = status;
-
-        badgePreview.classList.remove('status-perecivel', 'status-nao-perecivel');
-        
-        if (status === "Perecível") {
-            badgePreview.classList.add('status-perecivel');
-        } else {
-            badgePreview.classList.add('status-nao-perecivel');
-        }
-
-        document.getElementById('edit-header-titulo').innerText = `Editar Produto - ${nome}`;
-        document.getElementById('edit-preview-nome').innerText = nome;
-        document.getElementById('edit-preview-preco').innerText = preco;
-        document.getElementById('edit-preview-categoria').innerText = categoria;
-
-        document.getElementById('edit-input-nome').value = nome;
-        document.getElementById('edit-input-preco').value = preco.replace('R$', '').trim();
-        document.getElementById('edit-input-status').value = status;
-        document.getElementById('edit-input-categoria').value = categoria;
-
-        modalEditar.style.display = 'flex';
-    }
-
-        if (e.target.id === 'btnClose' || e.target.id === 'btnEditClose' || e.target.id === 'btnCancel') {
-            modalEditar.style.display = 'none';
-        }
-    });
-
-
-    window.onclick = (event) => {
-        if (event.target == modalEditar) {
-            modalEditar.style.display = 'none';
-        }
-    };
-</script>
     <script src="../js/alert.js"></script>
     <script src="../js/vendas.js"></script>
 </body>

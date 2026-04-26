@@ -1,28 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
     loadHistory();
+
+    document.querySelector(".search-input").addEventListener("input", function (e) {
+        const termoBusca = e.target.value.toLowerCase();
+
+        const produtosFiltrados = allProducts.filter(produto => {
+            const nome = produto.productName.toLowerCase();
+            const categoria = produto.productCategory.toLowerCase();
+            return nome.includes(termoBusca) || categoria.includes(termoBusca);
+        });
+
+        renderTable(produtosFiltrados);
+    });
 });
+
+let allProducts = [];
 
 function loadHistory() {
     const mockData = [
-        { name: "Filé Mignon (kg)", user: "Jhenifer Lhais", qty: 12, date: "12/04/2026", valid: "12/05/2026", category: "carne" },
-        { name: "Cerveja Original 600ml", user: "Jhenifer Lhais", qty: 14, date: "12/04/2026", valid: "17/05/2026", category: "bebida" },
-        { name: "Campari 1,5L", user: "Jhenifer Lhais", qty: 2, date: "11/04/2026", valid: "29/08/2026", category: "bebida" },
-        { name: "Tomate (saco)", user: "Jhenifer Lhais", qty: 21, date: "11/04/2026", valid: "09/03/2027", category: "vegetal" },
-        { name: "Coca Cola 360ml", user: "Jean yuki Kimura", qty: 9, date: "11/04/2026", valid: "10/01/2028", category: "bebida" }
+        { productName: "Filé Mignon",       soldBy: "Jhenifer Lais",    totalSold: 12, saleDate: "12/04/2026",  productCategory: "carne" },
+        { productName: "Cerveja Original", soldBy: "Jhenifer Lais",    totalSold: 14, saleDate: "12/04/2026",  productCategory: "bebida" },
+        { productName: "Campari",           soldBy: "Jhenifer Lais",    totalSold: 2,  saleDate: "11/04/2026",  productCategory: "bebida" },
+        { productName: "Tomate",          soldBy: "Jhenifer Lais",    totalSold: 21, saleDate: "11/04/2026",  productCategory: "vegetal" },
+        { productName: "Coca Cola",        soldBy: "Jean yuki Kimura", totalSold: 9,  saleDate: "11/04/2026",  productCategory: "bebida" }
     ];
+    allProducts.push(mockData);
 
     renderTable(mockData);
-
-    // QUANDO FOR CONECTAR O BACK-END, USE ESTA PARTE:
-    /*
-    const token = localStorage.getItem("token");
-    fetch("http://localhost:8080/stock/history", {
-        headers: { "Authorization": "Bearer " + token }
-    })
-    .then(res => res.json())
-    .then(data => renderTable(data))
-    .catch(err => console.error("Erro ao carregar:", err));
-    */
 }
 
 function renderTable(items) {
@@ -34,14 +38,13 @@ function renderTable(items) {
         tr.innerHTML = `
             <td>
                 <div class="product-cell">
-                    <img src="../assets/categorias_dos_produtos_sched/${item.category || 'file'}.png" onerror="this.src='../assets/file.png'">
-                    <span>${item.name}</span>
+                    <img src="../assets/categorias_dos_produtos_sched/${item.productCategory}.png" onerror="this.src='../assets/file.png'">
+                    <span>${item.productName}</span>
                 </div>
             </td>
-            <td>${item.user}</td>
-            <td class="qty-bold">${item.qty}</td>
-            <td>${item.date}</td>
-            <td>${item.valid}</td>
+            <td>${item.soldBy}</td>
+            <td class="qty-bold">${item.totalSold}</td>
+            <td>${item.saleDate}</td>
         `;
         tbody.appendChild(tr);
     });
