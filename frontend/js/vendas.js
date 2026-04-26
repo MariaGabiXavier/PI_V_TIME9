@@ -1,17 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        window.location.href = "login.html";
-        return;
-    }
-    
-    const user = await isValidUser(token);
-
-    if (user) {
-        await loadProducts();
-    }
+   await loadProducts();
 
     const btnHistory = document.querySelector(".btn-history");
     if (btnHistory) {
@@ -34,31 +22,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 let allProducts = [];
-
-async function isValidUser(token) {
-    try {
-        const response = await fetch("http://localhost:8080/user/me", {
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer " + token,
-                "Content-Type": "application/json"
-            }
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            return result;
-        } else {
-            logout();
-            showAlert('error', 'ERRO DE USUARIO', result.message);
-            return null;
-        }
-    } catch (error) {
-        showAlert('error', 'SEM CONEXÃO', 'O servidor parece estar desligado.');
-        return null;
-    }
-}
 
 async function loadProducts() {
     try {
@@ -98,10 +61,4 @@ function renderListProducts(productsList) {
         `;
         tableBody.appendChild(tr);
     });
-}
-
-function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userEmail");
-    window.location.href = "login.html";
 }

@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
-    loadHistory();
+document.addEventListener("DOMContentLoaded", async () => {
+   await loadHistory();
 
     document.querySelector(".search-input").addEventListener("input", function (e) {
         const termoBusca = e.target.value.toLowerCase();
@@ -49,11 +49,3 @@ function renderTable(items) {
         tbody.appendChild(tr);
     });
 }
-
-document.getElementById("historySearch").addEventListener("input", (e) => {
-    const term = e.target.value.toLowerCase();
-    const rows = document.querySelectorAll("#historyTableBody tr");
-    rows.forEach(row => {
-        row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
-    });
-});

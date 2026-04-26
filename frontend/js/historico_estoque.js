@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
-    loadHistory();
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadHistory();
 
     document.querySelector(".search-input").addEventListener("input", function (e) {
         const termoBusca = e.target.value.toLowerCase();

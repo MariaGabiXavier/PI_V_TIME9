@@ -1,18 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        window.location.href = "login.html";
-        return;
-    }
-
-    const user = await isValidUser(token);
-
-    if(user) {
-        await loadStockProducts()
-    } else {
-        window.location.href = "login.html";
-    }
+    await loadStockProducts();
 
     const btnHistory = document.querySelector(".btn-history");
     if (btnHistory) {
@@ -51,26 +38,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 let allStock = [];
-
-async function isValidUser(token) {
-    try {
-        const response = await fetch("http://localhost:8080/user/me", {
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer " + token,
-                "Content-Type": "application/json"
-            }
-        });
-        const result = await response.json();
-        if (response.ok) return result;
-
-        logout();
-        return null;
-    } catch (error) {
-        showAlert('error', 'SEM CONEXÃO', 'O servidor parece estar desligado.');
-        return null;
-    }
-}
 
 async function loadStockProducts() {
     try {
