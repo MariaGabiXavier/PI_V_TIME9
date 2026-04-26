@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Funcionários | Sched</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/funcionario.css">
+</head>
+<body>
+
+<div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="../assets/logo_menu.png" alt="Sched">
+      </div>
+
+      <nav class="menu">
+  <a href="../pages/dashboard.html" class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_casaAzul.png" alt="Dashboard">
+    </div>
+    <span>Dashboard</span>
+  </a>
+
+  <a href="../pages/produto.html" class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_produtos.png" alt="Produtos">
+    </div>
+    <span>Produtos</span>
+  </a>
+
+  <a href="../pages/estoque.html" class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_estoque.png" alt="Estoque">
+    </div>
+    <span>Estoque</span>
+  </a>
+
+  <a href="#" class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_vendas.png" alt="Vendas">
+    </div>
+    <span>Vendas</span>
+  </a>
+
+  <a href="#" class="menu-item">
+    <div class="icon-box">
+      <img src="../assets/icon_alertas.png" alt="Alertas">
+    </div>
+    <span>Alertas</span>
+  </a>
+  <span class="admin-title">ADMIN (apenas)</span>
+  <a href="funcionario.html" class="menu-item active">
+    <div class="icon-box">
+        <img src="../assets/icon_userBranco.png" alt="">
+    </div>
+    <span>Funcionários</span>
+  </a>
+
+    <div class="help-card">
+      <div class="help-icon">
+        <img src="../assets/icon_help.png" alt="">
+      </div>
+    <div class="help-text">
+      <strong>Precisa de ajuda?</strong>
+      <p>Entre em contato com nosso time!</p>
+    </div>
+    <button class="help-button">Entre em contato</button>
+</div>
+</nav>
+    </aside>
+  <main>
+
+    <header class="page-header">
+        <div class="page-header-top">
+            <div class="page-header-left">
+                <div class="breadcrumb">
+                    <span class="breadcrumb-muted">Páginas</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-active">Funcionários</span>
+                </div>
+
+              <h1 class="page-title">Funcionários</h1>
+            </div>
+
+            <div class="page-header-right">
+                <button class="topbar-icon">
+                    <img src="../assets/iconProfile.png" alt="">
+                </button>
+                <button class="topbar-icon">
+                    <img src="../assets/Icon_conf.png" alt="">
+                </button>
+                <button class="topbar-icon">
+                    <img src="../assets//Icon_sino.png" alt="">
+                </button>
+            </div>
+        </div>
+
+        <div class="page-header-search">
+            <img src="../assets/icon_lupa.png" alt="Buscar">
+            <input type="text" placeholder="Type here..." />
+            <button class="btn-primary">+ Cadastrar Funcionário</button>
+        </div>
+    </header>
+
+    <section class="card">
+      <h2>Lista de Funcionários</h2>
+
+      <div class="table">
+
+        <div class="table-header">
+          <span>NOME</span>
+          <span>EMAIL</span>
+          <span>TIPO DO FUNCIONÁRIO</span>
+          <span>AÇÕES</span>
+        </div>
+
+        <div class="table-row">
+          <div class="user">
+            <img src="https://i.pravatar.cc/40?img=1">
+            <span>Jhenifer Lais Barbosa</span>
+          </div>
+
+          <span>jheniferlais@sched.org</span>
+          <span class="badge admin">ADMIN</span>
+
+          <div class="actions">
+             <button class="edit">
+                <img src="../assets/icon_lapis.png" alt="Editar">
+                <span>Editar</span>
+            </button>
+
+            <button class="delete">
+                <img src="../assets/icon_lixeira.png" alt="Excluir">
+                <span>Excluir</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-row">
+          <div class="user">
+            <img src="https://i.pravatar.cc/40?img=2">
+            <span>João Giatti</span>
+          </div>
+
+          <span>joaogiatti@sched.org</span>
+          <span class="badge employee">FUNCIONÁRIO</span>
+
+          <div class="actions">
+            <button class="edit">
+                <img src="../assets/icon_lapis.png" alt="Editar">
+                <span>Editar</span>
+            </button>
+
+            <button class="delete">
+                <img src="../assets/icon_lixeira.png" alt="Excluir">
+                <span>Excluir</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-row">
+          <div class="user">
+            <img src="https://i.pravatar.cc/40?img=3">
+            <span>Anna Clara Olbi</span>
+          </div>
+
+          <span>annaclara@sched.org</span>
+          <span class="badge employee">FUNCIONÁRIO</span>
+
+          <div class="actions">
+             <button class="edit">
+                <img src="../assets/icon_lapis.png" alt="Editar">
+                <span>Editar</span>
+            </button>
+
+            <button class="delete">
+                <img src="../assets/icon_lixeira.png" alt="Excluir">
+                <span>Excluir</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>
