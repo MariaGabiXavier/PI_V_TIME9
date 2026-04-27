@@ -101,26 +101,31 @@
                 </div>
             </div>
 
-            <section class="history-card">
-                <div class="history-header-info">
-                    <h2>Histórico de Vendas</h2>
-                    <p class="history-stats">
-                        <span class="check-icon">✔</span> 
-                        <span class="bold-stats">21 vendas registradas</span> esta semana
-                    </p>
-                </div>
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th>PRODUTO</th>
-                            <th>FUNCIONÁRIO</th>
-                            <th>QUANTIDADE VENDIDA</th>
-                            <th>DATA DA VENDA</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBody"></tbody>
-                </table>
-            </section>
+             <section class="history-card">
+                 <div class="history-header-info">
+                     <h2>Histórico de Vendas</h2>
+
+                     <p class="history-stats">
+                         <span class="check-icon">✔</span>
+                         <span class="bold-stats" id="weekSalesText">0 vendas registradas</span>
+                         esta semana
+                     </p>
+                 </div>
+
+                 <table class="history-table">
+                     <thead>
+                     <tr>
+                         <th>PRODUTO</th>
+                         <th>FUNCIONÁRIO</th>
+                         <th>QUANTIDADE VENDIDA</th>
+                         <th>VALOR DA VENDA</th>
+                         <th>DATA DA VENDA</th>
+                     </tr>
+                     </thead>
+
+                     <tbody id="historyTableBody"></tbody>
+                 </table>
+             </section>
         </main>
     </div>
     <script src="../js/auth.js"></script>

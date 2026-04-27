@@ -9,8 +9,8 @@ public record SaleResponse(
 
         String productName,
         String productCategory,
-        Double productPrice,
 
+        Double totalPrice,
         Integer totalSold,
         String soldBy,
         LocalDateTime saleDate
@@ -20,7 +20,7 @@ public record SaleResponse(
                 sale.getId(),
                 sale.getProduct().getName(),
                 sale.getProduct().getCategory(),
-                sale.getProduct().getPrice(),
+                sale.getTotalPrice(),
                 sale.getTotalSold(),
                 sale.getSoldBy().getName(),
                 sale.getSaleDate()

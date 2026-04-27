@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
-   await loadHistory();
+   await loadHistorySale();
 
     document.querySelector(".search-input").addEventListener("input", function (e) {
         const termoBusca = e.target.value.toLowerCase();
 
-        const produtosFiltrados = allProducts.filter(produto => {
+        const produtosFiltrados = allHistorySale.filter(produto => {
             const nome = produto.productName.toLowerCase();
             const categoria = produto.productCategory.toLowerCase();
             return nome.includes(termoBusca) || categoria.includes(termoBusca);
@@ -14,19 +14,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
 
-let allProducts = [];
+let allHistorySale = [];
 
-function loadHistory() {
-    const mockData = [
-        { productName: "Filé Mignon",       soldBy: "Jhenifer Lais",    totalSold: 12, saleDate: "12/04/2026",  productCategory: "carne" },
-        { productName: "Cerveja Original", soldBy: "Jhenifer Lais",    totalSold: 14, saleDate: "12/04/2026",  productCategory: "bebida" },
-        { productName: "Campari",           soldBy: "Jhenifer Lais",    totalSold: 2,  saleDate: "11/04/2026",  productCategory: "bebida" },
-        { productName: "Tomate",          soldBy: "Jhenifer Lais",    totalSold: 21, saleDate: "11/04/2026",  productCategory: "vegetal" },
-        { productName: "Coca Cola",        soldBy: "Jean yuki Kimura", totalSold: 9,  saleDate: "11/04/2026",  productCategory: "bebida" }
-    ];
-    allProducts.push(mockData);
+async function loadHistorySale() {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:8080/sale", {
+            headers: { "Authorization": "Bearer " + token }
+        });
+        const historySale = await response.json();
 
-    renderTable(mockData);
+        if (response.ok) {
+            allHistorySale = historySale;
+
+            renderTable(allHistorySale);
+            updateWeekSalesInfo();
+        }
+    } catch (error) {
+        showAlert('error', 'ERRO', 'Não foi possível carregar os produtos.');
+    }
 }
 
 function renderTable(items) {
@@ -43,9 +49,45 @@ function renderTable(items) {
                 </div>
             </td>
             <td>${item.soldBy}</td>
+            <td>${item.totalSold}</td>
+            <td>${item.totalPrice}
             <td class="qty-bold">${item.totalSold}</td>
-            <td>${item.saleDate}</td>
+            <td>${formatarSomenteData(item.saleDate)}</td>
         `;
         tbody.appendChild(tr);
     });
+}
+
+function formatarSomenteData(dataISO) {
+    const data = new Date(dataISO);
+    return data.toLocaleDateString('pt-BR');
+}
+
+function updateWeekSalesInfo() {
+    const total = getWeekSalesQuantity();
+
+    document.getElementById("weekSalesText").textContent =
+        `${total} vendas registradas`;
+}
+
+function getWeekSalesQuantity() {
+    const hoje = new Date();
+
+    const diaSemana = hoje.getDay();
+    const diff = diaSemana === 0 ? 6 : diaSemana - 1;
+
+    const inicioSemana = new Date(hoje);
+    inicioSemana.setDate(hoje.getDate() - diff);
+    inicioSemana.setHours(0, 0, 0, 0);
+
+    const fimSemana = new Date(inicioSemana);
+    fimSemana.setDate(inicioSemana.getDate() + 7);
+
+    const vendasDaSemana = allHistorySale.filter(item => {
+        const dataVenda = new Date(item.saleDate);
+
+        return dataVenda >= inicioSemana && dataVenda < fimSemana;
+    });
+
+    return vendasDaSemana.length;
 }
