@@ -294,6 +294,12 @@ body {
   cursor: pointer;
 }
 
+.btn-new:hover{
+  transform: translateY(-1px);
+  transition: 0.2s ease;
+}
+
+
 .instruction-text { font-size: 13px; color: #64748b; }
 
 .stock-grid {

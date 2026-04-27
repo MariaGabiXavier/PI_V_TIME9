@@ -331,6 +331,16 @@ main {
   cursor: pointer;
 }
 
+.btn-new:hover {
+  transform: translateY(-1px);
+  transition: 0.2s ease;
+}
+
+.actions button:hover {
+  transform: translateY(-1px);
+  transition: 0.2s ease;
+}
+
 .card {
   background: #fff;
   padding: 20px;

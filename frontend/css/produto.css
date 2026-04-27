@@ -294,6 +294,11 @@ body {
   cursor: pointer;
 }
 
+.btn-new:hover {
+  transform: translateY(-1px);
+  transition: 0.2s ease;
+}
+
 .card-table {
   background: #fff;
   border-radius: 16px;
@@ -362,6 +367,11 @@ td {
   color: #94a3b8;
   text-decoration: none;
   font-size: 12px;
+}
+
+.edit-link:hover{
+  text-decoration: underline;
+  color: #AE5BFF;
 }
 
 .modal-overlay {
@@ -659,7 +669,7 @@ td {
 }
 
 .btn-save-gradient {
-  background: linear-gradient(90deg, #5e72e4, #825ee4);
+  background: linear-gradient(90deg, #499BFF, #AE5BFF);
   color: #fff;
   border: none;
   padding: 12px 40px;
