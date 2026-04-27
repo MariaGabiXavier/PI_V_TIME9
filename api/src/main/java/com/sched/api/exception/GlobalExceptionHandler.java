@@ -72,7 +72,11 @@ public class GlobalExceptionHandler {
     // Access Denied / Forbidden (403)
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorDetails> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
-        return buildResponse(HttpStatus.FORBIDDEN, "You do not have permission to access this resource.", request
-        );
+        return buildResponse(HttpStatus.FORBIDDEN, "You do not have permission to access this resource.", request);
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ErrorDetails> handleInsufficientStock(InsufficientStockException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
 }
