@@ -952,3 +952,28 @@ td {
     line-height: 1;
 }
 
+
+/* Marcador roxo */
+#productsTableBody tr {
+    cursor: pointer;
+    transition: all 0.2s ease; 
+}
+
+#productsTableBody tr:hover {
+    background-color: #f2f0ff; 
+}
+
+#productsTableBody tr:hover .product-cell {
+    color: #6c5ce7; 
+}
+
+#productsTableBody tr:hover td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+#productsTableBody tr:hover td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
