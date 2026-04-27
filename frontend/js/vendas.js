@@ -46,17 +46,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const productId = sellForm.getAttribute('data-product-id');
             const quantity = document.getElementById('sellQuantity').value;
-            const saleDateType = document.querySelector('input[name="saleDate"]:checked').value;
-            const customDate = document.getElementById('sellDateCustom').value;
-
-            // Formatação para LocalDateTime do Java
-            const finalDate = saleDateType === 'today' 
-                ? new Date().toISOString() 
-                : `${customDate}T10:00:00`;
 
             const vendaData = {
                 totalSold: parseInt(quantity),
-                saleDate: finalDate
             };
 
             try {

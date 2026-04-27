@@ -14,6 +14,7 @@ import com.sched.api.repository.StockRepository;
 import com.sched.api.repository.UserRepository;
 import com.sched.api.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,19 +35,30 @@ public class SaleService {
                 .toList();
     }
 
+    @Transactional
     public SaleResponse create(Long id, SaleRequest dto) {
         User authUser = SecurityUtils.getAuthenticatedUser();
 
         User user = userRepository.findByEmail(authUser.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("user not found or inactive with email: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "user not found or inactive with email: " + authUser.getEmail()));
 
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("product not found or inactive with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "product not found or inactive with id: " + id));
 
         List<Stock> stocks = stockRepository
                 .findByProductIdOrderByExpirationDateAsc(product.getId());
 
         int quantityToSell = dto.totalSold();
+
+        int totalAvailable = stocks.stream()
+                .mapToInt(Stock::getQuantity)
+                .sum();
+
+        if (totalAvailable < quantityToSell) {
+            throw new InsufficientStockException("Insufficient stock to complete sale.");
+        }
 
         for (Stock stock : stocks) {
 
@@ -63,10 +75,6 @@ public class SaleService {
             }
 
             stockRepository.save(stock);
-        }
-
-        if (quantityToSell > 0) {
-            throw new InsufficientStockException("Insufficient stock to complete sale.");
         }
 
         double totalPrice = product.getPrice() * dto.totalSold();
