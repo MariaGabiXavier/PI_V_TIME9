@@ -305,8 +305,7 @@ body {
 
 .btn-new:hover {
     transform: translateY(-1px);
-    opacity: 0.9;
-    box-shadow: 0 4px 10px rgba(73, 155, 255, 0.3);
+    transition: 0.2s ease;
 }
 
 .search-input {
