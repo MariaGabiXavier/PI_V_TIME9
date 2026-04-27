@@ -11,16 +11,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 3. Barra de Pesquisa
-    document.querySelector(".search-input").addEventListener("input", function (e) {
-        const termoBusca = e.target.value.toLowerCase();
-        const produtosFiltrados = allProducts.filter(produto => {
-            const nome = (produto.name || "").toLowerCase();
-            const categoria = (produto.category || "").toLowerCase();
-            return nome.includes(termoBusca) || categoria.includes(termoBusca);
-        });
-        renderListProducts(produtosFiltrados);
-    });
+    
+    const searchInput = document.querySelector(".search-input");
+    if (searchInput) {
+        searchInput.addEventListener("input", function (e) {
+            const termoBusca = e.target.value.toLowerCase().trim();
+            const produtosFiltrados = allProducts.filter(produto => {
+                const nome = (produto.productName || "").toLowerCase();
+                const categoria = (produto.productCategory || "").toLowerCase();
+                
+                return nome.includes(termoBusca) || categoria.includes(termoBusca);
+            });
 
+            renderListProducts(produtosFiltrados);
+        });
+}
     // 4. Lógica do Calendário 
     const sellDateCustom = document.getElementById('sellDateCustom');
     if (sellDateCustom) {
@@ -91,7 +96,7 @@ async function loadProducts() {
             "Content-Type": "application/json"
         };
 
-        // Faz as duas chamadas ao mesmo tempo (mais rápido)
+        // Faz as duas chamadas ao mesmo tempo 
         const [resStock, resProduct] = await Promise.all([
             fetch("http://localhost:8080/stock/filterProduct", { headers }),
             fetch("http://localhost:8080/product", { headers })
@@ -101,17 +106,15 @@ async function loadProducts() {
         const productData = await resProduct.json();
 
         if (resStock.ok && resProduct.ok) {
-            // Criamos um "Dicionário" de preços usando o ID como chave
-            // { "1": 15.0, "2": 10.50 }
             const priceMap = {};
             productData.forEach(p => {
                 priceMap[p.id] = p.price;
             });
 
-            // Mesclamos o preço dentro dos dados de estoque
+            
             allProducts = stockData.map(item => ({
                 ...item,
-                productPrice: priceMap[item.productId] || 0 // Pega o preço do segundo fetch
+                productPrice: priceMap[item.productId] || 0 
             }));
 
             renderListProducts(allProducts);
@@ -123,12 +126,23 @@ async function loadProducts() {
 function renderListProducts(productsList) {
     const tableBody = document.getElementById("productsTableBody");
     if (!tableBody) return;
+
+    if (productsList.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 40px; color: #94a3b8;">
+                    Nenhum produto encontrado com esse nome.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
     tableBody.innerHTML = "";
 
     productsList.forEach(product => {
         const tr = document.createElement("tr");
         
-        // Agora o productPrice existe porque injetamos ele no loadProducts
         const price = product.productPrice || 0;
 
         tr.innerHTML = `
@@ -163,7 +177,6 @@ function openSellModal(product) {
         return new Date(data).toLocaleDateString('pt-BR');
     };
 
-    // Pegamos a unidade de medida do banco ou definimos um padrão caso esteja vazio
     const unidadeMedida = product.unitOfMeasure || "Unid.";
 
     previewContainer.innerHTML = `
