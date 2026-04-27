@@ -729,10 +729,10 @@ td {
 
 .modal-body {
     display: flex;
-    align-items: center;
+    align-items: stretch; 
     justify-content: space-between;
     gap: 30px;
-    padding: 10px 0;
+    padding: 20px 0;
 }
 
 /* Lado Esquerdo: Card de Preview */
@@ -777,10 +777,30 @@ td {
 /* Lado Direito: Campos de Entrada */
 .modal-fields-section {
     flex: 1;
-    padding: 25px;
+    padding: 30px;
     border-radius: 20px;
     background: #fff;
-    border: 1px solid #f1f5f9; 
+    border: 1px solid #f1f5f9;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    gap: 25px; 
+    
+    min-height: 260px;
+}
+.modal-fields-section .form-group {
+    margin-bottom: 0;
+}
+
+.modal-fields-section label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
 }
 
 .form-group label {
@@ -795,31 +815,33 @@ td {
 /* Input de Quantidade */
 #sellQuantity {
     width: 100%;
-    height: 48px;
+    height: 45px;
     padding: 0 15px;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
-    background: #ffffff;
-    font-size: 15px;
+    font-size: 14px;
+    color: #475569;
     outline: none;
+    transition: border-color 0.2s;
+}
+#sellQuantity:focus {
+    border-color: #499BFF;
 }
 
 /* Grupo de Data (Hoje / Outro dia) */
 .radio-group {
     display: flex;
-    gap: 15px;
+    gap: 20px;
     align-items: center;
-    margin-top: 10px;
 }
 
 .radio-option {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
+    gap: 6px;
+    font-size: 13px;
     font-weight: 600;
-    color: #64748b;
-    cursor: pointer;
+    color: #475569;
 }
 
 /* Botões de Ação Inferiores */
@@ -828,6 +850,24 @@ td {
     justify-content: center;
     gap: 15px;
     margin-top: 35px;
+}
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer; /* Isso garante que apareça a mãozinha ao passar o mouse */
+    position: relative;
+    z-index: 10; /* Garante que ele esteja "na frente" para receber o clique */
+}
+
+.radio-option input[type="radio"] {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+    accent-color: #499BFF; /* Deixa o círculo azul como no Figma */
 }
 
 .btn-delete-red {
@@ -906,3 +946,4 @@ td {
     color: #1e293b;
     line-height: 1;
 }
+
