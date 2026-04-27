@@ -365,12 +365,16 @@ td {
   font-weight: 700;
 }
 
-.badge-orange {
-  background: #fb6340;
+.badge-orange { 
+    background: #fff7ed; 
+    color: #f97316; 
+    border: 1px solid #fdba74; 
 }
 
-.badge-green {
-  background: #22c55e;
+.badge-green { 
+    background: #f0fdf4; 
+    color: #22c55e; 
+    border: 1px solid #86efac; 
 }
 
 .edit-link {
@@ -638,11 +642,11 @@ td {
   background: #f5365c;
   color: #fff;
   border: none;
-  padding: 12px 30px;
+  padding: 12px 40px;
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: 0.2s;
+  
 }
 
 .btn-save-gradient {
@@ -653,7 +657,7 @@ td {
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: 0.2s;
+  
 }
 
 .btn-delete-red:hover, .btn-save-gradient:hover {
@@ -681,7 +685,7 @@ td {
     transform: scale(1);
   }
 }
-/* --- Estilos do Modal de Venda (Fidelidade ao Figma) --- */
+/* --- Estilos do Modal de Venda --- */
 
 .modal {
     display: none;
@@ -696,10 +700,10 @@ td {
 
 .modal-large {
     background: #fff;
-    width: 800px; /* Ajustado para a proporção do Figma */
+    width: 800px; 
     max-width: 95vw;
-    border-radius: 28px; /* Bordas mais arredondadas como no protótipo */
-    padding: 40px; /* Mais respiro interno */
+    border-radius: 28px; 
+    padding: 40px; 
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
@@ -867,32 +871,36 @@ td {
     cursor: pointer;
     width: 16px;
     height: 16px;
-    accent-color: #499BFF; /* Deixa o círculo azul como no Figma */
+    accent-color: #499BFF; 
 }
 
 .btn-delete-red {
     background: #f5365c; 
     color: #fff;
     border: none;
-    padding: 14px 35px;
+    padding: 14px 40px;
     border-radius: 14px;
     font-weight: 700;
     cursor: pointer;
     min-width: 160px;
+    width: 200px;
+    transition: 0.2s;
 }
 
 .btn-save-gradient {
-    background: linear-gradient(90deg, #5e72e4, #825ee4); 
+    background: linear-gradient(90deg, #499BFF, #AE5BFF); 
     color: #fff;
     border: none;
-    padding: 14px 35px;
+    padding: 14px 40px;
     border-radius: 14px;
     font-weight: 700;
     cursor: pointer;
     min-width: 180px;
+    width: 200px;
+    transition: 0.2s;
 }
 
-.big-number-figma {
+.big-number {
     font-size: 64px !important; 
     font-weight: 800;
     color: #1e293b;
@@ -909,7 +917,6 @@ td {
     box-shadow: none !important;
 }
 
-/* Ajuste na badge para ficar mais arredondada como no Figma */
 .badge {
     border-radius: 50px !important;
     font-weight: 700;
@@ -940,7 +947,7 @@ td {
     font-weight: 700;
 }
 
-.big-number-figma {
+.big-number{
     font-size: 60px !important;
     font-weight: 800;
     color: #1e293b;
