@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // 3. Barra de Pesquisa
-    
     const searchInput = document.querySelector(".search-input");
     if (searchInput) {
         searchInput.addEventListener("input", function (e) {

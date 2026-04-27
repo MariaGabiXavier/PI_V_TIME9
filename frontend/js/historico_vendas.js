@@ -25,22 +25,31 @@ async function loadHistorySale() {
         const historySale = await response.json();
 
         if (response.ok) {
-            allHistorySale = historySale;
+            // Invertemos a lista aqui para que o último item do banco (mais novo)
+            // se torne o primeiro da lista na tela.
+            allHistorySale = historySale.reverse();
 
             renderTable(allHistorySale);
             updateWeekSalesInfo();
         }
     } catch (error) {
-        showAlert('error', 'ERRO', 'Não foi possível carregar os produtos.');
+        showAlert('error', 'ERRO', 'Não foi possível carregar o histórico de vendas.');
     }
 }
 
 function renderTable(items) {
     const tbody = document.getElementById("historyTableBody");
     tbody.innerHTML = "";
-
+    
     items.forEach(item => {
         const tr = document.createElement("tr");
+
+        // Formata o preço para o padrão brasileiro (R$ 00,00)
+        const precoFormatado = Number(item.totalPrice || 0).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+
         tr.innerHTML = `
             <td>
                 <div class="product-cell">
@@ -50,8 +59,7 @@ function renderTable(items) {
             </td>
             <td>${item.soldBy}</td>
             <td>${item.totalSold}</td>
-            <td>${item.totalPrice}
-            <td class="qty-bold">${item.totalSold}</td>
+            <td class="price-cell-bold">${precoFormatado}</td> 
             <td>${formatarSomenteData(item.saleDate)}</td>
         `;
         tbody.appendChild(tr);

@@ -712,7 +712,7 @@ td {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
-    padding-bottom: 0px; /* Removendo borda inferior para ficar limpo */
+    padding-bottom: 0px; 
     border-bottom: none;
 }
 
@@ -744,12 +744,11 @@ td {
 .modal-preview-section, .modal-fields-section {
     display: flex;
     flex-direction: column;
-    min-height: 260px; /* Ajuste essa altura para bater com o conteúdo */
+    min-height: 260px; 
 }
 
-
 .preview-card, .modal-fields-section {
-    flex: 1; /* Faz ambos preencherem a altura total do container pai */
+    flex: 1; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -862,9 +861,9 @@ td {
     font-size: 13px;
     font-weight: 600;
     color: #64748b;
-    cursor: pointer; /* Isso garante que apareça a mãozinha ao passar o mouse */
+    cursor: pointer; 
     position: relative;
-    z-index: 10; /* Garante que ele esteja "na frente" para receber o clique */
+    z-index: 10; 
 }
 
 .radio-option input[type="radio"] {
@@ -908,7 +907,6 @@ td {
     letter-spacing: -2px;
 }
 
-/* Ajuste no container do card de preview */
 .preview-card {
     background: #ffffff;
     border: 1px solid #f1f5f9 !important;
@@ -922,7 +920,7 @@ td {
     font-weight: 700;
 }
 
-/* Estilo da linha tracejada */
+
 .card-content-grid {
     border-top: 1px dashed #e2e8f0;
 }
