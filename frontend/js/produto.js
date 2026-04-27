@@ -202,6 +202,11 @@ function renderListProducts(productsList) {
         `;
         tableBody.appendChild(tr);
     });
+
+    const totalEl = document.getElementById("totalProdutos");
+    if (totalEl) {
+        totalEl.innerText = productsList.length;
+    }
 }
 
 function openPopUpEdit(elemento) {

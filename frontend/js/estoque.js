@@ -42,6 +42,7 @@ let allStock = [];
 async function loadStockProducts() {
     try {
         const token = localStorage.getItem("token");
+
         const response = await fetch("http://localhost:8080/stock/filterProduct", {
             method: "GET",
             headers: {
@@ -49,12 +50,26 @@ async function loadStockProducts() {
                 "Content-Type": "application/json"
             }
         });
+
         const stock = await response.json();
 
         if (response.ok) {
             allStock = stock;
             renderStockGrid(stock);
+
+            let total = 0;
+
+            stock.forEach(item => {
+                total += item.availableQuantity || 0;
+            });
+            
+            const totalEl = document.getElementById("totalEstoque");
+            if (totalEl) {
+                totalEl.innerText = total;
+            }
+
         }
+
     } catch (error) {
         showAlert('error', 'ERRO', 'Não foi possível carregar o estoque.');
     }

@@ -121,7 +121,7 @@
             <div class="metric-text">
             <p>Total de Itens no Estoque</p>
             <strong>
-                2.300 <span class="red">-8%</span>
+                <span id="totalEstoque">0</span>
             </strong>
             </div>
 
@@ -144,7 +144,7 @@
         <div class="card metric-card">
             <div class="metric-text">
             <p>Produtos Cadastrados</p>
-            <strong>138</strong>
+            <strong id="totalProdutos">0</strong>
             </div>
 
             <div class="metric-icon">
@@ -329,5 +329,88 @@
     </main>
   </div>
     <script src="../js/auth.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            carregarTotalProdutos();
+            carregarTotalEstoque();
+        });
+
+        // ==========================
+        // 🟢 PRODUTOS CADASTRADOS
+        // ==========================
+        async function carregarTotalProdutos() {
+            try {
+                const token = localStorage.getItem("token");
+
+                if (!token) {
+                    console.warn("Sem token para produtos");
+                    return;
+                }
+
+                const response = await fetch("http://localhost:8080/product", {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar produtos");
+                }
+
+                const products = await response.json();
+
+                const el = document.getElementById("totalProdutos");
+                if (el) {
+                    el.innerText = products.length;
+                }
+
+            } catch (error) {
+                console.error("Erro ao carregar produtos:", error);
+            }
+        }
+
+        // ==========================
+        // 🔵 TOTAL DE ESTOQUE
+        // ==========================
+        async function carregarTotalEstoque() {
+            try {
+                const token = localStorage.getItem("token");
+
+                if (!token) {
+                    console.warn("Sem token para estoque");
+                    return;
+                }
+
+                const response = await fetch("http://localhost:8080/stock/filterProduct", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Erro ao buscar estoque");
+                }
+
+                const stock = await response.json();
+
+                let total = 0;
+
+                stock.forEach(item => {
+                    total += item.availableQuantity || 0;
+                });
+
+                const el = document.getElementById("totalEstoque");
+                if (el) {
+                    el.innerText = total;
+                }
+
+            } catch (error) {
+                console.error("Erro ao carregar estoque:", error);
+            }
+        }
+    </script>
 </body>
 </html>
