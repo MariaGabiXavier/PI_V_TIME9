@@ -677,3 +677,228 @@ td {
     transform: scale(1);
   }
 }
+/* --- Estilos do Modal de Venda (Fidelidade ao Figma) --- */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0; /* Atalho para top, left, width e height */
+    background-color: rgba(15, 23, 42, 0.7);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.modal-large {
+    background: #fff;
+    width: 800px; /* Ajustado para a proporção do Figma */
+    max-width: 95vw;
+    border-radius: 28px; /* Bordas mais arredondadas como no protótipo */
+    padding: 40px; /* Mais respiro interno */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 0px; /* Removendo borda inferior para ficar limpo */
+    border-bottom: none;
+}
+
+.modal-header h2 {
+    font-size: 18px;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #cbd5e1;
+    transition: 0.2s;
+}
+
+.modal-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 10px 0;
+}
+
+/* Lado Esquerdo: Card de Preview */
+
+.modal-preview-section, .modal-fields-section {
+    display: flex;
+    flex-direction: column;
+    min-height: 260px; /* Ajuste essa altura para bater com o conteúdo */
+}
+
+
+.preview-card, .modal-fields-section {
+    flex: 1; /* Faz ambos preencherem a altura total do container pai */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Número Grande do Estoque */
+.preview-card .big-number {
+    font-size: 56px !important; 
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1;
+}
+
+.preview-card .unit-text {
+    font-size: 14px;
+    color: #94a3b8;
+    font-weight: 700;
+    margin-left: 8px;
+}
+
+/* Ícone Central de Troca */
+.modal-divider-icon {
+    font-size: 28px;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+}
+
+/* Lado Direito: Campos de Entrada */
+.modal-fields-section {
+    flex: 1;
+    padding: 25px;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid #f1f5f9; 
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* Input de Quantidade */
+#sellQuantity {
+    width: 100%;
+    height: 48px;
+    padding: 0 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #ffffff;
+    font-size: 15px;
+    outline: none;
+}
+
+/* Grupo de Data (Hoje / Outro dia) */
+.radio-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+}
+
+/* Botões de Ação Inferiores */
+.modal-actions-edit {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+.btn-delete-red {
+    background: #f5365c; 
+    color: #fff;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    min-width: 160px;
+}
+
+.btn-save-gradient {
+    background: linear-gradient(90deg, #5e72e4, #825ee4); 
+    color: #fff;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    min-width: 180px;
+}
+
+.big-number-figma {
+    font-size: 64px !important; 
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+/* Ajuste no container do card de preview */
+.preview-card {
+    background: #ffffff;
+    border: 1px solid #f1f5f9 !important;
+    border-radius: 24px !important;
+    padding: 30px !important;
+    box-shadow: none !important;
+}
+
+/* Ajuste na badge para ficar mais arredondada como no Figma */
+.badge {
+    border-radius: 50px !important;
+    font-weight: 700;
+}
+
+/* Estilo da linha tracejada */
+.card-content-grid {
+    border-top: 1px dashed #e2e8f0;
+}
+
+.label-muted {
+    color: #94a3b8;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: block;
+}
+
+.value-dark {
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.value-green {
+    color: #22c55e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.big-number-figma {
+    font-size: 60px !important;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1;
+}

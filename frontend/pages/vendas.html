@@ -125,6 +125,54 @@
             </section>
         </main>
     </div>
+    
+    <div id="sellModal" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">
+            <h2 id="modalHeaderTitle">Registro de Venda</h2> 
+            <button class="close-modal" id="closeSellModal">&times;</button>
+        </div>
+        
+        <form id="sellForm">
+            <div class="modal-body">
+                <div class="modal-preview-section">
+                    <div id="sellCardPreview" class="preview-card">
+                        </div>
+                </div>
+
+                <div class="modal-divider-icon">⇄</div>
+
+                <div class="modal-fields-section">
+                    <div class="form-group">
+                        <label for="sellQuantity">Quantidade vendida</label>
+                        <input type="number" id="sellQuantity" placeholder="nº de Fardos" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Data de venda</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="saleDate" value="today" checked>
+                                <span>Hoje</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="saleDate" value="custom">
+                                <span>Outro dia</span>
+                            </label>
+                            <input type="date" id="sellDateCustom" class="input-date-small">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions-edit">
+                <button type="button" class="btn-delete-red" id="btnCancelSell">Cancelar</button>
+                <button type="submit" class="btn-save-gradient">Registrar venda</button>
+            </div>
+        </form>
+    </div>
+</div>
+
     <script src="../js/auth.js"></script>
     <script src="../js/alert.js"></script>
     <script src="../js/vendas.js"></script>
