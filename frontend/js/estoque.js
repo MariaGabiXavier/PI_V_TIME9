@@ -200,7 +200,6 @@ function openStockModal(product) {
     // Armazena o ID para o submit
     form.dataset.productId = product.productId;
 
-    // ATUALIZAÇÃO: Define o placeholder dinâmico
     inputQuantity.placeholder = `nº de ${product.unitOfMeasure || 'Unidades'}`;
 
     document.getElementById("modalHeaderTitle").innerText = `Entrada de Estoque: ${product.productName}`;
@@ -212,16 +211,12 @@ function openStockModal(product) {
     const quantity = product.availableQuantity;
 
     const nextExpiry = (quantity > 0) ? formatarDataISO(product.nextToExpireDate) : '--/--/--';
-
-    // Na imagem original, a segunda data é a que será preenchida,
-    // mas aqui mantemos a lógica de buscar a mais distante do banco caso queira mostrar o estado atual.
     const latestExpiry = (quantity > 0) ? formatarDataISO(product.latestExpirationDate) : '--/--/--';
 
     cardPreview.innerHTML = `
         <div class="card-top">
             <div class="top-left">
-                <img src="../assets/categorias_dos_produtos_sched/${product.productCategory}.png" 
-                     class="prod-thumb" onerror="this.src='../assets/file.png'">
+                <img src="../assets/categorias_dos_produtos_sched/${product.productCategory}.png" class="prod-thumb">
                 <h3>${product.productName}</h3>
             </div>
             <span class="badge ${badgeClass}">${badgeText}</span>
@@ -229,22 +224,23 @@ function openStockModal(product) {
         <div class="card-center">
             <div class="quantity-box">
                 <span class="big-number">${String(product.availableQuantity).padStart(2, '0')}</span>
-                <span class="unit-text">${product.unitOfMeasure || "Unidades"}</span>
+                 <div class="info-item"><small>${product.unitOfMeasure}</small></div>
             </div>
             
             <div class="right-info">
                 <div class="info-item"><small>Categoria</small><strong>${product.productCategory}</strong></div>
-                <div class="info-item"><small>Última estocagem</small><strong>${formatarDataISO(product.lastStockEntry)}</strong></div>
+                <div class="info-item"><small>Unidade</small><strong>${product.unitOfMeasure}</strong></div>
             </div>
         </div>
         <div class="card-footer">
             <div class="expiry-info">
                 <p>Lote mais perto da validade: <span>${nextExpiry}</span></p>
-                <p>Data de validade do lote: <span id="previewNewExpiry" style="color: #28a745;">--/--/--</span></p>
+                <p>Data de validade do lote: <span>${latestExpiry}</span></p>
             </div>
         </div>
     `;
 
+    // AJUSTE: O campo de validade agora fica SEMPRE visível e é obrigatório
     const perishableFields = document.getElementById("perishableFields");
     const inputExpiry = document.getElementById("stockExpiry");
 
