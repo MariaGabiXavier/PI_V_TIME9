@@ -352,6 +352,121 @@ main {
   margin-bottom: 16px;
 }
 
+.sales-card {
+  margin-top: 24px;
+}
+
+.sales-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.sales-card-header h3 {
+  font-size: 15px;
+  color: #1f2937;
+}
+
+.sales-period {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #6b728082;
+  font-weight: 700;
+}
+
+.sales-period img {
+  width: 14px;
+  opacity: 0.7;
+}
+
+.sales-group {
+  margin-top: 14px;
+}
+
+.sales-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.sales-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.sales-item:last-child {
+  border-bottom: none;
+}
+
+.sales-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sales-user strong {
+  font-size: 13px;
+  color: #1f2937;
+}
+
+.sales-user p {
+  font-size: 11px;
+  color: #6b72809d;
+  font-weight: 600;
+}
+
+.status {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status.up {
+  border: 1px solid #22c55e;
+  color: #22c55e;
+}
+
+.status.down {
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+.status.pending {
+  border: 1px solid #94a3b8;
+  color: #94a3b8;
+}
+
+.value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.value.positive {
+  color: #22c55e;
+}
+
+.value.negative {
+  color: #ef4444;
+}
+
+.value.pending-text {
+  color: #1f2937;
+  font-weight: 500;
+}
+
 .table {
   display: flex;
   flex-direction: column;
