@@ -571,3 +571,130 @@ main {
   transform: translateY(-1px);
   transition: 0.2s ease;
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.35);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  backdrop-filter: blur(4px); 
+  z-index: 999;
+}
+
+.modal-box {
+  width: 590px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  animation: fadeInScale 0.2s ease;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-box h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1f1f21c0;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: #1f2937;
+
+  transition: 0.2s ease;
+}
+
+.form-group input::placeholder {
+  color: #cbd5e1;
+}
+
+.form-group input:focus {
+  border-color: #499BFF;
+  box-shadow: 0 0 0 2px rgba(73, 155, 255, 0.15);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(90deg, #499BFF, #AE5BFF);
+  color: #fff;
+
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  flex: 1;
+  background: #1f2937;
+  color: #fff;
+
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.btn-secondary:hover {
+  transform: translateY(-1px);
+  background: #111827;
+}
