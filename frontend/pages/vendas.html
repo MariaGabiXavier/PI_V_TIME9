@@ -16,79 +16,86 @@
     <div class="app">
         <aside class="sidebar">
             <div class="logo">
-                <img src="../assets/logo_menu.png" alt="Sched">
+                <img src="../assets/ic_base_screen/ic_logo.svg" alt="Sched">
             </div>
+
             <nav class="menu">
                 <a href="dashboard.html" class="menu-item">
                     <div class="icon-box">
-                        <img src="../assets/icone_casa.png" alt="Dashboard">
+                        <img src="../assets/ic_base_screen/ic_home.svg" alt="Dashboard">
                     </div>
                     <span>Dashboard</span>
                 </a>
-                <a href="produto.html" class="menu-item ">
+
+                <a href="produto.html" class="menu-item">
                     <div class="icon-box">
-                        <img src="../assets/icon_produtos.png" alt="Produtos">
+                        <img src="../assets/ic_base_screen/ic_box.svg" alt="Produtos">
                     </div>
                     <span>Produtos</span>
                 </a>
+
                 <a href="estoque.html" class="menu-item">
                     <div class="icon-box">
-                        <img src="../assets/icon_estoque.png" alt="Estoque">
+                        <img src="../assets/ic_base_screen/ic_graphic.svg" alt="Estoque">
                     </div>
                     <span>Estoque</span>
                 </a>
-                <a href="vendas.html" class="menu-item active">
+
+                <a  href="vendas.html" class="menu-item active">
                     <div class="icon-box">
-                        <img src="../assets/icon_vendas.png" alt="Vendas">
+                        <img src="../assets/ic_base_screen/ic_rocket.svg" alt="Vendas">
                     </div>
                     <span>Vendas</span>
                 </a>
+
                 <a href="alertas.html" class="menu-item">
                     <div class="icon-box">
-                        <img src="../assets/icon_alertas.png" alt="Alertas">
+                        <img src="../assets/ic_base_screen/ic_bell.svg" alt="Alertas">
                     </div>
                     <span>Alertas</span>
                 </a>
 
                 <div id="adminMenu" style="display: none;">
                     <span class="admin-title">ADMIN (apenas)</span>
-
                     <a href="funcionario.html" class="menu-item">
                         <div class="icon-box">
-                            <img src="../assets/icon_user.png" alt="">
+                            <img src="../assets/ic_base_screen/ic_user.svg" alt="">
                         </div>
                         <span>Funcionários</span>
                     </a>
                 </div>
+
                 <div class="help-card">
                     <div class="help-icon">
-                        <img src="../assets/icon_help.png" alt="">
+                        <img src="../assets/ic_base_screen/ic_help.svg" alt="">
                     </div>
                     <div class="help-text">
                         <strong>Precisa de ajuda?</strong>
                         <p>Entre em contato com nosso time!</p>
                     </div>
-                    <button class="help-button">Entre em contato</button>
+                    <a href="mailto:suporte@sched.com.br" class="help-button" style="text-decoration: none; text-align: center; display: block;">Entre em contato</a>
                 </div>
             </nav>
         </aside>
 
         <main class="main-content">
-            <header class="page-header">
+            <div class="page-header">
                 <div class="page-header-left">
                     <div class="breadcrumb">
                         <span class="breadcrumb-muted">Páginas</span>
                         <span class="breadcrumb-separator">/</span>
                         <span class="breadcrumb-active">Vendas</span>
                     </div>
+
                     <h1 class="page-title">Página de Vendas</h1>
                 </div>
+
                 <div class="page-header-right">
-                    <button class="topbar-icon"><img src="../assets/iconProfile.png" alt=""></button>
-                    <button class="topbar-icon"><img src="../assets/Icon_conf.png" alt=""></button>
-                    <button class="topbar-icon"><img src="../assets/Icon_sino.png" alt=""></button>
+                    <button class="topbar-icon">
+                        <img src="../assets/ic_base_screen/ic_user_profile.svg" alt="">
+                    </button>
                 </div>
-            </header>
+            </div>
 
             <div class="action-bar">
                 <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
@@ -156,7 +163,6 @@
         </form>
     </div>
 </div>
-
     <script src="../js/auth.js"></script>
     <script src="../js/alert.js"></script>
     <script src="../js/vendas.js"></script>
