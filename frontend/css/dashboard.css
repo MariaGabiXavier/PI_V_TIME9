@@ -435,16 +435,9 @@ main {
   position: absolute;
   inset: 0;
   border-radius: 14px;
+  border: 2px solid #499BFF;
   padding: 1.5px;
   pointer-events: none;
-
-  background: linear-gradient(135deg, #6c5ce7, #74b9ff);
-
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
 }
 
 .previsoes-cards {
@@ -876,7 +869,7 @@ main {
   width: 100%;
   height: 100%;
 
-  background-image: url("../assets/background_linear.png");
+  background-image: url("../assets/background/background_card_dashboard.svg");
   background-position: center;
   background-size: cover;
 
@@ -913,7 +906,7 @@ main {
 
   min-height: 300px;
 
-  background-image: url("../assets/background_people.png");
+  background-image: url("../assets/background/background_card_dashboard_people.svg");
   background-size: cover;
   background-position: center;
 

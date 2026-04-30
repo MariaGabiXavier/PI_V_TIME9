@@ -28,13 +28,13 @@ function showAlert(tipo, titulo, mensagem) {
 
 // Função auxiliar para pegar o ícone certo
 function getIcon(tipo) {
-    const path = "../assets/";
+    const path = "../assets/ic_alerts/";
     
     const icons = {
-        success: `<img src="${path}alertsuccess.png" alt="Sucesso" width="24">`,
-        warning: `<img src="${path}alertwarning.png" alt="Aviso" width="24">`,
-        error:   `<img src="${path}alerterror.png" alt="Erro" width="24">`,
-        info:    `<img src="${path}alertinfo.png" alt="Info" width="24">`
+        success: `<img src="${path}ic_success.svg" alt="Sucesso" width="24">`,
+        warning: `<img src="${path}ic_warning.svg" alt="Aviso" width="24">`,
+        error:   `<img src="${path}ic_error.svg" alt="Erro" width="24">`,
+        info:    `<img src="${path}ic_info.svg" alt="Info" width="24">`
     };
 
     return icons[tipo] || '';

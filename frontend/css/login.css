@@ -79,7 +79,7 @@ body {
 /* Garante que o ícone (assets) dentro do botão fique branco */
 .btn-criar-menu img {
     filter: brightness(0) invert(1);
-    width: 12px;
+    width: 18px;
     height: auto;
 }
 
@@ -223,13 +223,13 @@ input:checked + .slider:before { transform: translateX(16px); }
     top: 0;
     left: 0;
     right: 0;
-    height: calc(100vh); 
-    
-    background: linear-gradient(135deg, rgba(66, 153, 225, 0.85) 0%, rgba(159, 122, 234, 0.85) 100%), url('../assets/background-login.png');
+    height: calc(100vh);
+
+    background: url('../assets/background/background_login.svg');
     background-blend-mode: overlay;
     background-size: cover;
     background-position: center;
-    
+
     display: flex;
     align-items: center;
     justify-content: center;
