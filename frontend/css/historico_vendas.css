@@ -85,7 +85,7 @@ body {
   display: flex;
   gap: 10px;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
   overflow: hidden;
 }
@@ -315,7 +315,7 @@ body {
 }
 
 .btn-new {
-    background: linear-gradient(90deg, #499BFF, #AE5BFF);
+    background: #499BFF;
     color: #fff;
     border: none;
     padding: 10px 25px;

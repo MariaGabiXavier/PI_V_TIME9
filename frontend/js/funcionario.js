@@ -124,18 +124,18 @@ function renderEmployees(employees) {
 
                 <span>${user.email}</span>
 
-                <span class="badge ${user.role === 'ADMIN' ? 'admin' : 'employee'}">
-                    ${user.role}
+                <span class="badge ${user.role === 'ADMIN' ? 'admin' : 'user'}">
+                    ${user.role === 'ADMIN' ? 'ADMIN' : 'FUNCIONÁRIO'}
                 </span>
 
                 <div class="actions">
                     <button class="edit">
-                        <img src="../assets/icon_lapis.png">
+                        <img src="../assets/ic_ui/ic_pencil.svg">
                         <span>Editar</span>
                     </button>
 
                     <button class="delete">
-                        <img src="../assets/icon_lixeira.png">
+                        <img src="../assets/ic_ui/ic_trash.svg">
                         <span>Excluir</span>
                     </button>
                 </div>

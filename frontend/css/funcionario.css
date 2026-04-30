@@ -88,7 +88,7 @@ body {
   display: flex;
   gap: 10px;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 
   position: relative;
   overflow: hidden;
@@ -521,18 +521,21 @@ main {
   font-weight: 550;
   border-radius: 7px;
   color: #fff;
+
   width: 110px;
   height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .badge.admin {
   background: #8b5cf6;
-  padding: 5px 35px;
 }
 
-.badge.employee {
+.badge.user {
   background: #499BFF;
-  padding: 5px 14px;
 }
 
 .actions {

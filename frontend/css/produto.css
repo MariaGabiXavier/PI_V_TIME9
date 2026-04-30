@@ -85,7 +85,7 @@ body {
   display: flex;
   gap: 10px;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
   overflow: hidden;
 }
@@ -377,6 +377,7 @@ td {
   font-size: 11px;
   color: #fff;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .badge-orange {

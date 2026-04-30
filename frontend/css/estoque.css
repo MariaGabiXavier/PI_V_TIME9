@@ -85,7 +85,7 @@ body {
   display: flex;
   gap: 10px;
   flex-direction: column;
-  align-items: center;
+    align-items: flex-start;
   position: relative;
   overflow: hidden;
 }
@@ -309,7 +309,7 @@ body {
 }
 
 .btn-new {
-  background: linear-gradient(90deg, #499BFF, #AE5BFF);
+    background: #499BFF;
   color: #fff;
   border: none;
   padding: 10px 25px;
@@ -321,6 +321,17 @@ body {
 .btn-new:hover{
   transform: translateY(-1px);
   transition: 0.2s ease;
+}
+
+.btn-history {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
 }
 
 .instruction-text { font-size: 13px; color: #64748b; }
@@ -380,6 +391,7 @@ body {
     font-size: 11px;
     color: #fff;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 .badge-orange {
