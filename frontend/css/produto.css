@@ -359,18 +359,18 @@ td {
 
 .badge {
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: 7px;
   font-size: 11px;
   color: #fff;
   font-weight: 700;
 }
 
 .badge-orange {
-  background: #fb6340;
+  background: #FF8D28;
 }
 
 .badge-green {
-  background: #22c55e;
+  background: #48BB78;
 }
 
 .edit-link {
