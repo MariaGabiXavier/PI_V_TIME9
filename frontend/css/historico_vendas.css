@@ -42,20 +42,20 @@ body {
   gap: 12px;
   padding: 10px 12px;
   color: #a7a7a7;
-  border-radius: 8px;
+  border-radius: 15px;
   margin-bottom: 6px;
   cursor: pointer;
   transition: 0.2s;
 }
 
 .sidebar nav a:hover {
-  background: #f2f0ff;
-  color: #6c5ce7;
+    background: #FFFFFF;
+    color: #000000;
 }
 
 .sidebar nav a.active {
-  background: #edeafe;
-  color: #6c5ce7;
+    background: #FFFFFF;
+    color: #000000;
 }
 
 .admin-title {

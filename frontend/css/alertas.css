@@ -6,7 +6,7 @@
 }
 
 body {
-    background: #f5f6fa;
+    background: #F8F9FA;
 }
 
 .app {
@@ -16,10 +16,8 @@ body {
 
 .sidebar {
     width: 240px;
-    background: #fff;
-    border-right: 1px solid #eee;
+    background: #F8F9FA;
     padding: 20px;
-
     display: flex;
     flex-direction: column;
 }
@@ -42,23 +40,22 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-
     padding: 10px 12px;
     color: #a7a7a7;
-    border-radius: 8px;
+    border-radius: 15px;
     margin-bottom: 6px;
     cursor: pointer;
     transition: 0.2s;
 }
 
 .sidebar nav a:hover {
-    background: #f2f0ff;
-    color: #6c5ce7;
+    background: #FFFFFF;
+    color: #000000;
 }
 
 .sidebar nav a.active {
-    background: #edeafe;
-    color: #6c5ce7;
+    background: #FFFFFF;
+    color: #000000;
 }
 
 .admin-title {
@@ -157,6 +154,7 @@ body {
     transition: 0.2s ease;
 }
 
+
 .menu {
     display: flex;
     flex-direction: column;
@@ -165,7 +163,7 @@ body {
 }
 
 .menu-item {
-    text-decoration: none; /* Remove o sublinhado de link */
+    text-decoration: none;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -173,7 +171,7 @@ body {
     border-radius: 10px;
     cursor: pointer;
     transition: 0.2s ease;
-    color: #9ca3af; /* Mantém a cor cinza padrão */
+    color: #9ca3af;
 }
 
 .menu-item span {
@@ -184,16 +182,13 @@ body {
 .icon-box {
     width: 36px;
     height: 36px;
-
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
-
     border-radius: 15px;
     border: none;
     outline: none;
-
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     background-clip: padding-box;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
@@ -211,7 +206,6 @@ body {
 
 .menu-item.active .icon-box {
     background-color: #499BFF;
-    box-shadow: none;
 }
 
 .menu-item.active .icon-box img {
