@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #f5f6fa;
+  background: #F8F9FA;
 }
 
 .app {
@@ -16,8 +16,7 @@ body {
 
 .sidebar {
   width: 240px;
-  background: #fff;
-  border-right: 1px solid #eee;
+  background: #F8F9FA;
   padding: 20px;
   display: flex;
   flex-direction: column;

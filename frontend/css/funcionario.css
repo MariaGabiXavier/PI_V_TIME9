@@ -6,7 +6,7 @@
 }
 
 body {
-  background: #f5f6fa;
+  background: #F8F9FA;
 }
 
 .app {
@@ -16,10 +16,8 @@ body {
 
 .sidebar {
   width: 240px;
-  background: #fff;
-  border-right: 1px solid #eee;
+  background: #F8F9FA;
   padding: 20px;
-
   display: flex;
   flex-direction: column;
 }
@@ -34,7 +32,7 @@ body {
 }
 
 .logo img {
-  width: 100px;
+  width: 135px;
   margin-bottom: 30px;
 }
 
@@ -234,15 +232,9 @@ main {
 
 .page-header {
   display: flex;
-  flex-direction: column;
-  gap: 0; 
-  margin-bottom: 32px;
-} 
-
-.page-header-top {
-  display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
 .page-header-left {
@@ -270,42 +262,38 @@ main {
   color: #1f2937;
 }
 
-
 .page-header-right {
   display: flex;
-  align-items: center;
   gap: 12px;
 }
 
 .topbar-icon {
-  width: 15px;
-  height: 15px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  border-radius: 50%;
   border: none;
+  background-color: transparent;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: none;
-  color: #eef2ff;
-
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-  padding: 15px 15px;
-  border-radius: 8px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .topbar-icon img {
-  width: 13px;
-  height: 13px;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .topbar-icon:hover {
-  background: #edeafe;   
-  color: #499BFF;   
+  background-color: #e2e8f0;
+  transform: scale(1.05);
 }
-
 
 .action-bar {
   display: flex;
