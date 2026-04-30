@@ -286,9 +286,23 @@ body {
   margin-bottom: 25px;
 }
 
+.search-container {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
 .search-input {
   width: 300px;
-  padding: 12px;
+  padding: 12px 12px 12px 40px; /* espaço pro ícone */
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   outline: none;
