@@ -352,7 +352,6 @@ body {
 
 .card-header {
   padding: 20px;
-  border-bottom: 1px solid #f1f5f9;
 }
 
 table {
@@ -361,7 +360,7 @@ table {
 }
 
 th {
-  background: #f8fafc;
+  background: #fff;
   padding: 12px 20px;
   text-align: left;
   font-size: 11px;

@@ -366,13 +366,13 @@ body {
 .history-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 25px;
+    margin-top: 15px;
 }
 
 .history-table th {
     text-align: left;
-    font-size: 10px;
-    color: #cbd5e0;
+    font-size: 11px;
+    color: #94a3b8;
     font-weight: 700;
     padding: 12px 15px;
     border-bottom: 1px solid #f0f2f5;
@@ -382,8 +382,8 @@ body {
 
 .history-table td {
     padding: 15px;
-    border-bottom: 1px solid #f0f2f5;
-    font-size: 13px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
     color: #718096;
 }
 
@@ -402,7 +402,6 @@ body {
 
 .product-cell span {
     font-weight: 700;
-    color: #2d3748;
 }
 
 .qty-bold {
