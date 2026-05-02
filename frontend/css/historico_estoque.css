@@ -369,28 +369,25 @@ body {
     margin-top: 15px;
 }
 
-.history-table th {
+th {
+    padding: 12px 20px;
     text-align: left;
     font-size: 11px;
     color: #94a3b8;
-    font-weight: 700;
-    padding: 12px 15px;
-    border-bottom: 1px solid #f0f2f5;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
 }
 
-.history-table td {
-    padding: 15px;
-    border-bottom: 1px solid #f0f2f5;
-    font-size: 13px;
-    color: #718096;
+td {
+    padding: 15px 20px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 14px;
 }
 
 .product-cell {
     display: flex;
     align-items: center;
     gap: 12px;
+    font-weight: 600;
 }
 
 .product-cell img {

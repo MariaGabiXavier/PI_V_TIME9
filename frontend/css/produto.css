@@ -326,11 +326,8 @@ body {
 .card-table {
   background: #fff;
   border-radius: 16px;
+  padding: 25px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.card-header {
-  padding: 20px;
 }
 
 table {
@@ -339,7 +336,6 @@ table {
 }
 
 th {
-  background: #fff;
   padding: 12px 20px;
   text-align: left;
   font-size: 11px;
@@ -416,16 +412,6 @@ td {
   justify-content: center;
   gap: 15px;
   margin-top: 60px;
-}
-
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
 }
 
 .modal-box {
@@ -706,24 +692,4 @@ td {
 .btn-delete-red:hover, .btn-save-gradient:hover {
   transform: translateY(-2px);
   opacity: 0.9;
-}
-
-.status-perecivel {
-    background-color: #fb6340 !important;
-    color: white !important;
-}
-
-.status-nao-perecivel {
-    background-color: #22c55e !important;
-    color: white !important;
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
