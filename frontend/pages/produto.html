@@ -106,6 +106,46 @@
                 <button class="btn-new btn-history" id="btnOpen">+ Novo Produto</button>
             </div>
         </div>
+        <div class="filters-bar">
+            <select id="filterCategory">
+                <option value="">Todas as categorias</option>
+            </select>
+
+            <select id="filterSort">
+                <option value="">Ordenar por</option>
+                <option value="preco_asc">Menor preço</option>
+                <option value="preco_desc">Maior preço</option>
+                <option value="nome_asc">Nome A→Z</option>
+                <option value="nome_desc">Nome Z→A</option>
+            </select>
+
+            <div class="items-per-page">
+                <label for="itemsPerPageSelect">Exibir:</label>
+                <select id="itemsPerPageSelect">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+        </div>
+
+        <section class="card-table">
+            <div class="card-header">
+                <h3>Produtos Registrados</h3>
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>PRODUTO</th>
+                    <th>PREÇO</th>
+                    <th>TIPO DO PRODUTO</th>
+                    <th>CATEGORIA</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="productsTableBody"></tbody>
+            </table>
+        </section>
 
         <section class="card-table">
             <div class="card-header">
@@ -254,8 +294,8 @@
         </div>
     </div>
 </div>
-    <script src="../js/auth.js"></script>
-    <script src="../js/alert.js"></script>
-    <script src="../js/produto.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/alert.js"></script>
+<script src="../js/produto.js"></script>
 </body>
 </html>
