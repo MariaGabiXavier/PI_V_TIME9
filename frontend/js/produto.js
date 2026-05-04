@@ -54,20 +54,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
 
-// ─── Estado global ────────────────────────────────────────
 let allProducts = [];
 let currentPage = 1;
 let ITEMS_PER_PAGE = 10;
-// ─────────────────────────────────────────────────────────
 
+function normalizar(texto) {
+    return texto
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
 function applyFiltersAndRender() {
-    const termoBusca = document.querySelector(".search-input").value.toLowerCase();
+    const termoBusca = normalizar(document.querySelector(".search-input").value);
     const sortValue = document.getElementById("filterSort").value;
     const categoryValue = document.getElementById("filterCategory").value;
 
     let filtered = allProducts.filter(produto => {
-        const nome = produto.name.toLowerCase();
-        const categoria = produto.category.toLowerCase();
+        const nome = normalizar(produto.name);
+        const categoria = normalizar(produto.category);
         const matchBusca = nome.includes(termoBusca) || categoria.includes(termoBusca);
         const matchCategoria = categoryValue === "" || produto.category === categoryValue;
         return matchBusca && matchCategoria;
