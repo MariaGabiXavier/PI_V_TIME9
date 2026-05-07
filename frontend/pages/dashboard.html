@@ -126,7 +126,7 @@
         <div class="card metric-card">
             <div class="metric-text">
             <p>Produtos com Alerta de Estoque Baixo</p>
-            <strong>000</strong>
+                <strong id="totalAlertasBaixoEstoque">0</strong>
             </div>
 
             <div class="metric-icon">
@@ -160,7 +160,7 @@
                     <span class="info-icon">i</span>
                     </div>
                     <p>
-                    Detectamos 000 possíveis aumentos de demanda para hoje
+                    Detectamos possíveis aumentos de demanda para hoje
                     baseados nas últimas semanas
                     </p>
                     <a href="alertas.html">Ver mais</a>
@@ -185,15 +185,12 @@
                 <div class="alerta-column">
                     <div class="alerta-header">
                         <span class="alerta-icon">!</span>
-                        <strong>000 Produtos com baixo estoque</strong>
+                        <strong id="tituloAlertasBaixoEstoque">
+                            0 Produtos com baixo estoque
+                        </strong>
                         </div>
 
-                        <ul>
-                        <li>Água c/ gás</li>
-                        <li>Skol Lata</li>
-                        <li>Smirnoff 2L</li>
-                        <li>Picolé Sergel Menta Flocada</li>
-                        </ul>
+                        <ul id="listaAlertasBaixoEstoque"></ul>
 
                         <a href="alertas.html">Ver mais</a>
                 </div>
@@ -324,13 +321,14 @@
         document.addEventListener("DOMContentLoaded", () => {
             carregarTotalProdutos();
             carregarTotalEstoque();
-            loadAlerts();
+            carregarAlertasDeVencimentoProximo();
 
             carregarEstatisticasVendas();
-            carregarOverviewVendas();
+            carregarAlertasDeEstoqueBaixo();
         });
 
         let alertasDeVencimento = []
+        let alertasDeBaixoEstoque = []
 
         async function carregarTotalProdutos() {
             try {
@@ -402,8 +400,6 @@
             }
         }
 
-        // ----------------------------------------------
-
         async function carregarEstatisticasVendas() {
             const token = localStorage.getItem("token");
             if (!token) return;
@@ -473,11 +469,11 @@
             }
         }
 
-        async function loadAlerts() {
+        async function carregarAlertasDeVencimentoProximo() {
             const token = localStorage.getItem("token");
 
             try {
-                const response = await fetch("http://localhost:8080/alert", {
+                const response = await fetch("http://localhost:8080/alert/expiring", {
                     method: "GET",
                     headers: {
                         "Authorization": "Bearer " + token,
@@ -490,6 +486,29 @@
                 if (response.ok) {
                     alertasDeVencimento = data;
                     renderizarAlertasVencimento();
+                }
+            } catch (error) {
+                showAlert('error', 'ERRO', 'Não foi possível carregar os alertas.');
+            }
+        }
+
+        async function carregarAlertasDeEstoqueBaixo() {
+            const token = localStorage.getItem("token");
+
+            try {
+                const response = await fetch("http://localhost:8080/alert/low-stock", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alertasDeBaixoEstoque = data;
+                    renderizarAlertasBaixoEstoque();
                 }
             } catch (error) {
                 showAlert('error', 'ERRO', 'Não foi possível carregar os alertas.');
@@ -578,6 +597,43 @@
             }
 
             alertasDeVencimento
+                .slice(0, 4)
+                .forEach(alerta => {
+                    const li = document.createElement("li");
+                    li.textContent = alerta.productName;
+
+                    lista.appendChild(li);
+                });
+        }
+
+        function renderizarAlertasBaixoEstoque() {
+            const lista = document.getElementById("listaAlertasBaixoEstoque");
+            const titulo = document.getElementById("tituloAlertasBaixoEstoque");
+            const totalCard = document.getElementById("totalAlertasBaixoEstoque");
+
+            if (!lista) return;
+
+            lista.innerHTML = "";
+
+            // Atualiza quantidade no card superior
+            if (totalCard) {
+                totalCard.innerText = alertasDeBaixoEstoque.length;
+            }
+
+            // Atualiza título da seção
+            if (titulo) {
+                titulo.innerText =
+                    `${alertasDeBaixoEstoque.length} Produtos com baixo estoque`;
+            }
+
+            // Caso não tenha alertas
+            if (alertasDeBaixoEstoque.length === 0) {
+                lista.innerHTML = "<li>Nenhum produto com baixo estoque</li>";
+                return;
+            }
+
+            // Renderiza até 4 produtos
+            alertasDeBaixoEstoque
                 .slice(0, 4)
                 .forEach(alerta => {
                     const li = document.createElement("li");
