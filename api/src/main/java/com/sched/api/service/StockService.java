@@ -31,14 +31,22 @@ public class StockService {
 
     @Transactional(readOnly = true)
     public List<StockBatchResponse> getAll() {
-        return stockRepository.findAll().stream()
+        User authUser = SecurityUtils.getAuthenticatedUser();
+        Long companyId = authUser.getCompany().getId();
+
+        return stockRepository
+                .findByProduct_Company_Id(companyId)
+                .stream()
                 .map(this::mapToBatchResponse)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public List<StockResponse> getProductStockSummary() {
-        List<Stock> allStocks = stockRepository.findAll();
+        User authUser = SecurityUtils.getAuthenticatedUser();
+        Long companyId = authUser.getCompany().getId();
+
+        List<Stock> allStocks = stockRepository.findByProduct_Company_Id(companyId);
 
         Map<Long, List<Stock>> stocksByProduct = allStocks.stream()
                 .collect(Collectors.groupingBy(stock -> stock.getProduct().getId()));
