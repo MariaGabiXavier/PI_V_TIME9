@@ -86,10 +86,8 @@
                     <span class="breadcrumb-separator">/</span>
                     <span class="breadcrumb-active">Vendas / Histórico</span>
                 </div>
-
                 <h1 class="page-title">Página de Histórico de Vendas</h1>
             </div>
-
             <div class="page-header-right">
                 <button class="topbar-icon">
                     <img src="../assets/ic_base_screen/ic_user_profile.svg" alt="">
@@ -111,7 +109,6 @@
             <select id="filterCategory">
                 <option value="">Todas as categorias</option>
             </select>
-
             <select id="filterSort">
                 <option value="" disabled selected>Ordenar por</option>
                 <option value="data_desc">Mais recente</option>
@@ -126,7 +123,6 @@
         <section class="history-card">
             <div class="history-header-info">
                 <h2>Histórico de Vendas</h2>
-
                 <p class="history-stats">
                     <img class="check-icon" src="../assets/ic_ui/ic_circle_success.svg">
                     <span class="bold-stats" id="weekSalesText">0 vendas registradas</span>
@@ -134,22 +130,24 @@
                 </p>
             </div>
 
-            <table class="history-table">
-                <thead>
-                <tr>
-                    <th>PRODUTO</th>
-                    <th>FUNCIONÁRIO</th>
-                    <th>QUANTIDADE VENDIDA</th>
-                    <th>VALOR DA VENDA</th>
-                    <th>DATA DA VENDA</th>
-                </tr>
-                </thead>
-
-                <tbody id="historyTableBody"></tbody>
-            </table>
+            <div class="table-scroll-wrapper">
+                <table class="history-table">
+                    <thead>
+                    <tr>
+                        <th>PRODUTO</th>
+                        <th>FUNCIONÁRIO</th>
+                        <th>QUANTIDADE VENDIDA</th>
+                        <th>VALOR DA VENDA</th>
+                        <th>DATA DA VENDA</th>
+                    </tr>
+                    </thead>
+                    <tbody id="historyTableBody"></tbody>
+                </table>
+            </div>
         </section>
     </main>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/alert.js"></script>
 <script src="../js/historico_vendas.js"></script>
