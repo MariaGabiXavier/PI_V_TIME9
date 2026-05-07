@@ -52,6 +52,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentPage = 1;
         applyFiltersAndRender();
     });
+
+    document.getElementById("btnExcluir").addEventListener("click", deleteProduct);
 });
 
 let allProducts = [];
@@ -365,4 +367,31 @@ function clearFormUpdate() {
     document.getElementById("edit-input-preco").value = "";
     window.idProdutoSendoEditado = null;
     window.dadosOriginais = null;
+}
+
+async function deleteProduct() {
+    const id = window.idProdutoSendoEditado;
+    if (!id) return;
+
+    const confirmado = confirm(`Tem certeza que deseja excluir o produto "${window.dadosOriginais?.nome}"?`);
+    if (!confirmado) return;
+
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`http://localhost:8080/product/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": "Bearer " + token }
+        });
+
+        if (response.ok) {
+            showAlert('success', 'EXCLUÍDO', 'Produto excluído com sucesso!');
+            document.getElementById("modalEditOverlay").style.display = "none";
+            clearFormUpdate();
+            await loadProducts();
+        } else {
+            showAlert('error', 'PRODUTO EM ESTOQUE', 'Não é possível excluir: este produto existe no estoque.');
+        }
+    } catch (error) {
+        showAlert('error', 'SEM CONEXÃO', 'Erro ao conectar com o servidor.');
+    }
 }
