@@ -100,8 +100,9 @@
         <div class="card metric-card">
             <div class="metric-text">
             <p>Vendas de Hoje</p>
-            <strong>000<span class="green">+00%</span>
-            </strong>
+                <strong>
+                    <span id="totalVendasHoje">0</span>
+                </strong>
             </div>
 
             <div class="metric-icon">
@@ -200,16 +201,12 @@
                 <div class="alerta-column">
                     <div class="alerta-header">
                     <span class="alerta-icon">!</span>
-                    <strong>000 Produtos próximos da data de validade</strong>
+                        <strong id="totalAlertasVencimento">
+                            000 Produtos próximos da data de validade
+                        </strong>
                     </div>
 
-                    <ul>
-                    <li>Frango à passarinho</li>
-                    <li>Alface</li>
-                    <li>Rúcula</li>
-                    <li>Whisky Bourbon</li>
-                    <li>Leite Condensado</li>
-                    </ul>
+                    <ul id="listaAlertasVencimento"></ul>
 
                     <a href="alertas.html">Ver mais</a>
                 </div>
@@ -231,15 +228,15 @@
 
             <div class="chart-stats">
 
-            <div class="chart-stat">
-                <div class="chart-stat-icon">
-                <img src="../assets/ic_ui/ic_wallet.svg" alt="Vendas">
+                <div class="chart-stat">
+                    <div class="chart-stat-icon">
+                        <img src="../assets/ic_ui/ic_wallet.svg" alt="Vendas">
+                    </div>
+                    <div class="chart-stat-text">
+                        <span>Vendas</span>
+                        <strong id="totalVendasMes">0</strong> <!-- Adicionado ID aqui -->
+                    </div>
                 </div>
-                <div class="chart-stat-text">
-                <span>Vendas</span>
-                <strong>000</strong>
-                </div>
-            </div>
 
             <div class="chart-stat">
                 <div class="chart-stat-icon">
@@ -276,8 +273,13 @@
 
         <div class="box chart-card">
             <h3>Vendas Overview</h3>
-            <p class="chart-sub green">Crescimento de 00% em relação ao mês anterior</p>
-            <div class="chart-placeholder light"></div>
+            <!-- ID adicionado para o texto de crescimento -->
+            <p id="crescimentoTexto" class="chart-sub">0% em relação ao mês anterior</p>
+
+            <!-- Substituímos a placeholder por um Canvas para o gráfico -->
+            <div class="chart-placeholder light">
+                <canvas id="vendasChart"></canvas>
+            </div>
         </div>
     </section>
 
@@ -317,11 +319,18 @@
   </div>
       <script src="../js/auth.js"></script>
       <script src="../js/alert.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
         document.addEventListener("DOMContentLoaded", () => {
             carregarTotalProdutos();
             carregarTotalEstoque();
+            loadAlerts();
+
+            carregarEstatisticasVendas();
+            carregarOverviewVendas();
         });
+
+        let alertasDeVencimento = []
 
         async function carregarTotalProdutos() {
             try {
@@ -392,6 +401,191 @@
                 console.error("Erro ao carregar estoque:", error);
             }
         }
-    </script>
+
+        // ----------------------------------------------
+
+        async function carregarEstatisticasVendas() {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+
+            try {
+                const response = await fetch("http://localhost:8080/sale", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (!response.ok) throw new Error("Erro ao buscar vendas");
+
+                const sales = await response.json();
+
+                const agora = new Date();
+                const hojeIso = agora.toISOString().split("T")[0];
+                const mesAtual = agora.getMonth();
+                const anoAtual = agora.getFullYear();
+
+                const dataMesPassado = new Date(anoAtual, mesAtual - 1, 1);
+                const mesPassado = dataMesPassado.getMonth();
+                const anoMesPassado = dataMesPassado.getFullYear();
+
+                let qtdHoje = 0;
+                let qtdMesAtual = 0;
+                let qtdMesPassado = 0;
+
+                sales.forEach(sale => {
+                    if (!sale.saleDate) return;
+                    const dataVenda = new Date(sale.saleDate);
+                    const dataVendaIso = sale.saleDate.split("T")[0];
+
+                    if (dataVendaIso === hojeIso) qtdHoje++;
+                    if (dataVenda.getMonth() === mesAtual && dataVenda.getFullYear() === anoAtual) qtdMesAtual++;
+                    if (dataVenda.getMonth() === mesPassado && dataVenda.getFullYear() === anoMesPassado) qtdMesPassado++;
+                });
+
+                // Atualiza Cards Simples
+                document.getElementById("totalVendasHoje").innerText = qtdHoje;
+                document.getElementById("totalVendasMes").innerText = qtdMesAtual;
+
+                // Cálculo de Porcentagem e Overview
+                let porcentagem = 0;
+                let classeCor = "green";
+                let prefixo = "Crescimento de ";
+
+                if (qtdMesPassado > 0) {
+                    porcentagem = ((qtdMesAtual - qtdMesPassado) / qtdMesPassado) * 100;
+                } else {
+                    porcentagem = qtdMesAtual > 0 ? 100 : 0;
+                }
+
+                if (porcentagem < 0) {
+                    classeCor = "red";
+                    prefixo = "Queda de ";
+                }
+
+                const elTexto = document.getElementById("crescimentoTexto");
+                if (elTexto) {
+                    elTexto.className = `chart-sub ${classeCor}`;
+                    elTexto.innerText = `${prefixo}${Math.abs(porcentagem).toFixed(0)}% em relação ao mês anterior`;
+                }
+
+                renderizarGrafico(qtdMesPassado, qtdMesAtual);
+
+            } catch (error) {
+                console.error("Erro ao carregar vendas:", error);
+            }
+        }
+
+        async function loadAlerts() {
+            const token = localStorage.getItem("token");
+
+            try {
+                const response = await fetch("http://localhost:8080/alert", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + token,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alertasDeVencimento = data;
+                    renderizarAlertasVencimento();
+                }
+            } catch (error) {
+                showAlert('error', 'ERRO', 'Não foi possível carregar os alertas.');
+            }
+        }
+
+        // ----------------------------------------------
+
+        function renderizarGrafico(passado, atual) {
+            const ctx = document.getElementById('vendasChart').getContext('2d');
+
+            // Destrói gráfico existente se houver
+            if (window.meuGrafico) window.meuGrafico.destroy();
+
+            // Tratamento para evitar erro de logaritmo com valor zero
+            const valorPassado = passado > 0 ? passado : 0.1;
+            const valorAtual = atual > 0 ? atual : 0.1;
+
+            window.meuGrafico = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mês Passado', 'Mês Atual'],
+                    datasets: [{
+                        label: 'Total de Vendas',
+                        data: [valorPassado, valorAtual],
+                        backgroundColor: ['#ff0615', '#4CAF50'],
+                        borderRadius: 8,
+                        barPercentage: 0.6 // Deixa as barras um pouco mais finas e elegantes
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                // Garante que o tooltip mostre o número real e não o 0.1 de ajuste
+                                label: function(context) {
+                                    const val = context.raw === 0.1 ? 0 : context.raw;
+                                    return `Vendas: ${val}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'logarithmic',
+                            min: 1, // Começa no 1 para o logaritmo funcionar bem
+                            suggestedMax: Math.max(passado, atual) * 1.2, // Dá um respiro no topo
+                            ticks: {
+                                callback: function(value) {
+                                    // Filtra para mostrar apenas números "bonitos" no eixo Y (1, 10, 100, 1000...)
+                                    return Number.isInteger(Math.log10(value)) ? value : null;
+                                }
+                            },
+                            grid: {
+                                display: true,
+                                color: 'rgba(200, 200, 200, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderizarAlertasVencimento() {
+            const lista = document.getElementById("listaAlertasVencimento");
+            const total = document.getElementById("totalAlertasVencimento");
+
+            if (!lista) return;
+
+            lista.innerHTML = "";
+
+            if (total) {
+                total.innerText =
+                    `${alertasDeVencimento.length} Produtos próximos da data de validade`;
+            }
+
+            if (alertasDeVencimento.length === 0) {
+                lista.innerHTML = "<li>Nenhum produto próximo do vencimento</li>";
+                return;
+            }
+
+            alertasDeVencimento
+                .slice(0, 4)
+                .forEach(alerta => {
+                    const li = document.createElement("li");
+                    li.textContent = alerta.productName;
+
+                    lista.appendChild(li);
+                });
+        }
+      </script>
 </body>
 </html>
