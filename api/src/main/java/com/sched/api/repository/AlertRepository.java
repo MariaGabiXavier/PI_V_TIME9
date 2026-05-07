@@ -13,4 +13,9 @@ public interface AlertRepository extends JpaRepository<Stock, Long> {
             LocalDateTime endDate,
             Long companyId
     );
+
+    List<Stock> findByQuantityLessThanEqualAndProduct_Company_Id(
+            Integer quantity,
+            Long companyId
+    );
 }

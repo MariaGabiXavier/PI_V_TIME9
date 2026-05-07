@@ -18,7 +18,7 @@ public class AlertService {
     private final AlertRepository alertRepository;
 
     @Transactional(readOnly = true)
-    public List<AlertResponse> getAll() {
+    public List<AlertResponse> getProductsExpiringInNext30Days() {
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime next30Days = now.plusDays(30);
@@ -30,6 +30,22 @@ public class AlertService {
                 .findByExpirationDateBetweenAndProduct_Company_Id(
                         now,
                         next30Days,
+                        companyId
+                )
+                .stream()
+                .map(AlertResponse::new)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<AlertResponse> getProductsWithLowStock() {
+
+        User authUser = SecurityUtils.getAuthenticatedUser();
+        Long companyId = authUser.getCompany().getId();
+
+        return alertRepository
+                .findByQuantityLessThanEqualAndProduct_Company_Id(
+                        20,
                         companyId
                 )
                 .stream()

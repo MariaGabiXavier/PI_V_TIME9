@@ -20,8 +20,13 @@ public class AlertController {
         this.alertService = alertService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<AlertResponse>> getAll() {
-        return ResponseEntity.ok(alertService.getAll());
+    @GetMapping("/expiring")
+    public ResponseEntity<List<AlertResponse>> getProductsExpiringInNext30Days() {
+        return ResponseEntity.ok(alertService.getProductsExpiringInNext30Days());
+    }
+
+    @GetMapping("/low-stock")
+    public ResponseEntity<List<AlertResponse>> getProductsWithLowStock() {
+        return ResponseEntity.ok(alertService.getProductsWithLowStock());
     }
 }
