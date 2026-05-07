@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
-    Optional<Stock> findById(Long id);
-    List<Stock> findByProductIdOrderByExpirationDateAsc(Long productId);
-    List<Stock> findByProduct_Company_Id(Long companyId);
+    Optional<Stock> findByIdAndProduct_DeletedFalse(Long id);
+    List<Stock> findByProductIdAndProduct_DeletedFalseOrderByExpirationDateAsc(Long productId);
+    List<Stock> findByProduct_Company_IdAndProduct_DeletedFalse(Long companyId);
+    boolean existsByProductIdAndQuantityGreaterThanAndProduct_DeletedFalse(Long productId, Integer quantity);
 
 }

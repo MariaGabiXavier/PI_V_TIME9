@@ -2,13 +2,14 @@ package com.sched.api.service;
 
 import com.sched.api.domain.Company;
 import com.sched.api.domain.Product;
-import com.sched.api.domain.Stock;
 import com.sched.api.domain.User;
 import com.sched.api.dto.request.ProductRequest;
 import com.sched.api.dto.request.StockRequest;
 import com.sched.api.dto.response.ProductResponse;
+import com.sched.api.exception.ProductHasStockException;
 import com.sched.api.exception.ResourceNotFoundException;
 import com.sched.api.repository.ProductRepository;
+import com.sched.api.repository.StockRepository;
 import com.sched.api.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final StockRepository stockRepository;
     private final StockService stockService;
 
     @Transactional(readOnly = true)
@@ -36,7 +38,7 @@ public class ProductService {
             throw new AccessDeniedException("Not authorized to create product, user/company has be deleted");
         }
 
-        return productRepository.findAllByCompanyId(authUser.getCompany().getId())
+        return productRepository.findAllByCompanyIdAndDeletedFalse(authUser.getCompany().getId())
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
@@ -58,7 +60,7 @@ public class ProductService {
             throw new AccessDeniedException("Not authorized to create product, user/company has be deleted");
         }
 
-        Product product = new Product(null, dto.name(), dto.category(), dto.price(), dto.unitOfMeasure(), dto.isPerishable(), null, company);
+        Product product = new Product(null, dto.name(), dto.category(), dto.price(), dto.unitOfMeasure(), dto.isPerishable(), null,false, company);
 
         Product savedProduct = productRepository.save(product);
 
@@ -88,7 +90,16 @@ public class ProductService {
     public void delete(Long id) {
         Product product = validateUserCompanyAccess(id);
 
-        productRepository.delete(product);
+        boolean hasActiveStock = stockRepository
+                .existsByProductIdAndQuantityGreaterThanAndProduct_DeletedFalse(product.getId(), 0);
+
+        if (hasActiveStock) {
+            throw new ProductHasStockException(product.getId());
+        }
+
+        product.setDeleted(true);
+
+        productRepository.save(product);
     }
 
     private Product validateUserCompanyAccess(Long productId) {
@@ -99,7 +110,7 @@ public class ProductService {
             throw new AccessDeniedException("Not authorized to product, user/company has be deleted");
         }
 
-        Product product = productRepository.findById(productId)
+        Product product = productRepository.findByIdAndDeletedFalse(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found or inactive with id: " + productId));
 
         if(!Objects.equals(product.getCompany().getId(), company.getId())){

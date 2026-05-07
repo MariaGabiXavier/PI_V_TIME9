@@ -43,12 +43,12 @@ public class SaleService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "user not found or inactive with email: " + authUser.getEmail()));
 
-        Product product = productRepository.findById(id)
+        Product product = productRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "product not found or inactive with id: " + id));
 
         List<Stock> stocks = stockRepository
-                .findByProductIdOrderByExpirationDateAsc(product.getId());
+                .findByProductIdAndProduct_DeletedFalseOrderByExpirationDateAsc(product.getId());
 
         int quantityToSell = dto.totalSold();
 

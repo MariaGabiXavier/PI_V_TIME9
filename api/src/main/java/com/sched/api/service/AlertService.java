@@ -27,7 +27,7 @@ public class AlertService {
         Long companyId = authUser.getCompany().getId();
 
         return alertRepository
-                .findByExpirationDateBetweenAndProduct_Company_Id(
+                .findByExpirationDateBetweenAndProduct_Company_IdAndProduct_DeletedFalse(
                         now,
                         next30Days,
                         companyId
@@ -44,7 +44,7 @@ public class AlertService {
         Long companyId = authUser.getCompany().getId();
 
         return alertRepository
-                .findByQuantityLessThanEqualAndProduct_Company_Id(
+                .findByQuantityLessThanEqualAndProduct_Company_IdAndProduct_DeletedFalse(
                         20,
                         companyId
                 )

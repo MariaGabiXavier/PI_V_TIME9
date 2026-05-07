@@ -24,6 +24,7 @@ public class Product {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+    private Boolean deleted = false;
 
     @ManyToOne
     @JoinColumn(name = "company_id")

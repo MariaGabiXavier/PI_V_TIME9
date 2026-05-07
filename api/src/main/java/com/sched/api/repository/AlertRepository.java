@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AlertRepository extends JpaRepository<Stock, Long> {
-    List<Stock> findByExpirationDateBetweenAndProduct_Company_Id(
+    List<Stock> findByExpirationDateBetweenAndProduct_Company_IdAndProduct_DeletedFalse(
             LocalDateTime startDate,
             LocalDateTime endDate,
             Long companyId
     );
 
-    List<Stock> findByQuantityLessThanEqualAndProduct_Company_Id(
+    List<Stock> findByQuantityLessThanEqualAndProduct_Company_IdAndProduct_DeletedFalse(
             Integer quantity,
             Long companyId
     );

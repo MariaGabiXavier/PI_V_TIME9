@@ -35,7 +35,7 @@ public class StockService {
         Long companyId = authUser.getCompany().getId();
 
         return stockRepository
-                .findByProduct_Company_Id(companyId)
+                .findByProduct_Company_IdAndProduct_DeletedFalse(companyId)
                 .stream()
                 .map(this::mapToBatchResponse)
                 .toList();
@@ -46,7 +46,7 @@ public class StockService {
         User authUser = SecurityUtils.getAuthenticatedUser();
         Long companyId = authUser.getCompany().getId();
 
-        List<Stock> allStocks = stockRepository.findByProduct_Company_Id(companyId);
+        List<Stock> allStocks = stockRepository.findByProduct_Company_IdAndProduct_DeletedFalse(companyId);
 
         Map<Long, List<Stock>> stocksByProduct = allStocks.stream()
                 .collect(Collectors.groupingBy(stock -> stock.getProduct().getId()));
@@ -65,7 +65,7 @@ public class StockService {
             throw new AccessDeniedException("Not authorized to create product, user/company has be deleted");
         }
 
-        var product = productRepository.findById(id)
+        var product = productRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("product not found or inactive with id: " + id));
 
         Stock stock = new Stock(null, dto.quantity(), dto.expirationDate(), null, product,authUser);
@@ -102,7 +102,7 @@ public class StockService {
             throw new AccessDeniedException("Not authorized to product, user/company has be deleted");
         }
 
-        Stock stock = stockRepository.findById(stockId)
+        Stock stock = stockRepository.findByIdAndProduct_DeletedFalse(stockId)
                 .orElseThrow(() -> new ResourceNotFoundException("stock not found or inactive with id: " + stockId));
 
         if(!Objects.equals(stock.getProduct().getCompany().getId(), company.getId())){

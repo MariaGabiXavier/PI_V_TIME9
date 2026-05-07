@@ -79,4 +79,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleInsufficientStock(InsufficientStockException ex, HttpServletRequest request) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
+
+    @ExceptionHandler(ProductHasStockException.class)
+    public ResponseEntity<ErrorDetails> handleProductHasStock(ProductHasStockException ex, HttpServletRequest request) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
 }
