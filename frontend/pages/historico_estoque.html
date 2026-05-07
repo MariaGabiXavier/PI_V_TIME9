@@ -97,15 +97,41 @@
                  </div>
              </div>
 
-            <div class="action-bar">
-                <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
-                    <div class="search-container">
-                        <img class="search-icon" src="../assets/ic_ui/ic_search.svg">
-                        <input type="text" placeholder="Pesquisar produto..." class="search-input">
-                    </div>
-                    <button class="btn-new" onclick="window.location.href='estoque.html'">Voltar</button>
-                </div>
-            </div>
+
+             <div class="action-bar">
+                 <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
+                     <div class="search-container">
+                         <img class="search-icon" src="../assets/ic_ui/ic_search.svg">
+                         <input type="text" placeholder="Pesquisar produto..." class="search-input">
+                     </div>
+                     <button class="btn-new" onclick="window.location.href='estoque.html'">Voltar</button>
+                 </div>
+             </div>
+
+             <!-- Barra de filtros -->
+             <div class="filters-bar">
+                 <select id="filterCategory">
+                     <option value="">Todas as categorias</option>
+                 </select>
+
+
+                 <select id="filterSort">
+                     <option value="">Ordenar por</option>
+                     <option value="data_desc">Mais recente</option>
+                     <option value="data_asc">Mais antigo</option>
+                     <option value="qtd_desc">Maior qtd</option>
+                     <option value="qtd_asc">Menor qtd</option>
+                 </select>
+
+                 <div class="items-per-page">
+                     <label for="itemsPerPageSelect">Exibir:</label>
+                     <select id="itemsPerPageSelect">
+                         <option value="10">10</option>
+                         <option value="20">20</option>
+                         <option value="25">25</option>
+                     </select>
+                 </div>
+             </div>
 
             <section class="history-card">
                 <div class="history-header-info">

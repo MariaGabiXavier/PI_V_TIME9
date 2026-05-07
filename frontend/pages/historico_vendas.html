@@ -108,6 +108,30 @@
                 </div>
             </div>
 
+             <div class="filters-bar">
+                 <select id="filterCategory">
+                     <option value="">Todas as categorias</option>
+                 </select>
+
+                 <select id="filterSort">
+                     <option value="" disabled selected>Ordenar por</option>
+                     <option value="data_desc">Mais recente</option>
+                     <option value="data_asc">Mais antigo</option>
+                     <option value="qtd_desc">Maior qtd.</option>
+                     <option value="qtd_asc">Menor qtd.</option>
+                     <option value="valor_desc">Maior valor</option>
+                     <option value="valor_asc">Menor valor</option>
+                 </select>
+
+                 <div class="items-per-page">
+                     <label for="itemsPerPageSelect">Exibir:</label>
+                     <select id="itemsPerPageSelect">
+                         <option value="10">10</option>
+                         <option value="20">20</option>
+                         <option value="25">25</option>
+                     </select>
+                 </div>
+             </div>
              <section class="history-card">
                  <div class="history-header-info">
                      <h2>Histórico de Vendas</h2>
