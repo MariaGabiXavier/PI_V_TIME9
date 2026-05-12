@@ -11,156 +11,145 @@
     <link rel="stylesheet" href="../css/alert.css">
 </head>
 <body>
-    <div id="alert-container"></div>
+<div id="alert-container"></div>
 
-    <div class="app">
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="../assets/logo/ic_logo_rainbow.svg" alt="Sched">
+<div class="app">
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="../assets/logo/ic_logo_rainbow.svg" alt="Sched">
+        </div>
+
+        <nav class="menu">
+            <a href="dashboard.html" class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/ic_base_screen/ic_home.svg" alt="Dashboard">
+                </div>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="produto.html" class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/ic_base_screen/ic_box.svg" alt="Produtos">
+                </div>
+                <span>Produtos</span>
+            </a>
+
+            <a href="estoque.html" class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/ic_base_screen/ic_graphic.svg" alt="Estoque">
+                </div>
+                <span>Estoque</span>
+            </a>
+
+            <a href="vendas.html" class="menu-item active">
+                <div class="icon-box">
+                    <img src="../assets/ic_base_screen/ic_rocket.svg" alt="Vendas">
+                </div>
+                <span>Vendas</span>
+            </a>
+
+            <a href="alertas.html" class="menu-item">
+                <div class="icon-box">
+                    <img src="../assets/ic_base_screen/ic_bell.svg" alt="Alertas">
+                </div>
+                <span>Alertas</span>
+            </a>
+
+            <div id="adminMenu" style="display: none;">
+                <span class="admin-title">ADMIN (apenas)</span>
+                <a href="funcionario.html" class="menu-item">
+                    <div class="icon-box">
+                        <img src="../assets/ic_base_screen/ic_user.svg" alt="">
+                    </div>
+                    <span>Funcionários</span>
+                </a>
             </div>
 
-            <nav class="menu">
-                <a href="dashboard.html" class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/ic_base_screen/ic_home.svg" alt="Dashboard">
-                    </div>
-                    <span>Dashboard</span>
-                </a>
-
-                <a href="produto.html" class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/ic_base_screen/ic_box.svg" alt="Produtos">
-                    </div>
-                    <span>Produtos</span>
-                </a>
-
-                <a href="estoque.html" class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/ic_base_screen/ic_graphic.svg" alt="Estoque">
-                    </div>
-                    <span>Estoque</span>
-                </a>
-
-                <a  href="vendas.html" class="menu-item active">
-                    <div class="icon-box">
-                        <img src="../assets/ic_base_screen/ic_rocket.svg" alt="Vendas">
-                    </div>
-                    <span>Vendas</span>
-                </a>
-
-                <a href="alertas.html" class="menu-item">
-                    <div class="icon-box">
-                        <img src="../assets/ic_base_screen/ic_bell.svg" alt="Alertas">
-                    </div>
-                    <span>Alertas</span>
-                </a>
-
-                <div id="adminMenu" style="display: none;">
-                    <span class="admin-title">ADMIN (apenas)</span>
-                    <a href="funcionario.html" class="menu-item">
-                        <div class="icon-box">
-                            <img src="../assets/ic_base_screen/ic_user.svg" alt="">
-                        </div>
-                        <span>Funcionários</span>
-                    </a>
+            <div class="help-card">
+                <div class="help-icon">
+                    <img src="../assets/ic_base_screen/ic_help.svg" alt="">
                 </div>
-
-                <div class="help-card">
-                    <div class="help-icon">
-                        <img src="../assets/ic_base_screen/ic_help.svg" alt="">
-                    </div>
-                    <div class="help-text">
-                        <strong>Precisa de ajuda?</strong>
-                        <p>Entre em contato com nosso time!</p>
-                    </div>
-                    <a href="mailto:suporte@sched.com.br" class="help-button" style="text-decoration: none; text-align: center; display: block;">Entre em contato</a>
+                <div class="help-text">
+                    <strong>Precisa de ajuda?</strong>
+                    <p>Entre em contato com nosso time!</p>
                 </div>
-            </nav>
-        </aside>
+                <a href="mailto:suporte@sched.com.br" class="help-button" style="text-decoration: none; text-align: center; display: block;">Entre em contato</a>
+            </div>
+        </nav>
+    </aside>
 
-         <main class="main-content">
-             <div class="page-header">
-                 <div class="page-header-left">
-                     <div class="breadcrumb">
-                         <span class="breadcrumb-muted">Páginas</span>
-                         <span class="breadcrumb-separator">/</span>
-                         <span class="breadcrumb-active">Vendas / Histórico</span>
-                     </div>
-
-                     <h1 class="page-title">Página de Histórico de Vendas</h1>
-                 </div>
-
-                 <div class="page-header-right">
-                     <button class="topbar-icon">
-                         <img src="../assets/ic_base_screen/ic_user_profile.svg" alt="">
-                     </button>
-                 </div>
-             </div>
-
-            <div class="action-bar">
-                <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
-                    <div class="search-container">
-                        <img class="search-icon" src="../assets/ic_ui/ic_search.svg">
-                        <input type="text" placeholder="Pesquisar produto..." class="search-input">
-                    </div>
-                    <button class="btn-new" onclick="window.location.href='vendas.html'">Voltar
-                    </button>
+    <main class="main-content">
+        <div class="page-header">
+            <div class="page-header-left">
+                <div class="breadcrumb">
+                    <span class="breadcrumb-muted">Páginas</span>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-active">Vendas / Histórico</span>
                 </div>
+                <h1 class="page-title">Página de Histórico de Vendas</h1>
+            </div>
+            <div class="page-header-right">
+                <button class="topbar-icon">
+                    <img src="../assets/ic_base_screen/ic_user_profile.svg" alt="">
+                </button>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <div class="action-bar-left" style="display: flex; gap: 15px; align-items: center;">
+                <div class="search-container">
+                    <img class="search-icon" src="../assets/ic_ui/ic_search.svg">
+                    <input type="text" placeholder="Pesquisar produto..." class="search-input">
+                </div>
+                <button class="btn-new" onclick="window.location.href='vendas.html'">Voltar</button>
+            </div>
+        </div>
+
+        <div class="filters-bar">
+            <select id="filterCategory">
+                <option value="">Todas as categorias</option>
+            </select>
+            <select id="filterSort">
+                <option value="" disabled selected>Ordenar por</option>
+                <option value="data_desc">Mais recente</option>
+                <option value="data_asc">Mais antigo</option>
+                <option value="qtd_desc">Maior qtd.</option>
+                <option value="qtd_asc">Menor qtd.</option>
+                <option value="valor_desc">Maior valor</option>
+                <option value="valor_asc">Menor valor</option>
+            </select>
+        </div>
+
+        <section class="history-card">
+            <div class="history-header-info">
+                <h2>Histórico de Vendas</h2>
+                <p class="history-stats">
+                    <img class="check-icon" src="../assets/ic_ui/ic_circle_success.svg">
+                    <span class="bold-stats" id="weekSalesText">0 vendas registradas</span>
+                    esta semana
+                </p>
             </div>
 
-             <div class="filters-bar">
-                 <select id="filterCategory">
-                     <option value="">Todas as categorias</option>
-                 </select>
-
-                 <select id="filterSort">
-                     <option value="" disabled selected>Ordenar por</option>
-                     <option value="data_desc">Mais recente</option>
-                     <option value="data_asc">Mais antigo</option>
-                     <option value="qtd_desc">Maior qtd.</option>
-                     <option value="qtd_asc">Menor qtd.</option>
-                     <option value="valor_desc">Maior valor</option>
-                     <option value="valor_asc">Menor valor</option>
-                 </select>
-
-                 <div class="items-per-page">
-                     <label for="itemsPerPageSelect">Exibir:</label>
-                     <select id="itemsPerPageSelect">
-                         <option value="10">10</option>
-                         <option value="20">20</option>
-                         <option value="25">25</option>
-                     </select>
-                 </div>
-             </div>
-             <section class="history-card">
-                 <div class="history-header-info">
-                     <h2>Histórico de Vendas</h2>
-
-                     <p class="history-stats">
-                         <img class="check-icon" src="../assets/ic_ui/ic_circle_success.svg">
-                         <span class="bold-stats" id="weekSalesText">0 vendas registradas</span>
-                         esta semana
-                     </p>
-                 </div>
-
-                 <table class="history-table">
-                     <thead>
-                     <tr>
-                         <th>PRODUTO</th>
-                         <th>FUNCIONÁRIO</th>
-                         <th>QUANTIDADE VENDIDA</th>
-                         <th>VALOR DA VENDA</th>
-                         <th>DATA DA VENDA</th>
-                     </tr>
-                     </thead>
-
-                     <tbody id="historyTableBody"></tbody>
-                 </table>
-             </section>
-        </main>
-    </div>
-    <script src="../js/auth.js"></script>
-    <script src="../js/alert.js"></script>
-    <script src="../js/historico_vendas.js"></script>
+            <div class="table-scroll-wrapper">
+                <table class="history-table">
+                    <thead>
+                    <tr>
+                        <th>PRODUTO</th>
+                        <th>FUNCIONÁRIO</th>
+                        <th>QUANTIDADE VENDIDA</th>
+                        <th>VALOR DA VENDA</th>
+                        <th>DATA DA VENDA</th>
+                    </tr>
+                    </thead>
+                    <tbody id="historyTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/alert.js"></script>
+<script src="../js/historico_vendas.js"></script>
 </body>
 </html>
