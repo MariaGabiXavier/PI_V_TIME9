@@ -11,5 +11,5 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
     List<Stock> findByProductIdAndProduct_DeletedFalseOrderByExpirationDateAsc(Long productId);
     List<Stock> findByProduct_Company_IdAndProduct_DeletedFalse(Long companyId);
     boolean existsByProductIdAndQuantityGreaterThanAndProduct_DeletedFalse(Long productId, Integer quantity);
-
+    List<Stock> findByProductId(Long productId);
 }
