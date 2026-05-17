@@ -1,12 +1,17 @@
 package com.sched.api.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.sched.api.domain.Sale;
 import com.sched.api.domain.Stock;
-import com.sched.api.dto.response.DemandDataResponse;
+import com.sched.api.domain.User;
+import com.sched.api.dto.response.AiPredictionResponse;
 import com.sched.api.repository.SaleRepository;
 import com.sched.api.repository.StockRepository;
 
@@ -18,28 +23,53 @@ public class AiService {
 
     private final SaleRepository saleRepository;
     private final StockRepository stockRepository;
+    private final RestTemplate restTemplate;
 
-    public List<DemandDataResponse> getDemandData() {
+    public List<AiPredictionResponse> getPredictions(User user) {
 
-        List<Sale> sales = saleRepository.findAll();
+        Long companyId = user.getCompany().getId();
 
-        return sales.stream().map(sale -> {
+        List<Sale> sales =
+                saleRepository.findByProduct_Company_Id(companyId);
 
-            Integer stockQuantity = stockRepository
+        List<AiPredictionResponse> predictions = new ArrayList<>();
+
+        for (Sale sale : sales) {
+
+            Long stockQuantity = stockRepository
                     .findByProductId(sale.getProduct().getId())
                     .stream()
-                    .mapToInt(Stock::getQuantity)
+                    .mapToLong(Stock::getQuantity)
                     .sum();
 
-            return new DemandDataResponse(
-                    sale.getProduct().getName(),
-                    sale.getProduct().getCategory(),
-                    sale.getProduct().getPrice(),
-                    sale.getTotalSold(),
-                    sale.getSaleDate().getMonthValue(),
-                    stockQuantity
-            );
+            Map<String, Object> request = new HashMap<>();
 
-        }).toList();
+            request.put("month",
+                    sale.getSaleDate().getMonthValue());
+
+            request.put("price",
+                    sale.getProduct().getPrice());
+
+            request.put("stockQuantity",
+                    stockQuantity);
+
+            AiPredictionResponse response =
+                    restTemplate.postForObject(
+                            "http://127.0.0.1:5000/predict",
+                            request,
+                            AiPredictionResponse.class
+                    );
+
+            if (response != null) {
+
+                response.setProductName(
+                        sale.getProduct().getName()
+                );
+
+                predictions.add(response);
+            }
+        }
+
+        return predictions;
     }
 }

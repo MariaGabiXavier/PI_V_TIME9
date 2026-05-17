@@ -16,5 +16,5 @@ public class DemandDataResponse {
     private Double price;
     private Integer totalSold;
     private Integer month;
-    private Integer stockQuantity;
+    private Long stockQuantity;
 }

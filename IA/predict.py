@@ -4,12 +4,15 @@ from sklearn.ensemble import RandomForestRegressor
 
 response = requests.get("http://localhost:8080/api/ai/demand-data")
 
+print(response.status_code)
+print(response.text)
+
 data = response.json()
 
 df = pd.DataFrame(data)
 
 # Features
-X = df[["month", "price"]]
+X = df[["month", "price", "stockQuantity"]]
 
 # Target
 y = df["totalSold"]
@@ -25,11 +28,13 @@ model.fit(X, y)
 alerts = []
 
 # previsão por produto
+# previsão por produto
 for _, row in df.iterrows():
 
     features = pd.DataFrame([{
         "month": row["month"],
-        "price": row["price"]
+        "price": row["price"],
+        "stockQuantity": row["stockQuantity"]
     }])
 
     predicted_sales = model.predict(features)[0]
@@ -62,5 +67,6 @@ for _, row in df.iterrows():
 
 alerts_df = pd.DataFrame(alerts)
 
-print("\nALERTAS DE REPOSIÇÃO:\n")
-print(alerts_df)
+import json
+
+print(json.dumps(alerts))
