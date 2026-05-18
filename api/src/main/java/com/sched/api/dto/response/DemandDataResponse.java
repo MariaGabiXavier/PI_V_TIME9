@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DemandDataResponse {
-
+    private Long productId;
     private String productName;
     private String category;
     private Double price;

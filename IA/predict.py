@@ -1,8 +1,18 @@
 import pandas as pd
 import requests
 from sklearn.ensemble import RandomForestRegressor
+import os
 
-response = requests.get("http://localhost:8080/api/ai/demand-data")
+TOKEN = os.getenv("TOKEN")
+
+headers = {
+    "Authorization": f"Bearer {TOKEN}"
+}
+
+response = requests.get(
+    "http://localhost:8080/ai/demand-data",
+    headers=headers
+)
 
 print(response.status_code)
 print(response.text)

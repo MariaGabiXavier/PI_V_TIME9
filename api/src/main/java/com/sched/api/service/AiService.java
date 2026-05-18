@@ -1,17 +1,13 @@
 package com.sched.api.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.sched.api.domain.Sale;
-import com.sched.api.domain.Stock;
 import com.sched.api.domain.User;
 import com.sched.api.dto.response.AiPredictionResponse;
+import com.sched.api.dto.response.DemandDataResponse;
 import com.sched.api.repository.SaleRepository;
 import com.sched.api.repository.StockRepository;
 
@@ -25,69 +21,28 @@ public class AiService {
     private final StockRepository stockRepository;
     private final RestTemplate restTemplate;
 
-    public List<AiPredictionResponse> getPredictions(User user) {
+    public List<DemandDataResponse> getDemandData(User user) {
 
         Long companyId = user.getCompany().getId();
 
-        List<Sale> sales =
-                saleRepository.findByProduct_Company_Id(companyId);
+        return saleRepository.getDemandDataByCompany(companyId);
+    }
 
-        List<AiPredictionResponse> predictions =
-                new ArrayList<>();
+    public List<AiPredictionResponse> getPredictions(User user) {
 
-        for (Sale sale : sales) {
+        List<DemandDataResponse> demandData =
+                getDemandData(user);
 
-            Long stockQuantity = stockRepository
-                    .findByProductId(sale.getProduct().getId())
-                    .stream()
-                    .mapToLong(Stock::getQuantity)
-                    .sum();
+        String flaskUrl =
+                "http://127.0.0.1:5000/predict";
 
-            long historyCount = sales.stream()
-                    .filter(s -> s.getProduct().getId()
-                            .equals(sale.getProduct().getId()))
-                    .count();
-
-            Map<String, Object> request =
-                    new HashMap<>();
-
-            request.put(
-                    "month",
-                    sale.getSaleDate().getMonthValue()
-            );
-
-            request.put(
-                    "price",
-                    sale.getProduct().getPrice()
-            );
-
-            request.put(
-                    "stockQuantity",
-                    stockQuantity
-            );
-
-            request.put(
-                    "historyCount",
-                    historyCount
-            );
-
-            AiPredictionResponse response =
-                    restTemplate.postForObject(
-                            "http://127.0.0.1:5000/predict",
-                            request,
-                            AiPredictionResponse.class
-                    );
-
-            if (response != null) {
-
-                response.setProductName(
-                        sale.getProduct().getName()
+        AiPredictionResponse[] response =
+                restTemplate.postForObject(
+                        flaskUrl,
+                        demandData,
+                        AiPredictionResponse[].class
                 );
 
-                predictions.add(response);
-            }
-        }
-
-        return predictions;
+        return List.of(response);
     }
 }

@@ -9,14 +9,13 @@ public class AiPredictionResponse {
 
     private String productName;
 
-    private String status;
-    private String message;
+    private Integer stockQuantity;
 
     private Integer prediction7Days;
-    private Integer prediction15Days;
-    private Integer prediction30Days;
 
-    private Long currentStock;
+    private Integer prediction15Days;
+
+    private Integer prediction30Days;
 
     private Integer recommendedRestock;
 
