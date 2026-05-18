@@ -1,33 +1,66 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
+import requests
 import joblib
+from sklearn.ensemble import RandomForestRegressor
 
-# DADOS DE TREINAMENTO (FICTÍCIOS)
-data = {
-    "month": [1,2,3,4,5,6,7,8,9,10,11,12],
-    "price": [10,12,9,15,20,25,30,18,16,14,13,11],
-    "stockQuantity": [100,90,80,70,60,50,40,30,20,15,10,5],
-    "sales": [20,25,30,35,40,50,60,55,45,35,30,25]
-}
+response = requests.get("http://localhost:8080/api/ai/demand-data")
+data = response.json()
 
 df = pd.DataFrame(data)
 
-# FEATURES
-X = df[["month", "price", "stockQuantity"]]
+# valida se existe histórico mínimo
+if len(df) < 10:
+    print("Dados insuficientes para previsão.")
+    exit()
 
-# TARGET
-y = df["sales"]
+# separa por produto
+results = []
 
-# MODELO
-model = RandomForestRegressor(
-    n_estimators=100,
-    random_state=42
-)
+for product_id in df["productId"].unique():
 
-# TREINAMENTO
-model.fit(X, y)
+    product_df = df[df["productId"] == product_id].copy()
 
-# SALVAR MODELO
+    # mínimo de histórico por produto
+    if len(product_df) < 5:
+        results.append({
+            "productId": product_id,
+            "status": "INSUFFICIENT_DATA"
+        })
+        continue
+
+    X = product_df[["month", "price", "stockQuantity"]]
+    y = product_df["totalSold"]
+
+    model = RandomForestRegressor(
+        n_estimators=100,
+        random_state=42
+    )
+
+    model.fit(X, y)
+
+    last = product_df.iloc[-1]
+
+    predict_data = pd.DataFrame([{
+        "month": last["month"],
+        "price": last["price"],
+        "stockQuantity": last["stockQuantity"]
+    }])
+
+    prediction = int(model.predict(predict_data)[0])
+
+    results.append({
+        "productId": product_id,
+        "productName": last["productName"],
+        "prediction7Days": int(prediction * 0.25),
+        "prediction15Days": int(prediction * 0.50),
+        "prediction30Days": prediction,
+        "currentStock": int(last["stockQuantity"]),
+        "recommendedRestock": max(
+            prediction - int(last["stockQuantity"]), 0
+        ),
+        "status": "OK"
+    })
+
 joblib.dump(model, "modelo_demanda.pkl")
 
-print("Modelo treinado e salvo com sucesso!")
+print(results)

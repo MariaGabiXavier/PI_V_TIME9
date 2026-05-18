@@ -32,7 +32,8 @@ public class AiService {
         List<Sale> sales =
                 saleRepository.findByProduct_Company_Id(companyId);
 
-        List<AiPredictionResponse> predictions = new ArrayList<>();
+        List<AiPredictionResponse> predictions =
+                new ArrayList<>();
 
         for (Sale sale : sales) {
 
@@ -42,16 +43,33 @@ public class AiService {
                     .mapToLong(Stock::getQuantity)
                     .sum();
 
-            Map<String, Object> request = new HashMap<>();
+            long historyCount = sales.stream()
+                    .filter(s -> s.getProduct().getId()
+                            .equals(sale.getProduct().getId()))
+                    .count();
 
-            request.put("month",
-                    sale.getSaleDate().getMonthValue());
+            Map<String, Object> request =
+                    new HashMap<>();
 
-            request.put("price",
-                    sale.getProduct().getPrice());
+            request.put(
+                    "month",
+                    sale.getSaleDate().getMonthValue()
+            );
 
-            request.put("stockQuantity",
-                    stockQuantity);
+            request.put(
+                    "price",
+                    sale.getProduct().getPrice()
+            );
+
+            request.put(
+                    "stockQuantity",
+                    stockQuantity
+            );
+
+            request.put(
+                    "historyCount",
+                    historyCount
+            );
 
             AiPredictionResponse response =
                     restTemplate.postForObject(
