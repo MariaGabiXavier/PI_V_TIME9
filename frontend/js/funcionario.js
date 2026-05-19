@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const token = localStorage.getItem("token");
 
-            const response = await fetch("http://localhost:8080/user", {
+            const response = await fetch("http://localhost:8080/auth/user", {
                 method: "POST",
                 headers: {
                     "Authorization": "Bearer " + token,
@@ -54,8 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 body: JSON.stringify({
                     name,
                     email,
-                    password,
-                    role: "EMPLOYEE" 
+                    password
                 })
             });
 
@@ -129,12 +128,7 @@ function renderEmployees(employees) {
                 </span>
 
                 <div class="actions">
-                    <button class="edit">
-                        <img src="../assets/ic_ui/ic_pencil.svg">
-                        <span>Editar</span>
-                    </button>
-
-                    <button class="delete">
+                    <button class="delete" onclick="deleteEmployee(${user.id})">
                         <img src="../assets/ic_ui/ic_trash.svg">
                         <span>Excluir</span>
                     </button>
@@ -142,4 +136,28 @@ function renderEmployees(employees) {
             </div>
         `;
     });
+}
+async function deleteEmployee(id) {
+    if (!confirm("Tem certeza que deseja excluir este funcionário?")) return;
+
+    const token = localStorage.getItem("token");
+
+    try {
+        const response = await fetch(`http://localhost:8080/user/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (response.ok) {
+            showAlert('success', 'SUCESSO', 'Funcionário excluído!');
+            await loadEmployees();
+        } else {
+            const err = await response.json().catch(() => ({}));
+            showAlert('error', 'ERRO', err.message || 'Não foi possível excluir o funcionário.');
+        }
+    } catch (error) {
+        showAlert('error', 'ERRO', 'Falha na conexão com servidor.');
+    }
 }
