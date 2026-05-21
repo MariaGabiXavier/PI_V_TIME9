@@ -630,9 +630,7 @@ main {
 .chart-placeholder.light {
   height: 220px;
   border-radius: 12px;
-
-  background: linear-gradient(135deg, #6c5ce7, #74b9ff);
-  opacity: 0.65;
+  background: transparent;
 }
 
 .chart-info {

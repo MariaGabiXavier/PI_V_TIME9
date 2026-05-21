@@ -414,55 +414,54 @@
                 const sales = await response.json();
 
                 const agora = new Date();
-                const hojeIso = agora.toISOString().split("T")[0];
+                // Usa data local (não UTC) para bater com o saleDate do backend (LocalDateTime sem timezone)
+                const hojeIso = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
                 const mesAtual = agora.getMonth();
                 const anoAtual = agora.getFullYear();
+                const anoAnterior = anoAtual - 1;
 
-                const dataMesPassado = new Date(anoAtual, mesAtual - 1, 1);
-                const mesPassado = dataMesPassado.getMonth();
-                const anoMesPassado = dataMesPassado.getFullYear();
-
+                // Vendas por mês: arrays de 12 posições (Jan=0 ... Dez=11)
+                const vendasAnoAtual    = new Array(12).fill(0);
+                const vendasAnoAnterior = new Array(12).fill(0);
                 let qtdHoje = 0;
-                let qtdMesAtual = 0;
-                let qtdMesPassado = 0;
 
                 sales.forEach(sale => {
                     if (!sale.saleDate) return;
-                    const dataVenda = new Date(sale.saleDate);
-                    const dataVendaIso = sale.saleDate.split("T")[0];
+                    const dataVenda  = new Date(sale.saleDate);
+                    const dataIso    = sale.saleDate.split("T")[0];
+                    const mes = dataVenda.getMonth();
+                    const ano = dataVenda.getFullYear();
 
-                    if (dataVendaIso === hojeIso) qtdHoje++;
-                    if (dataVenda.getMonth() === mesAtual && dataVenda.getFullYear() === anoAtual) qtdMesAtual++;
-                    if (dataVenda.getMonth() === mesPassado && dataVenda.getFullYear() === anoMesPassado) qtdMesPassado++;
+                    if (dataIso === hojeIso) qtdHoje++;
+                    if (ano === anoAtual)    vendasAnoAtual[mes]++;
+                    if (ano === anoAnterior) vendasAnoAnterior[mes]++;
                 });
 
-                // Atualiza Cards Simples
+                const qtdMesAtual            = vendasAnoAtual[mesAtual];
+                const qtdMesmoMesAnoAnterior = vendasAnoAnterior[mesAtual];
+
+                // Atualiza Cards
                 document.getElementById("totalVendasHoje").innerText = qtdHoje;
-                document.getElementById("totalVendasMes").innerText = qtdMesAtual;
+                document.getElementById("totalVendasMes").innerText  = qtdMesAtual;
 
-                // Cálculo de Porcentagem e Overview
+                // Porcentagem: mês atual vs mesmo mês do ano anterior
                 let porcentagem = 0;
-                let classeCor = "green";
-                let prefixo = "Crescimento de ";
-
-                if (qtdMesPassado > 0) {
-                    porcentagem = ((qtdMesAtual - qtdMesPassado) / qtdMesPassado) * 100;
+                if (qtdMesmoMesAnoAnterior > 0) {
+                    porcentagem = ((qtdMesAtual - qtdMesmoMesAnoAnterior) / qtdMesmoMesAnoAnterior) * 100;
                 } else {
                     porcentagem = qtdMesAtual > 0 ? 100 : 0;
                 }
 
-                if (porcentagem < 0) {
-                    classeCor = "red";
-                    prefixo = "Queda de ";
-                }
-
                 const elTexto = document.getElementById("crescimentoTexto");
                 if (elTexto) {
-                    elTexto.className = `chart-sub ${classeCor}`;
-                    elTexto.innerText = `${prefixo}${Math.abs(porcentagem).toFixed(0)}% em relação ao mês anterior`;
+                    const sinal  = porcentagem >= 0 ? "+" : "";
+                    const cor    = porcentagem >= 0 ? "green2" : "red";
+                    const direcao = porcentagem >= 0 ? "a mais" : "a menos";
+                    elTexto.innerHTML = `<span class="${cor}">(${sinal}${Math.abs(porcentagem).toFixed(0)}%) ${direcao}</span> que ${anoAnterior}`;
+                    elTexto.className = "chart-sub";
                 }
 
-                renderizarGrafico(qtdMesPassado, qtdMesAtual);
+                renderizarGrafico(vendasAnoAnterior, vendasAnoAtual, anoAtual, anoAnterior);
 
             } catch (error) {
                 console.error("Erro ao carregar vendas:", error);
@@ -517,27 +516,60 @@
 
         // ----------------------------------------------
 
-        function renderizarGrafico(passado, atual) {
-            const ctx = document.getElementById('vendasChart').getContext('2d');
+        function renderizarGrafico(anoAnteriorData, anoAtualData, anoAtual, anoAnterior) {
+            const canvas = document.getElementById('vendasChart');
+            const ctx = canvas.getContext('2d');
 
-            // Destrói gráfico existente se houver
             if (window.meuGrafico) window.meuGrafico.destroy();
 
-            // Tratamento para evitar erro de logaritmo com valor zero
-            const valorPassado = passado > 0 ? passado : 0.1;
-            const valorAtual = atual > 0 ? atual : 0.1;
+            const gradientPlugin = {
+                id: 'dynamicGradient',
+                beforeDatasetDraw(chart, args) {
+                    if (args.index !== 0) return; 
+                    const { ctx: c, chartArea: { top, bottom } } = chart;
+                    const grad = c.createLinearGradient(0, top, 0, bottom);
+                    grad.addColorStop(0,   'rgba(80, 150, 255, 0.75)');
+                    grad.addColorStop(0.5, 'rgba(120, 180, 255, 0.40)');
+                    grad.addColorStop(1,   'rgba(190, 220, 255, 0.08)');
+                    chart.data.datasets[0].backgroundColor = grad;
+                }
+            };
+
+            const labels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
             window.meuGrafico = new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
+                plugins: [gradientPlugin],
                 data: {
-                    labels: ['Mês Passado', 'Mês Atual'],
-                    datasets: [{
-                        label: 'Total de Vendas',
-                        data: [valorPassado, valorAtual],
-                        backgroundColor: ['#ff0615', '#4CAF50'],
-                        borderRadius: 8,
-                        barPercentage: 0.6 // Deixa as barras um pouco mais finas e elegantes
-                    }]
+                    labels,
+                    datasets: [
+                        {
+                            // Ano anterior
+                            label: String(anoAnterior),
+                            data: anoAnteriorData,
+                            borderColor: '#60a5fa',
+                            backgroundColor: 'rgba(100, 160, 255, 0.3)', 
+                            fill: 'origin',
+                            tension: 0.45,
+                            pointRadius: 0,
+                            pointHoverRadius: 5,
+                            borderWidth: 2,
+                            order: 2
+                        },
+                        {
+                            // Ano atual
+                            label: String(anoAtual),
+                            data: anoAtualData,
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'transparent',
+                            fill: false,
+                            tension: 0.45,
+                            pointRadius: 0,
+                            pointHoverRadius: 5,
+                            borderWidth: 2.5,
+                            order: 1
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
@@ -545,33 +577,39 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(255,255,255,0.97)',
+                            titleColor: '#1e293b',
+                            bodyColor: '#475569',
+                            borderColor: '#e2e8f0',
+                            borderWidth: 1,
                             callbacks: {
-                                // Garante que o tooltip mostre o número real e não o 0.1 de ajuste
-                                label: function(context) {
-                                    const val = context.raw === 0.1 ? 0 : context.raw;
-                                    return `Vendas: ${val}`;
-                                }
+                                label: c => `${c.dataset.label}: ${c.raw} vendas`
                             }
                         }
                     },
+                    interaction: { mode: 'index', intersect: false },
                     scales: {
-                        y: {
-                            type: 'logarithmic',
-                            min: 1, // Começa no 1 para o logaritmo funcionar bem
-                            suggestedMax: Math.max(passado, atual) * 1.2, // Dá um respiro no topo
-                            ticks: {
-                                callback: function(value) {
-                                    // Filtra para mostrar apenas números "bonitos" no eixo Y (1, 10, 100, 1000...)
-                                    return Number.isInteger(Math.log10(value)) ? value : null;
-                                }
-                            },
-                            grid: {
-                                display: true,
-                                color: 'rgba(200, 200, 200, 0.1)'
-                            }
-                        },
                         x: {
-                            grid: { display: false }
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 11 } },
+                            border: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(148, 163, 184, 0.22)',
+                                borderDash: [5, 5],
+                                drawTicks: false
+                            },
+                            border: { display: false },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { size: 11 },
+                                precision: 0,
+                                padding: 8
+                            }
                         }
                     }
                 }
