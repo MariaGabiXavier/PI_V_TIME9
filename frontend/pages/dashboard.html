@@ -214,14 +214,16 @@
 
     <section class="grid-3">
         <div class="box chart-card">
-            <div class="chart-placeholder dark"></div>
+            <div class="chart-placeholder dark">
+                <canvas id="demandaChart"></canvas>
+            </div>
 
             <div class="chart-info">
                 <h3>
                     Previsão de Demanda 
                     <span class="ai-badge">sched AI</span>
                 </h3>
-                <p class="chart-sub"><span class="green2">( +00% )</span> As previsões são boas para este mês!</p>
+                <p class="chart-sub" id="demandaSubtitle"><span class="green2">( +0% )</span> As previsões são boas para este mês!</p>
 
             <div class="chart-stats">
 
@@ -324,6 +326,7 @@
             carregarAlertasDeVencimentoProximo();
 
             carregarEstatisticasVendas();
+            carregarGraficoDemanda();
             carregarAlertasDeEstoqueBaixo();
         });
 
@@ -522,10 +525,11 @@
 
             if (window.meuGrafico) window.meuGrafico.destroy();
 
+            // Plugin para criar gradiente dinâmico baseado na altura real do chart
             const gradientPlugin = {
                 id: 'dynamicGradient',
                 beforeDatasetDraw(chart, args) {
-                    if (args.index !== 0) return; 
+                    if (args.index !== 0) return; // só aplica no primeiro dataset (ano anterior)
                     const { ctx: c, chartArea: { top, bottom } } = chart;
                     const grad = c.createLinearGradient(0, top, 0, bottom);
                     grad.addColorStop(0,   'rgba(80, 150, 255, 0.75)');
@@ -679,6 +683,173 @@
 
                     lista.appendChild(li);
                 });
+        }
+
+        async function carregarGraficoDemanda() {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+
+            try {
+                const response = await fetch("http://localhost:8080/sale", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+                if (!response.ok) return;
+                const sales = await response.json();
+
+                const agora = new Date();
+                const mesAtual = agora.getMonth();
+                const anoAtual = agora.getFullYear();
+
+                // Mês anterior
+                const mesAnterior = mesAtual === 0 ? 11 : mesAtual - 1;
+                const anoMesAnterior = mesAtual === 0 ? anoAtual - 1 : anoAtual;
+
+                // Vendas por dia
+                const diasMesAtual    = new Array(31).fill(0);
+                const diasMesAnterior = new Array(31).fill(0);
+
+                sales.forEach(sale => {
+                    if (!sale.saleDate) return;
+                    const d = new Date(sale.saleDate);
+                    const mes = d.getMonth();
+                    const ano = d.getFullYear();
+                    const dia = d.getDate() - 1; // 0-indexed
+
+                    if (ano === anoAtual && mes === mesAtual)       diasMesAtual[dia]++;
+                    if (ano === anoMesAnterior && mes === mesAnterior) diasMesAnterior[dia]++;
+                });
+
+                // Junta dias com venda de ambos os meses
+                const diasComVenda = new Set();
+                diasMesAtual.forEach((v, i) => { if (v > 0) diasComVenda.add(i); });
+                diasMesAnterior.forEach((v, i) => { if (v > 0) diasComVenda.add(i); });
+
+                const labels        = Array.from({ length: 31 }, (_, i) => `${i + 1}`);
+                const dadosAtual    = diasMesAtual.slice(0, 31);
+                const dadosAnterior = diasMesAnterior.slice(0, 31);
+
+                const totalAtual    = diasMesAtual.reduce((a, b) => a + b, 0);
+                const totalAnterior = diasMesAnterior.reduce((a, b) => a + b, 0);
+                let pct = 0;
+                if (totalAnterior > 0) {
+                    pct = ((totalAtual - totalAnterior) / totalAnterior) * 100;
+                } else {
+                    pct = totalAtual > 0 ? 100 : 0;
+                }
+                const sinal = pct >= 0 ? "+" : "";
+                const cor   = pct >= 0 ? "green2" : "red";
+                const sub   = document.getElementById("demandaSubtitle");
+                if (sub) {
+                    sub.innerHTML = `<span class="${cor}">(${sinal}${Math.abs(pct).toFixed(0)}%)</span> As previsões são boas para este mês!`;
+                }
+
+                renderizarGraficoDemanda(labels, dadosAnterior, dadosAtual);
+
+            } catch (e) {
+                console.error("Erro ao carregar gráfico de demanda:", e);
+            }
+        }
+
+        function renderizarGraficoDemanda(labels, dadosAnterior, dadosAtual) {
+            const canvas = document.getElementById('demandaChart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            if (window.graficoDemanda) window.graficoDemanda.destroy();
+
+            const legendaCustom = {
+                id: 'legendaCustom',
+                afterDraw(chart) {
+                    const { ctx: c, chartArea: { left } } = chart;
+                    const itens = [
+                        { cor: 'rgba(255,255,255,0.85)', texto: 'Mês passado', textoCor: '#fff' },
+                        { cor: 'rgba(149, 76, 233, 0.9)',  texto: 'Este Mês',    textoCor: '#c084fc' }
+                    ];
+                    c.save();
+                    let x = left;
+                    const y = 10;
+                    const boxW = 12, boxH = 12, radius = 3, gap = 6, itemGap = 20;
+                    c.font = '600 11px Inter, sans-serif';
+                    itens.forEach(item => {
+                        c.beginPath();
+                        c.roundRect(x, y, boxW, boxH, radius);
+                        c.fillStyle = item.cor;
+                        c.fill();
+                        c.fillStyle = item.textoCor;
+                        c.fillText(item.texto, x + boxW + gap, y + boxH - 2);
+                        x += boxW + gap + c.measureText(item.texto).width + itemGap;
+                    });
+                    c.restore();
+                }
+            };
+
+            window.graficoDemanda = new Chart(ctx, {
+                type: 'bar',
+                plugins: [legendaCustom],
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: 'Mês passado',
+                            data: dadosAnterior,
+                            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                            borderRadius: 4,
+                            barPercentage: 0.85,
+                            categoryPercentage: 0.7,
+                            order: 2
+                        },
+                        {
+                            label: 'Este Mês',
+                            data: dadosAtual,
+                            backgroundColor: 'rgba(149, 76, 233, 0.9)',
+                            borderRadius: 4,
+                            barPercentage: 0.85,
+                            categoryPercentage: 0.7,
+                            order: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { top: 30 } },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: items => `Dia ${items[0].label}`,
+                                label: c => `${c.dataset.label}: ${c.raw} vendas`
+                            }
+                        }
+                    },
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                color: 'rgba(255,255,255,0.6)',
+                                font: { size: 10, weight: '600' },
+                                maxRotation: 0,
+                                autoSkip: false,
+                                callback: function(val, i) { return (i+1) % 5 === 0 ? i+1 : ''; }
+                            },
+                            border: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.06)', borderDash: [4,4] },
+                            border: { display: false },
+                            ticks: {
+                                color: 'rgba(255,255,255,0.6)',
+                                font: { size: 10, weight: '600' },
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
         }
       </script>
 </body>
