@@ -1,7 +1,6 @@
 package com.sched.api.repository;
 
 import com.sched.api.domain.Sale;
-import com.sched.api.dto.response.AiProductDataResponse;
 import com.sched.api.dto.response.DemandDataResponse;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,8 +10,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface SaleRepository extends JpaRepository<Sale, Long> {
-
-    List<Sale> findByProduct_DeletedFalse();
 
     List<Sale> findByProduct_Company_Id(Long companyId);
 

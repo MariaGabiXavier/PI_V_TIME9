@@ -28,7 +28,15 @@ public class SaleService {
     private final StockRepository stockRepository;
 
     public List<SaleResponse> getAll() {
-        List<Sale> sales = saleRepository.findAll();
+        User authUser = SecurityUtils.getAuthenticatedUser();
+
+        User user = userRepository.findByEmail(authUser.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "user not found or inactive with email: " + authUser.getEmail()));
+
+        Long companyId = user.getCompany().getId();
+
+        List<Sale> sales = saleRepository.findByProduct_Company_Id(companyId);
 
         return sales.stream()
                 .map(SaleResponse::new)
