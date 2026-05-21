@@ -12,7 +12,7 @@ def predict():
     df = pd.DataFrame(data)
 
     # valida quantidade mínima
-    if len(df) < 5:
+    if len(df) < 3:
         return jsonify({
             "status": "INSUFFICIENT_DATA",
             "message": "Poucos dados para previsão"

@@ -14,7 +14,7 @@ def predict():
 
     # valida quantidade mínima
     # KNN precisa de pelo menos k+1 amostras (k=3 aqui)
-    if len(df) < 5:
+    if len(df) < 3:
         return jsonify({
             "status": "INSUFFICIENT_DATA",
             "message": "Poucos dados para previsão"
