@@ -75,7 +75,6 @@
             return;
         }
 
-        // ter as chaves exatas que o LoginRequest espera no Java
         const dadosLogin = {
             email: email,
             password: password
@@ -95,7 +94,7 @@
             const result = await response.json();
 
             if (response.ok) {
-                // result.token é o nome que vem do seu LoginResponse no Java
+                
                 const token = result.token;
 
                 // SALVANDO O TOKEN: Guardamos no localStorage para usar depois

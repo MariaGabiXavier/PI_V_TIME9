@@ -14,8 +14,5 @@ public interface AlertRepository extends JpaRepository<Stock, Long> {
             Long companyId
     );
 
-    List<Stock> findByQuantityLessThanEqualAndProduct_Company_IdAndProduct_DeletedFalse(
-            Integer quantity,
-            Long companyId
-    );
+    List<Stock> findByProduct_Company_IdAndProduct_DeletedFalse(Long companyId);
 }
