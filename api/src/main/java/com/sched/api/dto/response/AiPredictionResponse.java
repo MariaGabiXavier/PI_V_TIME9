@@ -20,4 +20,8 @@ public class AiPredictionResponse {
     private Integer recommendedRestock;
 
     private String alert;
+
+    private String modelUsed;
+    
+    private Double modelMAE;
 }
