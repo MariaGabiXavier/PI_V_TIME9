@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Vendas | Sched</title>
+    <title>Alertas | Sched</title>
     <link rel="icon" type="image/png" href="../assets/favicon_sched/android-chrome-192x192.png">
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -95,8 +95,88 @@
           </div>
         </div>
 
-        <!-- CONTEUDO DA PAGINA AQUI -->
+<div class="search-container-alert">
+    <img class="search-icon" src="../assets/ic_ui/ic_search.svg">
 
+    <input 
+        type="text" 
+        placeholder="Pesquisar produtos..." 
+        class="search-input-alert"
+    >
+</div>
+
+<section class="forecast-section">
+
+    <div class="forecast-header">
+
+        <div>
+            <h3>
+                Previsão de demanda
+                <span class="tag">sched AI</span>
+            </h3>
+
+            <p>
+                Produtos com alertas de previsão de demanda de acordo com o ritmo do seu negócio.
+            </p>
+        </div>
+
+    </div>
+
+  <div class="forecast-cards" id="forecastCards">
+
+  </div>
+</section>
+
+<div class="bottom-grid">
+
+    <section class="table-card">
+
+        <div class="table-title">
+            <h3>Produtos com estoque baixo</h3>
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>NOME</th>
+                    <th>EM ESTOQUE</th>
+                    <th>ESTOQUE RECOMENDADO</th>
+                </tr>
+            </thead>
+
+            <tbody id="lowStockTable"></tbody>
+
+        </table>
+
+    </section>
+
+    <section class="table-card">
+
+        <div class="table-title">
+            <h3>Produtos próximos a data de validade</h3>
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>NOME</th>
+                    <th>DATA DE VALIDADE</th>
+                    <th>QTD. NO LOTE</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+
+            <tbody id="expirationTable"></tbody>
+
+        </table>
+
+    </section>
+
+</div>
+
+<script src="../js/alertas.js"></script>
       </main>
     </div>
     <script src="../js/auth.js"></script>

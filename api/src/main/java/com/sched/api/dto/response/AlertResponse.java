@@ -8,7 +8,8 @@ public record AlertResponse(
         Long stockId,
         LocalDateTime expirationDate,
         Integer quantity,
-        String productName
+        String productName,
+        String unitOfMeasure
 ) {
 
     public AlertResponse(Stock stock) {
@@ -16,7 +17,8 @@ public record AlertResponse(
                 stock.getId(),
                 stock.getExpirationDate(),
                 stock.getQuantity(),
-                stock.getProduct().getName()
+                stock.getProduct().getName(),
+                stock.getProduct().getUnitOfMeasure()
         );
     }
 }
