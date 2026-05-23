@@ -1,13 +1,13 @@
 package com.sched.api.repository;
 
-import com.sched.api.domain.Sale;
-import com.sched.api.dto.response.DemandDataResponse;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import com.sched.api.domain.Sale;
+import com.sched.api.dto.response.DemandDataResponse;
 
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 
@@ -20,7 +20,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             p.category,
             p.price,
             CAST(SUM(s.totalSold) AS integer),
-            MONTH(MAX(s.saleDate)),
+            CAST(EXTRACT(MONTH FROM MAX(s.saleDate)) AS integer),
             COALESCE(SUM(st.quantity), 0)
         )
         FROM Sale s

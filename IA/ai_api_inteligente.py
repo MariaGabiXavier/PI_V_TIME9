@@ -9,13 +9,13 @@ def predict():
     data = request.get_json()
     df = pd.DataFrame(data)
 
-    if len(df) < 6:  # mínimo para ter treino e teste
+    if len(df) < 2: 
         return jsonify({
             "status": "INSUFFICIENT_DATA",
             "message": "Poucos dados para avaliação dos modelos"
         }), 400
 
-    # Seleciona automaticamente o melhor modelo
+    # Seleciona o melhor modelo
     model, scaler, model_name, mae = build_models_and_select(df)
 
     X_full = df[["month", "price", "stockQuantity"]]
@@ -28,7 +28,6 @@ def predict():
             "stockQuantity": row["stockQuantity"]
         }])
 
-        # KNN precisa do scaler, RF não
         if scaler is not None:
             features = scaler.transform(features)
 
@@ -54,7 +53,7 @@ def predict():
             "prediction30Days":   int(prediction30),
             "recommendedRestock": int(recommended_restock),
             "alert":              alert,
-            "modelUsed":          model_name,   # bônus: informa qual foi escolhida
+            "modelUsed":          model_name,   
             "modelMAE":           round(mae, 2)
         })
 

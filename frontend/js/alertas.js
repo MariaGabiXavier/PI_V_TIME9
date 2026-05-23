@@ -396,129 +396,84 @@ async function carregarPrevisoes() {
 
         const token = localStorage.getItem("token");
 
-        const [productResponse, stockResponse] = await Promise.all([
+        const response = await fetch(`${API_URL}/ai/predictions`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
 
-            fetch(`${API_URL}/product`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }),
-
-            fetch(`${API_URL}/stock/filterProduct`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-
-        ]);
-
-        if (!productResponse.ok || !stockResponse.ok) {
-
-            console.log("Erro API");
+        if (!response.ok) {
+            console.log("Erro ao buscar previsões da IA");
             return;
-
         }
 
-        const produtos = await productResponse.json();
-        const estoque = await stockResponse.json();
+        const previsoes = await response.json();
 
-        const listaProdutos = Array.isArray(produtos)
-            ? produtos
-            : produtos.content || [];
+        console.log("PREVISÕES IA:", previsoes);
 
         forecastCards.innerHTML = "";
 
-        if (!listaProdutos.length) {
+        // filtra o alerta do produto
+        const comAlerta = previsoes.filter(p =>
+            p.alert === "ATENCAO" || p.alert === "URGENTE"
+        );
+
+        if (!comAlerta.length) {
+            forecastCards.innerHTML = `
+                <p style="color:#9ca3af; font-size:13px;">
+                    Nenhum produto com alerta de demanda no momento.
+                </p>
+            `;
             return;
         }
 
-        const produtosAlta = listaProdutos
-            .sort((a, b) => {
+        comAlerta.forEach(produto => {
 
-                const vendasA =
-                    a.totalSold ||
-                    a.totalSales ||
-                    a.soldQuantity ||
-                    0;
+            const imagemProduto = pegarImagemProduto(produto.productName);
 
-                const vendasB =
-                    b.totalSold ||
-                    b.totalSales ||
-                    b.soldQuantity ||
-                    0;
-
-                return vendasB - vendasA;
-
-            })
-            .slice(0, 6);
-
-        produtosAlta.forEach(produto => {
-
-            const nomeProduto =
-                produto.name ||
-                produto.productName ||
-                produto.nome ||
-                produto.product?.name ||
-                "Produto";
-
-            const produtoEstoque = estoque.find(item =>
-                item.productName === nomeProduto
-            );
-
-            const estoqueAtual =
-                produtoEstoque?.availableQuantity || 0;
-
-            const totalVendido =
-                produto.totalSold ||
-                produto.totalSales ||
-                produto.soldQuantity ||
-                produto.salesQuantity ||
-                produto.vendido ||
-                0;
-
-            const previsaoIA = totalVendido;
-
-            const sugestao =
-                previsaoIA > estoqueAtual
-                    ? previsaoIA - estoqueAtual
-                    : 0;
-
-            const imagemProduto =
-                pegarImagemProduto(nomeProduto);
+            const corAlerta = produto.alert === "URGENTE" ? "#ef4444" : "#f59e0b";
+            const labelAlerta = produto.alert === "URGENTE" ? "Urgente" : "Atenção";
 
             forecastCards.innerHTML += `
 
-                <div class="forecast-alert-card">
+                <div class="forecast-alert-card"
+                     data-p7="${produto.prediction7Days}"
+                     data-p15="${produto.prediction15Days}"
+                     data-p30="${produto.prediction30Days}"
+                     data-restock="${produto.recommendedRestock}">
 
                     <div class="forecast-left">
-
                         <img
                             src="${imagemProduto}"
-                            alt="${nomeProduto}"
+                            alt="${produto.productName}"
                             onerror="this.src='../assets/file.png'"
                         >
-
                     </div>
 
                     <div class="forecast-info">
 
-                        <h4>${nomeProduto}</h4>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <h4>${produto.productName}</h4>
+                            <span style="
+                                background:${corAlerta};
+                                color:white;
+                                font-size:10px;
+                                font-weight:700;
+                                padding:2px 8px;
+                                border-radius:999px;
+                            ">${labelAlerta}</span>
+                        </div>
 
                         <div class="forecast-data">
 
                             <div class="forecast-line">
-
                                 <span>Estoque atual:</span>
-
-                                <strong>${estoqueAtual}</strong>
-
+                                <strong>${produto.stockQuantity}</strong>
                             </div>
 
                             <div class="forecast-previsao-row">
 
-                                <span class="forecast-label">
-                                    Previsão
-                                </span>
+                                <span class="forecast-label">Previsão</span>
 
                                 <select
                                     class="forecast-select"
@@ -532,7 +487,7 @@ async function carregarPrevisoes() {
                                 <span class="forecast-separator">:</span>
 
                                 <strong class="forecast-previsao-number">
-                                    ${previsaoIA}
+                                    ${produto.prediction30Days}
                                 </strong>
 
                             </div>
@@ -540,10 +495,10 @@ async function carregarPrevisoes() {
                         </div>
 
                         <div class="forecast-suggestion">
-                            +${sugestao} recomendadas
+                            +${produto.recommendedRestock} recomendadas
                         </div>
 
-                        <button 
+                        <button
                             class="forecast-stock-btn"
                             onclick="window.location.href='estoque.html'"
                         >
@@ -563,32 +518,20 @@ async function carregarPrevisoes() {
         console.log("Erro previsões:", error);
 
     }
-
 }
 
 function alterarPeriodoSelect(select) {
 
-    const card =
-        select.closest(".forecast-alert-card");
-
-    const numero =
-        card.querySelector(".forecast-previsao-number");
-
-    let valor = 0;
+    const card = select.closest(".forecast-alert-card");
+    const numero = card.querySelector(".forecast-previsao-number");
 
     if (select.value == "7") {
-        valor = 20;
+        numero.innerText = card.dataset.p7;
+    } else if (select.value == "15") {
+        numero.innerText = card.dataset.p15;
+    } else {
+        numero.innerText = card.dataset.p30;
     }
-
-    else if (select.value == "15") {
-        valor = 45;
-    }
-
-    else {
-        valor = 90;
-    }
-
-    numero.innerText = valor;
 
 }
 

@@ -1,11 +1,12 @@
 package com.sched.api.repository;
 
 
-import com.sched.api.domain.Stock;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sched.api.domain.Stock;
 
 public interface AlertRepository extends JpaRepository<Stock, Long> {
     List<Stock> findByExpirationDateBetweenAndProduct_Company_IdAndProduct_DeletedFalse(
@@ -15,4 +16,9 @@ public interface AlertRepository extends JpaRepository<Stock, Long> {
     );
 
     List<Stock> findByProduct_Company_IdAndProduct_DeletedFalse(Long companyId);
+
+    List<Stock> findByQuantityLessThanEqualAndProduct_Company_IdAndProduct_DeletedFalse(
+        Integer quantity,
+        Long companyId
+    );
 }

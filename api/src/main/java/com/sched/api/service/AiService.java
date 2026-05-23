@@ -30,11 +30,9 @@ public class AiService {
 
     public List<AiPredictionResponse> getPredictions(User user) {
 
-        List<DemandDataResponse> demandData =
-                getDemandData(user);
+        List<DemandDataResponse> demandData = getDemandData(user);
 
-        String flaskUrl =
-                "http://127.0.0.1:5000/predict";
+        String flaskUrl = "http://127.0.0.1:5000/predict";
 
         AiPredictionResponse[] response =
                 restTemplate.postForObject(
@@ -44,5 +42,5 @@ public class AiService {
                 );
 
         return List.of(response);
-    }
+        }
 }
