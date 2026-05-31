@@ -4,55 +4,13 @@ const lowStockTable = document.getElementById("lowStockTable");
 const expirationTable = document.getElementById("expirationTable");
 const forecastCards = document.getElementById("forecastCards");
 
-function pegarImagemProduto(nomeProduto) {
+function pegarImagemProduto(categoria) {
 
-    if (!nomeProduto) {
-        return "../assets/file.png";
+    if (!categoria) {
+        return "../assets/categorias_dos_produtos_sched/Outros.png";
     }
 
-    const nome = nomeProduto.toLowerCase();
-
-    if (
-        nome.includes("coca") ||
-        nome.includes("guarana") ||
-        nome.includes("fanta") ||
-        nome.includes("beats") ||
-        nome.includes("corote")
-    ) {
-        return "../assets/categorias_dos_produtos_sched/Bebida.png";
-    }
-
-    if (
-        nome.includes("doritos") ||
-        nome.includes("salgado")
-    ) {
-        return "../assets/categorias_dos_produtos_sched/Salgadinho.png";
-    }
-
-    if (
-        nome.includes("brigadeiro") ||
-        nome.includes("bolacha") ||
-        nome.includes("chocolate") ||
-        nome.includes("doce")
-    ) {
-        return "../assets/categorias_dos_produtos_sched/Doce.png";
-    }
-
-    if (
-        nome.includes("carne") ||
-        nome.includes("frango")
-    ) {
-        return "../assets/categorias_dos_produtos_sched/Carne.png";
-    }
-
-    if (
-        nome.includes("alface") ||
-        nome.includes("tomate")
-    ) {
-        return "../assets/categorias_dos_produtos_sched/Vegetal.png";
-    }
-
-    return "../assets/categorias_dos_produtos_sched/Outros.png";
+    return `../assets/categorias_dos_produtos_sched/${categoria}.png`;
 }
 
 async function carregarEstoqueBaixo() {
@@ -61,7 +19,7 @@ async function carregarEstoqueBaixo() {
 
         const token = localStorage.getItem("token");
 
-        const [alertResponse, stockResponse] = await Promise.all([
+        const [alertResponse, stockResponse, predictionResponse] = await Promise.all([
 
             fetch(`${API_URL}/alert/low-stock`, {
                 headers: {
@@ -73,15 +31,23 @@ async function carregarEstoqueBaixo() {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
+            }),
+
+            fetch(`${API_URL}/ai/predictions`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             })
 
         ]);
 
         const alertas = await alertResponse.json();
         const estoque = await stockResponse.json();
+        const previsoes = await predictionResponse.json();
 
         console.log("ALERTAS:", alertas);
         console.log("ESTOQUE:", estoque);
+        console.log("PREVISÕES:", previsoes);
 
         lowStockTable.innerHTML = "";
 
@@ -118,23 +84,22 @@ async function carregarEstoqueBaixo() {
             const unidadeMedida =
                 produtoEstoque.unitOfMeasure || "Unidades";
 
-            let estoqueRecomendado = estoqueAtual + 10;
+            // Procura a previsão da IA para o mesmo produto
+            const previsaoProduto = previsoes.find(p =>
+                (p.productName || "").trim().toLowerCase() ===
+                (nomeProduto || "").trim().toLowerCase()
+            );
 
-            if (estoqueAtual <= 2) {
-
-                estoqueRecomendado = estoqueAtual + 20;
-
-            } else if (estoqueAtual <= 5) {
-
-                estoqueRecomendado = estoqueAtual + 15;
-
-            }
+            // Usa o mesmo valor mostrado no card de previsão
+            const estoqueRecomendado =
+                previsaoProduto?.recommendedRestock || 0;
 
             const imagemProduto =
-                pegarImagemProduto(nomeProduto);
+                pegarImagemProduto(
+                    produtoEstoque.productCategory
+                );
 
             lowStockTable.innerHTML += `
-
                 <tr>
 
                     <td>
@@ -160,7 +125,6 @@ async function carregarEstoqueBaixo() {
                     </td>
 
                 </tr>
-
             `;
 
         });
@@ -340,8 +304,14 @@ async function carregarValidades() {
 
             }
 
+            const produtoEstoque = estoque.find(item =>
+                item.productName === produto.nomeProduto
+            );
+
             const imagemProduto =
-                pegarImagemProduto(produto.nomeProduto);
+                pegarImagemProduto(
+                    produtoEstoque?.productCategory
+                );
 
             expirationTable.innerHTML += `
 
@@ -396,11 +366,21 @@ async function carregarPrevisoes() {
 
         const token = localStorage.getItem("token");
 
-        const response = await fetch(`${API_URL}/ai/predictions`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        const [response, estoqueResponse] = await Promise.all([
+
+            fetch(`${API_URL}/ai/predictions`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }),
+
+            fetch(`${API_URL}/stock/filterProduct`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+        ]);
 
         if (!response.ok) {
             console.log("Erro ao buscar previsões da IA");
@@ -408,6 +388,7 @@ async function carregarPrevisoes() {
         }
 
         const previsoes = await response.json();
+        const estoque = await estoqueResponse.json();
 
         console.log("PREVISÕES IA:", previsoes);
 
@@ -429,7 +410,14 @@ async function carregarPrevisoes() {
 
         comAlerta.forEach(produto => {
 
-            const imagemProduto = pegarImagemProduto(produto.productName);
+            const produtoEstoque = estoque.find(item =>
+                item.productName === produto.productName
+            );
+
+            const imagemProduto =
+                pegarImagemProduto(
+                    produtoEstoque?.productCategory
+                );
 
             const corAlerta = produto.alert === "URGENTE" ? "#ef4444" : "#f59e0b";
             const labelAlerta = produto.alert === "URGENTE" ? "Urgente" : "Atenção";
@@ -534,6 +522,67 @@ function alterarPeriodoSelect(select) {
     }
 
 }
+
+// ==============================
+// BUSCA DE ALERTAS
+// ==============================
+
+function normalizar(texto) {
+    return (texto || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
+function filtrarAlertas() {
+
+    const termo = normalizar(
+        document.querySelector(".search-input-alert").value
+    );
+
+    // Cards de previsão
+    document.querySelectorAll(".forecast-alert-card").forEach(card => {
+
+        const nome = normalizar(
+            card.querySelector("h4")?.textContent
+        );
+
+        card.style.display =
+            nome.includes(termo) ? "flex" : "none";
+    });
+
+    // Tabela estoque baixo
+    document.querySelectorAll("#lowStockTable tr").forEach(row => {
+
+        const texto = normalizar(row.innerText);
+
+        row.style.display =
+            texto.includes(termo) ? "" : "none";
+    });
+
+    // Tabela validade
+    document.querySelectorAll("#expirationTable tr").forEach(row => {
+
+        const texto = normalizar(row.innerText);
+
+        row.style.display =
+            texto.includes(termo) ? "" : "none";
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const campoBusca =
+        document.querySelector(".search-input-alert");
+
+    if (campoBusca) {
+
+        campoBusca.addEventListener(
+            "input",
+            filtrarAlertas
+        );
+    }
+});
 
 carregarEstoqueBaixo();
 carregarValidades();
