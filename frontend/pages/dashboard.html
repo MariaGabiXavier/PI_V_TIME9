@@ -89,8 +89,8 @@
             </div>
 
             <div class="page-header-right">
-                <button class="topbar-icon">
-                    <img src="../assets/ic_base_screen/ic_user_profile.svg" alt="">
+                <button class="topbar-icon" id="btnPerfil" onclick="confirmarLogout()">
+                    <img src="../assets/ic_base_screen/icon_logout.png" alt="">
                 </button>
             </div>
         </div>
@@ -328,6 +328,7 @@
             carregarEstatisticasVendas();
             carregarGraficoDemanda();
             carregarAlertasDeEstoqueBaixo();
+            carregarPrevisoesDashboard();
         });
 
         let alertasDeVencimento = []
@@ -417,13 +418,12 @@
                 const sales = await response.json();
 
                 const agora = new Date();
-                // Usa data local (não UTC) para bater com o saleDate do backend (LocalDateTime sem timezone)
                 const hojeIso = `${agora.getFullYear()}-${String(agora.getMonth()+1).padStart(2,'0')}-${String(agora.getDate()).padStart(2,'0')}`;
                 const mesAtual = agora.getMonth();
                 const anoAtual = agora.getFullYear();
                 const anoAnterior = anoAtual - 1;
 
-                // Vendas por mês: arrays de 12 posições (Jan=0 ... Dez=11)
+                // Vendas por mês: arrays de 12 posições 
                 const vendasAnoAtual    = new Array(12).fill(0);
                 const vendasAnoAnterior = new Array(12).fill(0);
                 let qtdHoje = 0;
@@ -469,6 +469,20 @@
             } catch (error) {
                 console.error("Erro ao carregar vendas:", error);
             }
+        }
+
+        function confirmarLogout() {
+            const modal = document.getElementById("modalLogout");
+            modal.style.display = "flex";
+        }
+
+        function fecharModalLogout() {
+            document.getElementById("modalLogout").style.display = "none";
+        }
+
+        function executarLogout() {
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
         }
 
         async function carregarAlertasDeVencimentoProximo() {
@@ -685,6 +699,52 @@
                 });
         }
 
+        async function carregarPrevisoesDashboard() {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+
+                const response = await fetch("http://localhost:8080/ai/predictions", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (!response.ok) {
+                    esconderCardsPrevioes();
+                    return;
+                }
+
+                const previsoes = await response.json();
+
+                const temAumento = previsoes.some(p => p.alert === "URGENTE");
+                const temReposicao = previsoes.some(p =>
+                    p.alert === "URGENTE" || p.alert === "ATENCAO"
+                );
+
+                const cardAumento = document.querySelector(".previsoes-cards .previsao-card:first-child");
+                const cardReposicao = document.querySelector(".previsoes-cards .previsao-card:last-child");
+                const boxPrevisoes = document.querySelector(".previsoes-box");
+
+                cardAumento.style.display = temAumento ? "flex" : "none";
+                cardReposicao.style.display = temReposicao ? "flex" : "none";
+
+                // se nenhum card for exibido, esconde a seção inteira
+                if (!temAumento && !temReposicao) {
+                    boxPrevisoes.style.display = "none";
+                } else {
+                    boxPrevisoes.style.display = "";
+                }
+
+            } catch (error) {
+                console.log("Erro ao carregar previsões:", error);
+                esconderCardsPrevioes();
+            }
+        }
+
+        function esconderCardsPrevioes() {
+            const box = document.querySelector(".previsoes-box");
+            if (box) box.style.display = "none";
+        }
+
         async function carregarGraficoDemanda() {
             const token = localStorage.getItem("token");
             if (!token) return;
@@ -852,5 +912,22 @@
             });
         }
       </script>
+
+      <!-- Modal logout -->
+    <div id="modalLogout" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:16px; padding:32px 28px; width:340px; box-shadow:0 8px 32px rgba(0,0,0,0.15); text-align:center; font-family:'Inter',sans-serif;">
+            <div style="width:52px; height:52px; background:#FEE2E2; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path d="M15 3H19C20.1 3 21 3.9 21 5V19C21 20.1 20.1 21 19 21H15M10 17L15 12M15 12L10 7M15 12H3" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h3 style="font-size:18px; font-weight:700; color:#111; margin-bottom:8px;">Sair da conta</h3>
+            <p style="font-size:14px; color:#6b7280; margin-bottom:24px;">Tem certeza que deseja encerrar sua sessão?</p>
+            <div style="display:flex; gap:12px;">
+                <button onclick="fecharModalLogout()" style="flex:1; padding:11px; border:1.5px solid #e5e7eb; border-radius:10px; background:#fff; font-size:14px; font-weight:500; color:#374151; cursor:pointer;">Cancelar</button>
+                <button onclick="executarLogout()" style="flex:1; padding:11px; border:none; border-radius:10px; background:#EF4444; font-size:14px; font-weight:600; color:#fff; cursor:pointer;">Sair</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

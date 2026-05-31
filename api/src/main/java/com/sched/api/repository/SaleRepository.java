@@ -25,7 +25,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
         )
         FROM Sale s
         JOIN s.product p
-        LEFT JOIN Stock st ON st.product.id = p.id
+        LEFT JOIN Stock st ON st.product.id = p.id AND st.product.company.id = :companyId
         WHERE p.company.id = :companyId
         GROUP BY
             p.id,

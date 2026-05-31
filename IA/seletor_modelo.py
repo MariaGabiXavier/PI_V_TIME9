@@ -14,7 +14,7 @@ def build_models_and_select(df):
     X = df[["month", "price", "stockQuantity"]]
     y = df["totalSold"]
 
-    # Normalização dos dados
+    # Padronização dos dados
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
@@ -28,7 +28,7 @@ def build_models_and_select(df):
     rf_mae = mean_absolute_error(y_test, rf.predict(X_test))
 
     
-    k = min(3, len(X_train) - 1)
+    k = max(1, min(3, len(X_train) - 1))
     knn = KNeighborsRegressor(n_neighbors=k, weights="distance")
     knn.fit(X_train, y_train)
     knn_mae = mean_absolute_error(y_test, knn.predict(X_test))

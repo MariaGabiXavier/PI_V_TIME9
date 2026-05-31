@@ -9,55 +9,64 @@ def predict():
     data = request.get_json()
     df = pd.DataFrame(data)
 
-    if len(df) < 2: 
-        return jsonify({
-            "status": "INSUFFICIENT_DATA",
-            "message": "Poucos dados para avaliação dos modelos"
-        }), 400
-
-    # Seleciona o melhor modelo
-    model, scaler, model_name, mae = build_models_and_select(df)
-
-    X_full = df[["month", "price", "stockQuantity"]]
-
     alerts = []
-    for _, row in df.iterrows():
-        features = pd.DataFrame([{
-            "month": row["month"],
-            "price": row["price"],
-            "stockQuantity": row["stockQuantity"]
-        }])
 
-        if scaler is not None:
-            features = scaler.transform(features)
+    # Com dados suficientes, usa os modelos de IA
+    if len(df) >= 2:
+        model, scaler, model_name, mae = build_models_and_select(df)
 
-        predicted_sales = model.predict(features)[0]
+        for _, row in df.iterrows():
+            features = pd.DataFrame([{
+                "month": row["month"],
+                "price": row["price"],
+                "stockQuantity": row["stockQuantity"]
+            }])
 
-        prediction7  = round(predicted_sales * 0.25)
-        prediction15 = round(predicted_sales * 0.50)
-        prediction30 = round(predicted_sales)
-        stock = row["stockQuantity"]
-        recommended_restock = max(prediction30 - stock, 0)
+            if scaler is not None:
+                features = scaler.transform(features)
 
-        alert = "OK"
-        if stock < prediction7:
-            alert = "URGENTE"
-        elif stock < prediction15:
-            alert = "ATENCAO"
+            predicted_sales = model.predict(features)[0]
 
-        alerts.append({
-            "productName":        row["productName"],
-            "stockQuantity":      int(stock),
-            "prediction7Days":    int(prediction7),
-            "prediction15Days":   int(prediction15),
-            "prediction30Days":   int(prediction30),
-            "recommendedRestock": int(recommended_restock),
-            "alert":              alert,
-            "modelUsed":          model_name,   
-            "modelMAE":           round(mae, 2)
-        })
+            alert, entry = gerar_alerta(row, predicted_sales, model_name, round(mae, 2))
+            alerts.append(entry)
+
+    # Com poucos dados, usa totalSold diretamente como previsão
+    else:
+        for _, row in df.iterrows():
+            predicted_sales = row["totalSold"]
+            alert, entry = gerar_alerta(row, predicted_sales, "Direto", 0.0)
+            alerts.append(entry)
 
     return jsonify(alerts)
+
+
+def gerar_alerta(row, predicted_sales, model_name, mae):
+    prediction7  = round(predicted_sales * 0.25)
+    prediction15 = round(predicted_sales * 0.50)
+    prediction30 = round(predicted_sales)
+    stock = row["stockQuantity"]
+    recommended_restock = max(prediction30 - stock, 0)
+
+    alert = "OK"
+    if stock < prediction7:
+        alert = "URGENTE"
+    elif stock < prediction15:
+        alert = "ATENCAO"
+
+    entry = {
+        "productName":        row["productName"],
+        "stockQuantity":      int(stock),
+        "prediction7Days":    int(prediction7),
+        "prediction15Days":   int(prediction15),
+        "prediction30Days":   int(prediction30),
+        "recommendedRestock": int(recommended_restock),
+        "alert":              alert,
+        "modelUsed":          model_name,
+        "modelMAE":           mae
+    }
+
+    return alert, entry
+
 
 if __name__ == "__main__":
     app.run(port=5000)
